@@ -1,5 +1,5 @@
+import { PlayerID } from 'boardgame.io'
 import { Color } from '../static/colors'
-import { PlayerID } from './player'
 
 export interface Occupant {
     type: string

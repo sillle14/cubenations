@@ -1,11 +1,14 @@
-import { Ctx, Game } from "boardgame.io";
-import { Board } from './models/board'
-import { Monument, Tile } from './models/pieces'
-import Player, { PlayerID } from './models/player'
-import Space from './models/space'
-import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
+import { Ctx, Game, PlayerID } from 'boardgame.io'
+
 import { ALL_COLORS, Color, RED } from './static/colors'
+import { Board } from './models/board'
+import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
+import { Monument, Tile } from './models/pieces'
 import { TILE_COUNTS } from './static/tile'
+import CNState from './models/state'
+import placeTile from './moves/placeTile'
+import Player from './models/player'
+import Space from './models/space'
 
 function setup(ctx: Ctx) {
     // Board
@@ -61,17 +64,13 @@ function setup(ctx: Ctx) {
     }
 }
 
-export interface CNState {
-    board: Board,
-    tileBag: Array<Tile>,
-    players: {[playerID in PlayerID]?: Player},
-    monuments: Array<Monument>
-}
-
 export const CubeNations: Game<CNState> = {
     name: 'CubeNations',
     setup: setup,
     minPlayers: 3,
     maxPlayers: 4,
+    moves: {
+        placeTile: placeTile,
+    }
 }
 

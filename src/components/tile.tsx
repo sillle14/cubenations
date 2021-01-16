@@ -1,13 +1,24 @@
 import { makeStyles } from '@material-ui/styles'
 import React from 'react'
 
-import { Color } from '../static/colors'
+import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
 
 const useStyles = makeStyles({
-    red: {
-        background: 'red',
+    root: {
         height: '100%',
         width: '100%'
+    },
+    [RED]: {
+        background: 'red',
+    },
+    [BLUE]: {
+        background: 'blue',
+    },
+    [GREEN]: {
+        background: 'green',
+    },
+    [BLACK]: {
+        background: 'black',
     }
 })
 
@@ -16,7 +27,7 @@ const TileComp = ({color}: {color: Color}) => {
     let classes = useStyles()
 
     return (
-        <div className={classes.red}></div>
+        <div className={`${classes.root} ${classes[color]}`}></div>
     )
 }
 
