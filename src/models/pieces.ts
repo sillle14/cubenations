@@ -1,5 +1,5 @@
 import { Color } from '../static/colors'
-import { playerID } from './player'
+import { PlayerID } from './player'
 
 export interface Occupant {
     type: string
@@ -19,25 +19,25 @@ export class Tile implements Occupant {
     }
 }
 
-export class MonumentPiece implements Occupant {
+export class Monument implements Occupant {
     type = MONUMENT
     innerColor: Color
     outerColor: Color
-    position: number
+    // position: number TODO: Good way of displaying these not all the same
 
-    constructor (innerColor: Color, outerColor: Color, position: number) {
+    constructor (innerColor: Color, outerColor: Color) {
         this.innerColor = innerColor
         this.outerColor = outerColor
-        this.position = position
+        // this.position = position
     }
 }
 
 export class Leader implements Occupant {
     type = LEADER
     color: Color
-    player: playerID
+    player: PlayerID
 
-    constructor (color: Color, player: playerID) {
+    constructor (color: Color, player: PlayerID) {
         this.color = color
         this.player = player
     }

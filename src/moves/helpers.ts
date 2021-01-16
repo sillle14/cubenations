@@ -35,14 +35,14 @@ interface BFSInput {start: Coord, exclude: Coord, board: Board}
  * @param exclude   Coordinated to exclude from search
  * @param board     Current board state
  */
-function breadthFirstSearch({start, exclude, board}: BFSInput): Array<Coord> {
+function breadthFirstSearch({start, exclude, board}: BFSInput): Array<Array<boolean>> {
     let queue: Array<Coord> = [start]
-    let discovered: Array<Coord> = []
+    let discovered: Array<Array<boolean>> = Array(BOARD_WIDTH).fill(null).map(() => Array(BOARD_HEIGHT).fill(false))
     while (queue.length > 0) {
         const node = queue.pop()
         getNeighbors(node, board).forEach(adjacentNode => {
-            if (!discovered.includes(adjacentNode) && adjacentNode !== exclude) {
-                discovered.push(adjacentNode)
+            if (!discovered[adjacentNode.x][adjacentNode.y] && (adjacentNode.x !== exclude.x && adjacentNode.y !== exclude.y)) {
+                discovered[adjacentNode.x][adjacentNode.y] = true
                 queue.push(adjacentNode)
             }
         })
@@ -60,9 +60,11 @@ export function getAdjacentRegions(coord: Coord, board: Board): Array<Region> {
     let regions: Array<Region> = []
     getNeighbors(coord, board).forEach(neighbor => {
         // If the neighboor hasn't already been added to a region, find the graph starting from the tile
-        if (!regions.some(r => r.spaces.includes(neighbor))) {
+        if (!regions.some(r => r.spaces[coord.x][coord.y])) {
             // Add the region starting at this neighbor. Exclude the placed tile from search.
-            regions.push(new Region(breadthFirstSearch({start: neighbor, exclude: coord, board: board})))
+            regions.push(
+                new Region(breadthFirstSearch({start: neighbor, exclude: coord, board: board}), board)
+            )
         }
     })
     return regions
