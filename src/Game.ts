@@ -6,6 +6,7 @@ import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static
 import { Monument, Tile } from './models/pieces'
 import { TILE_COUNTS } from './static/tile'
 import CNState from './models/state'
+import placeLeader from './moves/placeLeader'
 import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
@@ -71,6 +72,7 @@ export const CubeNations: Game<CNState> = {
     maxPlayers: 4,
     moves: {
         placeTile: placeTile,
+        placeLeader: placeLeader,
     }
 }
 

@@ -1,7 +1,8 @@
 import { Board, Coord } from '../models/board'
-import { CATASTROPHE } from '../models/pieces'
+import { CATASTROPHE, Tile, TILE } from '../models/pieces'
 import Region from '../models/region'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
+import { RED } from '../static/colors'
 
 /**
  * Get the coordinates of all adjacent and filled spaces for a given space.
@@ -10,7 +11,7 @@ import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
  * @param coord Coordinates for the space
  * @param board Board object to reference for filled spaces
  */
-function getNeighbors(coord: Coord, board: Board): Array<Coord> {
+export function getNeighbors(coord: Coord, board: Board): Array<Coord> {
     // Get all possible neighbors in the grid.
     let neighbors = [
         {x: coord.x + 1, y: coord.y}, 
@@ -58,7 +59,7 @@ function breadthFirstSearch({start, exclude, board}: BFSInput): Array<Array<bool
  * @param coord Coordinates of the new piece
  * @param board Current board state
  */
-export default function getAdjacentRegions(coord: Coord, board: Board): Array<Region> {
+export function getAdjacentRegions(coord: Coord, board: Board): Array<Region> {
     let regions: Array<Region> = []
     getNeighbors(coord, board).forEach(neighbor => {
         // If the neighboor hasn't already been added to a region, find the graph starting from the tile
@@ -70,4 +71,19 @@ export default function getAdjacentRegions(coord: Coord, board: Board): Array<Re
         }
     })
     return regions
+}
+
+/**
+ * Check if given coordinates refer to a red tile. 
+ * 
+ * @param coord Coordinate of the space to check
+ * @param board Current board state
+ */
+export function isRedTile(coord: Coord, board: Board): boolean {
+    const isTile = board[coord.x][coord.y].occupant?.type === TILE
+    if (isTile) {
+        return (board[coord.x][coord.y].occupant as Tile).color === RED
+    } else {
+        return false
+    }
 }

@@ -1,21 +1,22 @@
-import { makeStyles } from '@material-ui/styles'
 import React from 'react'
+import { makeStyles } from '@material-ui/styles'
+import { Move } from 'boardgame.io'
+import { useDrop } from 'react-dnd'
 
 import { Board } from '../models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
+import { TILE_SIZE } from '../static/display'
 import OccupantComp from './occupant'
-
-const WIDTH = '70vw'
 
 const useStyles = makeStyles({
     root: {
         background: '#ffecb3',
-        width: WIDTH,
-        height: `calc(${WIDTH} * ${BOARD_HEIGHT}/${BOARD_WIDTH})`,
         borderCollapse: 'collapse',
         '& td': {
             border: '1px solid black',
-            padding: '6px'
+            padding: '6px',
+            height: TILE_SIZE,
+            width: TILE_SIZE,
         },
         '& .river': {
             background: '#81d4fa'
@@ -26,7 +27,22 @@ const useStyles = makeStyles({
     },
 })
 
-const TileGrid = ({board}: {board: Board}) => {
+interface TileSquareProps {
+    x: number, 
+    y: number, 
+    className: string, 
+    children: React.ReactNode,
+    placeTile: any
+}
+const TileSquare = ({ x, y, className, children, placeTile }: TileSquareProps) => {
+    const [, drop] = useDrop({
+        accept: 'tile',
+        drop: (item) => placeTile((item as any).id, x, y)
+    })
+    return <td className={className} ref={drop}>{children}</td>
+}
+
+const TileGrid = ({board, placeTile}: {board: Board, placeTile: Move}) => {
 
     let classes = useStyles()
 
@@ -38,9 +54,15 @@ const TileGrid = ({board}: {board: Board}) => {
             if (board[x][y].river) {classes.push('river')}
             if (board[x][y].border) {classes.push('special-border')}
             row.push(
-                <td key={x} className={classes.join(' ')}>
+                <TileSquare
+                    key={x}
+                    className={classes.join(' ')}
+                    x={x}
+                    y={y}
+                    placeTile={placeTile}
+                >
                     <OccupantComp occupant={board[x][y].occupant}/>
-                </td>
+                </TileSquare>
             )
         }
         rows.push(<tr key={y}>{row}</tr>)

@@ -35,11 +35,11 @@ export class Monument implements Occupant {
 export class Leader implements Occupant {
     type = LEADER
     color: Color
-    player: PlayerID
+    playerID: PlayerID
 
     constructor (color: Color, player: PlayerID) {
         this.color = color
-        this.player = player
+        this.playerID = player
     }
 }
 

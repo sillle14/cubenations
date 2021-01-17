@@ -22,7 +22,7 @@ export default class Region {
                         const color = (occupant as Tile).color
                         this.tileCounts[color] = (this.tileCounts[color] || 0) + 1
                     } else if (occupant!.type === LEADER) {
-                        this.leaders[(occupant as Leader).color] = (occupant as Leader).player
+                        this.leaders[(occupant as Leader).color] = (occupant as Leader).playerID
                         this.isKingdom = true
                     }
                 }
