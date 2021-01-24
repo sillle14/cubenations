@@ -1,12 +1,14 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
-import { useDrop } from 'react-dnd'
+import { DragObjectWithType, useDrop } from 'react-dnd'
 
 import { Board } from '../models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
 import { TILE_SIZE } from '../static/display'
 import OccupantComp from './occupant'
+import { LEADER, TILE } from '../models/pieces'
+import { canPlaceTile } from '../moves/placeTile'
 
 const useStyles = makeStyles({
     root: {
@@ -27,22 +29,43 @@ const useStyles = makeStyles({
     },
 })
 
+
 interface TileSquareProps {
     x: number, 
     y: number, 
     className: string, 
     children: React.ReactNode,
-    placeTile: any
+    placeTile: any,
+    placeLeader: any,
+    board: Board
 }
-const TileSquare = ({ x, y, className, children, placeTile }: TileSquareProps) => {
+// TODO: Organization
+const TileSquare = ({ x, y, className, children, placeTile, placeLeader, board }: TileSquareProps) => {
+
+    const canDrop = (item: any) => {
+        if (item.type === TILE) {
+            return canPlaceTile({x: x, y: y}, item.color, board)
+        }
+        return true // TODO: Can place leader
+    }
+
+    const onDrop = (item: any) => {
+        if (item.type === TILE) {
+            placeTile(item.position, x, y)
+        } else if (item.type == LEADER) {
+            placeLeader(item.color, x, y)
+        }
+    }
+
     const [, drop] = useDrop({
-        accept: 'tile',
-        drop: (item) => placeTile((item as any).id, x, y)
+        accept: [TILE, LEADER],
+        canDrop: canDrop,
+        drop: onDrop
     })
     return <td className={className} ref={drop}>{children}</td>
 }
 
-const TileGrid = ({board, placeTile}: {board: Board, placeTile: Move}) => {
+const TileGrid = ({board, placeTile, placeLeader}: {board: Board, placeTile: Move, placeLeader: Move}) => {
 
     let classes = useStyles()
 
@@ -60,6 +83,8 @@ const TileGrid = ({board, placeTile}: {board: Board, placeTile: Move}) => {
                     x={x}
                     y={y}
                     placeTile={placeTile}
+                    placeLeader={placeLeader}
+                    board={board}
                 >
                     <OccupantComp occupant={board[x][y].occupant}/>
                 </TileSquare>

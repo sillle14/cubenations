@@ -5,9 +5,23 @@ import { Color } from '../static/colors'
 import { getAdjacentRegions, getNeighbors, isRedTile } from './helpers'
 import CNState from '../models/state'
 import { Leader } from '../models/pieces'
+import { Board, Coord } from '../models/board'
+
+
+export function canPlaceLeader(destination: Coord, color: Color, board: Board): boolean {
+    const targetSpace = board[destination.x][destination.y]
+
+    // Can't place a leader if the space isn't empty.
+    if (targetSpace.occupant) return false
+
+    // Leaders can't be placed on rivers.
+    if (targetSpace.river) return false
+    return true
+}
 
 
 export default function placeLeader(G: CNState, ctx: Ctx, color: Color, x: number, y: number) {
+    // TODO: Remove leader from board
     const destination = {x: x, y: y} // TODO: Input a coord instead
     const targetSpace = G.board[destination.x][destination.y]
 

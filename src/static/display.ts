@@ -1,1 +1,1 @@
-export const TILE_SIZE = '6vh'
+export const TILE_SIZE = '5vh'

@@ -1,6 +1,5 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
-import { useDrag } from 'react-dnd'
 
 import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
 
@@ -33,16 +32,3 @@ const TileComp = ({color}: {color: Color}) => {
 }
 
 export default TileComp
-
-export const DraggableTile = ({color, id}: {color: Color, id: number}) => {
-
-    let classes = useStyles()
-    const [, drag] = useDrag({
-        item: { type: 'tile', id: id },
-      })
-    
-
-    return (
-        <div ref={drag} className={`${classes.root} ${classes[color]}`}></div>
-    )
-}

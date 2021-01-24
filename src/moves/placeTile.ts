@@ -1,10 +1,31 @@
 import { Ctx } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
-import { BLACK, BLUE } from '../static/colors'
-import { Coord } from '../models/board'
+import { BLACK, BLUE, Color } from '../static/colors'
+import { Board, Coord } from '../models/board'
 import { getAdjacentRegions } from './helpers'
 import CNState from '../models/state'
+import Space from '../models/space'
+
+
+export function canPlaceTile(destination: Coord, color: Color, board: Board): boolean {
+    const target = board[destination.x][destination.y]
+
+    // Can't place a tile if the space isn't empty.
+    if (target.occupant) return false
+
+    // Blue can only be placed on a river (and rivers can only hold blue)
+    if (target.river !== (color === BLUE)) return false
+    
+    const regions = getAdjacentRegions(destination, board)
+    
+    const kingdoms = regions.filter(r => r.isKingdom)
+    
+    // Can't unite more than two kingdoms.
+    if (kingdoms.length > 2) return false
+
+    return true
+}
 
 
 export default function placeTile(G: CNState, ctx: Ctx, source: number, x: number, y: number) {
@@ -12,19 +33,12 @@ export default function placeTile(G: CNState, ctx: Ctx, source: number, x: numbe
     const targetSpace = G.board[destination.x][destination.y]
     const tile = G.players[ctx.currentPlayer]!.hand[source]
 
-    // Can't place a tile if the space isn't empty.
-    if (targetSpace.occupant) return INVALID_MOVE
-
-    // Blue can only be placed on a river (and rivers can only hold blue)
-    if (targetSpace.river !== (tile.color === BLUE)) return INVALID_MOVE
+    if (!canPlaceTile(destination, tile.color, G.board)) return INVALID_MOVE
 
     const regions = getAdjacentRegions(destination, G.board)
     console.log(regions) // TODO
 
     const kingdoms = regions.filter(r => r.isKingdom)
-
-    // Can't unite more than two kingdoms.
-    if (kingdoms.length > 2) return INVALID_MOVE
 
     // Place the tile.
     targetSpace.occupant = G.players[ctx.currentPlayer]!.hand[source]

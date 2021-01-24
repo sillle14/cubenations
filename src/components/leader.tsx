@@ -1,8 +1,10 @@
+import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { PlayerID } from 'boardgame.io'
-import React from 'react'
 
 import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
+import { Draggable } from './draggable'
+import { LEADER } from '../models/pieces'
 
 const useStyles = makeStyles({
     root: {
@@ -30,7 +32,9 @@ const LeaderComp = ({color, playerID}: {color: Color, playerID: PlayerID}) => {
     let classes: any = useStyles()
 
     return (
-        <div className={`${classes.root} ${classes[color]} ${classes[playerID]}`}/>
+        <Draggable item={{type: LEADER, color: color, playerID: playerID}}>
+            <div className={`${classes.root} ${classes[color]} ${classes[playerID]}`}/>
+        </Draggable>
     )
 }
 

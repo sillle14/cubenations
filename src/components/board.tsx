@@ -9,7 +9,7 @@ import TileGrid from './tileGrid'
 
 export const CubeNationsTable = ({ G, moves, playerID, ctx }: BoardProps<CNState>) => (
     <DndProvider backend={HTML5Backend}>
-        <TileGrid board={G.board} placeTile={moves.placeTile}/>
+        <TileGrid board={G.board} placeTile={moves.placeTile} placeLeader={moves.placeLeader}/>
         <PlayerComp player={G.players[ctx.currentPlayer]!}/>
     </DndProvider>
 )
