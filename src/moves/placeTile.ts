@@ -5,7 +5,6 @@ import { BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
 import { getAdjacentRegions } from './helpers'
 import CNState from '../models/state'
-import Space from '../models/space'
 
 
 export function canPlaceTile(destination: Coord, color: Color, board: Board): boolean {
@@ -28,8 +27,7 @@ export function canPlaceTile(destination: Coord, color: Color, board: Board): bo
 }
 
 
-export default function placeTile(G: CNState, ctx: Ctx, source: number, x: number, y: number) {
-    const destination = {x: x, y: y} // TODO: Input a coord instead
+export default function placeTile(G: CNState, ctx: Ctx, source: number, destination: Coord) {
     const targetSpace = G.board[destination.x][destination.y]
     const tile = G.players[ctx.currentPlayer]!.hand[source]
 
@@ -64,4 +62,10 @@ export default function placeTile(G: CNState, ctx: Ctx, source: number, x: numbe
     }
 
     // TODO: Check for monuments here.
+
+    G.players[ctx.currentPlayer]!.actions -= 1
+    if (G.players[ctx.currentPlayer]!.actions === 0) {
+        G.players[ctx.currentPlayer]!.actions = 2
+        ctx.events!.endTurn!()
+    }
 }

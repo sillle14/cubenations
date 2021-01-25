@@ -1,14 +1,12 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
-import { DragObjectWithType, useDrop } from 'react-dnd'
 
 import { Board } from '../models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
 import { TILE_SIZE } from '../static/display'
 import OccupantComp from './occupant'
-import { LEADER, TILE } from '../models/pieces'
-import { canPlaceTile } from '../moves/placeTile'
+import TileSquare from './tileSquare'
 
 const useStyles = makeStyles({
     root: {
@@ -29,42 +27,6 @@ const useStyles = makeStyles({
     },
 })
 
-
-interface TileSquareProps {
-    x: number, 
-    y: number, 
-    className: string, 
-    children: React.ReactNode,
-    placeTile: any,
-    placeLeader: any,
-    board: Board
-}
-// TODO: Organization
-const TileSquare = ({ x, y, className, children, placeTile, placeLeader, board }: TileSquareProps) => {
-
-    const canDrop = (item: any) => {
-        if (item.type === TILE) {
-            return canPlaceTile({x: x, y: y}, item.color, board)
-        }
-        return true // TODO: Can place leader
-    }
-
-    const onDrop = (item: any) => {
-        if (item.type === TILE) {
-            placeTile(item.position, x, y)
-        } else if (item.type == LEADER) {
-            placeLeader(item.color, x, y)
-        }
-    }
-
-    const [, drop] = useDrop({
-        accept: [TILE, LEADER],
-        canDrop: canDrop,
-        drop: onDrop
-    })
-    return <td className={className} ref={drop}>{children}</td>
-}
-
 const TileGrid = ({board, placeTile, placeLeader}: {board: Board, placeTile: Move, placeLeader: Move}) => {
 
     let classes = useStyles()
@@ -74,19 +36,19 @@ const TileGrid = ({board, placeTile, placeLeader}: {board: Board, placeTile: Mov
         let row: Array<JSX.Element> = []
         for (let x = 0; x < BOARD_WIDTH; x++) {
             let classes = []
-            if (board[x][y].river) {classes.push('river')}
-            if (board[x][y].border) {classes.push('special-border')}
+            if (board[x][y].river) classes.push('river')
+            if (board[x][y].border) classes.push('special-border')
+            const location = {x: x, y: y}
             row.push(
                 <TileSquare
                     key={x}
                     className={classes.join(' ')}
-                    x={x}
-                    y={y}
+                    location={location}
                     placeTile={placeTile}
                     placeLeader={placeLeader}
                     board={board}
                 >
-                    <OccupantComp occupant={board[x][y].occupant}/>
+                    <OccupantComp occupant={board[x][y].occupant} location={{x: x, y: y}}/>
                 </TileSquare>
             )
         }

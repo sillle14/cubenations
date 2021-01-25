@@ -1,31 +1,56 @@
 {
   "name": "cubenations",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "@material-ui/styles": "^4.11.2",
     "boardgame.io": "^0.42.2",
+    "esm": "^3.2.25",
     "react": "16.13.1",
     "react-dnd": "^11.1.3",
     "react-dnd-html5-backend": "^11.1.3",
     "react-dom": "16.13.1",
-    "react-scripts": "3.4.3"
+    "react-scripts": "3.4.3",
+    "redux-logger": "^3.0.6"
   },
   "devDependencies": {
+    "@babel/cli": "^7.12.10",
+    "@babel/plugin-proposal-class-properties": "^7.12.1",
     "@types/react": "16.9.19",
     "@types/react-dom": "16.9.5",
-    "typescript": "3.7.5"
+    "@types/redux-logger": "^3.0.8",
+    "babel-preset-react-app": "^9.1.2",
+    "nodemon": "^2.0.7",
+    "typescript": "^3.9.3"
   },
   "scripts": {
     "start": "react-scripts start",
+    "server": "nodemon -r esm server.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "publish:npm": "rm -rf dist && mkdir dist && babel src -d dist --copy-files"
   },
   "eslintConfig": {
     "extends": [
       "react-app",
       "react-app/jest"
+    ]
+  },
+  "description": "Clone of Splendor",
+  "main": "dist/main.js",
+  "module": "dist/main.js",
+  "babel": {
+    "presets": [
+      "@babel/react"
+    ],
+    "plugins": [
+      [
+        "@babel/plugin-proposal-class-properties",
+        {
+          "loose": true
+        }
+      ]
     ]
   },
   "browserslist": {

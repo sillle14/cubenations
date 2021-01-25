@@ -12,6 +12,7 @@ export default class Player {
     hand: Array<Tile> = []
     catastrophes: number = 2  // Players start with 2 catastrophe tiles
     id: PlayerID
+    actions: number = 2
 
     constructor (id: PlayerID) {
         this.id = id

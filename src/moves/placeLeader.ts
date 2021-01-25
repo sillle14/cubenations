@@ -8,60 +8,77 @@ import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'
 
 
-export function canPlaceLeader(destination: Coord, color: Color, board: Board): boolean {
-    const targetSpace = board[destination.x][destination.y]
+export function canPlaceLeader(source: Coord | null, destination: Coord | null, board?: Board): boolean {
+    // Leaders can be withdrawn if they aren't already in hand.
+    if (!destination) return source !== null
+
+    if (!board) throw new Error('Board is required if destination is not null')
+
+    // Deep copy the board so it can be modified temporarily.
+    const tempBoard = JSON.parse(JSON.stringify(board))
+    const targetSpace = tempBoard[destination.x][destination.y]
 
     // Can't place a leader if the space isn't empty.
     if (targetSpace.occupant) return false
 
     // Leaders can't be placed on rivers.
     if (targetSpace.river) return false
-    return true
-}
 
-
-export default function placeLeader(G: CNState, ctx: Ctx, color: Color, x: number, y: number) {
-    // TODO: Remove leader from board
-    const destination = {x: x, y: y} // TODO: Input a coord instead
-    const targetSpace = G.board[destination.x][destination.y]
-
-    // Can't place a leader if the space isn't empty.
-    if (targetSpace.occupant) return INVALID_MOVE
-
-    // Leaders can't be placed on rivers.
-    if (targetSpace.river) return INVALID_MOVE
-
-    // Leaders must have a neighboring red tile.
-    const neighbors = getNeighbors(destination, G.board)
-    if (!neighbors.some(c => isRedTile(c, G.board))) {
-        return INVALID_MOVE
+    // Leaders require an adjacent red tile.
+    const neighbors = getNeighbors(destination, tempBoard)
+    if (!neighbors.some(c => isRedTile(c, tempBoard))) {
+        return false
     }
 
     // Remove the old leader before checking for revolt.
-    const oldPosition = G.players[ctx.currentPlayer]!.leaders[color]
-    if (oldPosition) {
-        G.board[oldPosition.x][oldPosition.y].occupant = undefined
+    if (source) {
+        tempBoard[source.x][source.y].occupant = undefined
     }
 
-    const regions = getAdjacentRegions(destination, G.board)
+    const regions = getAdjacentRegions(destination, tempBoard)
 
     const kingdoms = regions.filter(r => r.isKingdom)
 
     // Can't unite kingdoms with a leader.
     if (kingdoms.length > 1) {
-        // Replace the leader where it was.`
-        if (oldPosition) {
-            G.board[oldPosition.x][oldPosition.y].occupant = new Leader(color, ctx.currentPlayer)
-        }
-        return INVALID_MOVE
+        return false
+    }
+
+    return true
+}
+
+
+export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destination: Coord | null) {
+    const source = G.players[ctx.currentPlayer]!.leaders[color]
+    
+    if (!canPlaceLeader(source, destination, G.board)) return INVALID_MOVE
+
+    if (!destination) {
+        // Send the leader back to hand.
+        G.players[ctx.currentPlayer]!.leaders[color] = null
+        G.board[source!.x][source!.y].occupant = undefined
+        return
     }
     
+    const targetSpace = G.board[destination!.x][destination!.y]
+    const regions = getAdjacentRegions(destination!, G.board)
+    const kingdoms = regions.filter(r => r.isKingdom)
+
     // Place the leader
     targetSpace.occupant = new Leader(color, ctx.currentPlayer)
     G.players[ctx.currentPlayer]!.leaders[color] = destination
+    if (source) {
+        G.board[source.x][source.y].occupant = undefined
+    }
 
     // If the existing kingdom contains the leader, a revolt occurs.
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {
         console.log('revolt!') // TODO implement this
+    }
+
+    G.players[ctx.currentPlayer]!.actions -= 1
+    if (G.players[ctx.currentPlayer]!.actions === 0) {
+        G.players[ctx.currentPlayer]!.actions = 2
+        ctx.events!.endTurn!()
     }
 }

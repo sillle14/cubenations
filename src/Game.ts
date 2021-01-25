@@ -75,4 +75,3 @@ export const CubeNations: Game<CNState> = {
         placeLeader: placeLeader,
     }
 }
-

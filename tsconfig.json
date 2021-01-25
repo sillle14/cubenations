@@ -1,7 +1,5 @@
 {
-  "include": [
-    "./src/*"
-  ],
+  "include": ["./src/*", "server.ts"],
   "compilerOptions": {
     "strict": true,
     "esModuleInterop": true,

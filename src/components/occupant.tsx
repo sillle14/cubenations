@@ -1,9 +1,10 @@
 import React from 'react'
+import { Coord } from '../models/board'
 import { Leader, LEADER, Occupant, Tile, TILE } from '../models/pieces'
 import LeaderComp from './leader'
 import TileComp from './tile'
 
-const OccupantComp = ({occupant}: {occupant?: Occupant}) => {
+const OccupantComp = ({occupant, location}: {occupant?: Occupant, location?: Coord | null}) => {
 
     if (!occupant) {
         return null
@@ -13,7 +14,7 @@ const OccupantComp = ({occupant}: {occupant?: Occupant}) => {
         case TILE:
             return <TileComp {...occupant as Tile}/>
         case LEADER:
-            return <LeaderComp {...occupant as Leader}/>
+            return <LeaderComp {...occupant as Leader} location={location || null}/>
         default:
             console.log('ahhh')
             return null
