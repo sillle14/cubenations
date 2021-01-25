@@ -1,6 +1,9 @@
+import { Ctx } from 'boardgame.io'
 import { Board, Coord } from '../models/board'
 import { CATASTROPHE, Tile, TILE } from '../models/pieces'
+import Player from '../models/player'
 import Region from '../models/region'
+import CNState from '../models/state'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
 import { RED } from '../static/colors'
 
@@ -85,5 +88,20 @@ export function isRedTile(coord: Coord, board: Board): boolean {
         return (board[coord.x][coord.y].occupant as Tile).color === RED
     } else {
         return false
+    }
+}
+
+export function endAction(G: CNState, ctx: Ctx) {
+    let player = G.players[ctx.currentPlayer]!
+    player.actions -= 1
+    if (player.actions === 0) {
+        player.actions = 2
+        for (const playerID in G.players) {
+            for (let i = G.players[playerID]!.hand.length; i < 6; i++) {
+                // TODO: Handle empty bag
+                G.players[playerID]!.hand.push(G.tileBag.pop()!)
+            }
+        }
+        ctx.events!.endTurn!()
     }
 }

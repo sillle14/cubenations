@@ -1,8 +1,9 @@
 import { makeStyles } from '@material-ui/styles'
 import { useDrop } from 'react-dnd'
-import React from 'react'
+import React, { useContext } from 'react'
 
 import Player from '../models/player'
+import PlayerContext from './playerContext'
 import CatastropheComp from './catastrophe'
 import { TILE_SIZE } from '../static/display'
 import { Draggable } from './draggable'
@@ -56,7 +57,9 @@ const LeaderContainer = ({color, playerID, className, home, placeLeader}: {color
 
 const PlayerComp = ({player, placeLeader}: {player: Player, placeLeader: Move}) => {
 
-    let classes = useStyles()
+    const classes = useStyles()
+
+    const {myTurn: myTurn} = useContext(PlayerContext)
 
     const hand = player.hand.map((t, i) => (
         <div className={classes.tileContainer} key={`hand-${i}`}>
@@ -79,6 +82,12 @@ const PlayerComp = ({player, placeLeader}: {player: Player, placeLeader: Move}) 
             />
         )
     }
+
+    let points = []
+    for (const color in player.points) {
+        points.push(<div key={color}>{`${color}: ${player.points[color as Color]}`}</div>)
+    }
+
 
     let catastrophes = []
     for (let i = 0; i < player.catastrophes; i++) {
@@ -103,7 +112,11 @@ const PlayerComp = ({player, placeLeader}: {player: Player, placeLeader: Move}) 
                     {leaders}
                 </div>
             </div>
-            <span>{`Actions: ${player.actions}`}</span>
+            <div>
+                <div>{`Actions: ${player.actions}`}</div>
+                <div>{myTurn ? 'My Turn': 'Wait'}</div>
+                {points}
+            </div>
         </div>
     )
 }

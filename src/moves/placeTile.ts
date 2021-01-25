@@ -3,7 +3,7 @@ import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
-import { getAdjacentRegions } from './helpers'
+import { endAction, getAdjacentRegions } from './helpers'
 import CNState from '../models/state'
 
 
@@ -48,12 +48,10 @@ export default function placeTile(G: CNState, ctx: Ctx, source: number, destinat
         // Award a point for the placed tile.
         const matchingLeaderPlayerID = kingdoms[0].leaders[tile.color]
         if (matchingLeaderPlayerID) {
-            console.log(`${tile.color} point to ${matchingLeaderPlayerID}`)
             G.players[matchingLeaderPlayerID]!.points[tile.color] += 1
         } else {
             const blackLeaderPlayerID = kingdoms[0].leaders[BLACK]
             if (blackLeaderPlayerID) {
-                console.log(`${tile.color} point to ${blackLeaderPlayerID}`)
                 G.players[blackLeaderPlayerID]!.points[tile.color] += 1
             }
         }
@@ -63,9 +61,5 @@ export default function placeTile(G: CNState, ctx: Ctx, source: number, destinat
 
     // TODO: Check for monuments here.
 
-    G.players[ctx.currentPlayer]!.actions -= 1
-    if (G.players[ctx.currentPlayer]!.actions === 0) {
-        G.players[ctx.currentPlayer]!.actions = 2
-        ctx.events!.endTurn!()
-    }
+    endAction(G, ctx)
 }

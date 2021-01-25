@@ -2,7 +2,7 @@ import { Ctx } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { Color } from '../static/colors'
-import { getAdjacentRegions, getNeighbors, isRedTile } from './helpers'
+import { endAction, getAdjacentRegions, getNeighbors, isRedTile } from './helpers'
 import CNState from '../models/state'
 import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'
@@ -57,6 +57,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
         // Send the leader back to hand.
         G.players[ctx.currentPlayer]!.leaders[color] = null
         G.board[source!.x][source!.y].occupant = undefined
+        endAction(G, ctx)
         return
     }
     
@@ -76,9 +77,5 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
         console.log('revolt!') // TODO implement this
     }
 
-    G.players[ctx.currentPlayer]!.actions -= 1
-    if (G.players[ctx.currentPlayer]!.actions === 0) {
-        G.players[ctx.currentPlayer]!.actions = 2
-        ctx.events!.endTurn!()
-    }
+    endAction(G, ctx)
 }
