@@ -80,7 +80,7 @@ export function getAdjacentRegions(coord: Coord, board: Board): Array<Region> {
  * @param board Current board state
  */
 export function isRedTile(coord: Coord, board: Board): boolean {
-    const isTile = board[coord.x][coord.y].occupant?.type === TILE
+    const isTile = board[coord.x][coord.y].occupant && board[coord.x][coord.y].occupant!.type === TILE
     if (isTile) {
         return (board[coord.x][coord.y].occupant as Tile).color === RED
     } else {

@@ -1,6 +1,6 @@
 {
   "name": "cubenations",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": false,
   "dependencies": {
     "@material-ui/styles": "^4.11.2",
@@ -16,6 +16,7 @@
   "devDependencies": {
     "@babel/cli": "^7.12.10",
     "@babel/plugin-proposal-class-properties": "^7.12.1",
+    "@babel/plugin-transform-typescript": "^7.12.1",
     "@types/react": "16.9.19",
     "@types/react-dom": "16.9.5",
     "@types/redux-logger": "^3.0.8",
@@ -25,11 +26,11 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "server": "nodemon -r esm server.ts",
+    "server": "TS_NODE_COMPILER_OPTIONS='{\"module\":\"commonjs\"}' nodemon -r esm server.ts",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
-    "publish:npm": "rm -rf dist && mkdir dist && babel src -d dist --copy-files"
+    "publish:npm": "rm -rf dist && mkdir dist && babel --extensions '.ts' --extensions '.tsx' src -d dist --copy-files"
   },
   "eslintConfig": {
     "extends": [
@@ -37,12 +38,13 @@
       "react-app/jest"
     ]
   },
-  "description": "Clone of Splendor",
+  "description": "Clone of Tigris & Euphrates",
   "main": "dist/main.js",
   "module": "dist/main.js",
   "babel": {
     "presets": [
-      "@babel/react"
+      "@babel/react",
+      "@babel/preset-typescript"
     ],
     "plugins": [
       [

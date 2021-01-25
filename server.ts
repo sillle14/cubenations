@@ -1,7 +1,5 @@
-import * as game from './src/Game'
+import { CubeNations } from './src/Game'
 import { Server } from 'boardgame.io/server'
 
-console.log(game.CubeNations)
-
-const server = Server({ games: [game.CubeNations] })
+const server = Server({ games: [CubeNations] })
 server.run(8000)
