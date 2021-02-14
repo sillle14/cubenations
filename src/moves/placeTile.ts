@@ -27,20 +27,19 @@ export function canPlaceTile(destination: Coord, color: Color, board: Board): bo
 }
 
 
-export default function placeTile(G: CNState, ctx: Ctx, source: number, destination: Coord) {
+export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, destination: Coord) {
     const targetSpace = G.board[destination.x][destination.y]
-    const tile = G.players[ctx.currentPlayer]!.hand[source]
+    const tile = G.players[ctx.currentPlayer]!.hand[handIndex]!
 
     if (!canPlaceTile(destination, tile.color, G.board)) return INVALID_MOVE
 
     const regions = getAdjacentRegions(destination, G.board)
-    console.log(regions) // TODO
 
     const kingdoms = regions.filter(r => r.isKingdom)
 
     // Place the tile.
-    targetSpace.occupant = G.players[ctx.currentPlayer]!.hand[source]
-    G.players[ctx.currentPlayer]!.hand.splice(source, 1)
+    targetSpace.occupant = tile
+    G.players[ctx.currentPlayer]!.hand[handIndex] = null
 
     if (kingdoms.length === 2) {
         console.log('maybe war!') // TODO implement this

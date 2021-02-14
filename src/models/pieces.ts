@@ -1,5 +1,6 @@
 import { PlayerID } from 'boardgame.io'
 import { Color } from '../static/colors'
+import { Coord } from './board'
 
 export interface Occupant {
     type: string
@@ -17,6 +18,10 @@ export class Tile implements Occupant {
     constructor (color: Color) {
         this.color = color
     }
+}
+
+export interface DraggedTile extends Tile {
+    handIndex: number
 }
 
 export class Monument implements Occupant {
@@ -43,6 +48,12 @@ export class Leader implements Occupant {
     }
 }
 
+export interface DraggedLeader extends Leader {
+    source: Coord | null
+}
+
 export class Catastrophe implements Occupant {
     type = CATASTROPHE
 }
+
+export type Dragged = DraggedTile | DraggedLeader

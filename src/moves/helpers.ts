@@ -1,7 +1,6 @@
 import { Ctx } from 'boardgame.io'
 import { Board, Coord } from '../models/board'
 import { CATASTROPHE, Tile, TILE } from '../models/pieces'
-import Player from '../models/player'
 import Region from '../models/region'
 import CNState from '../models/state'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
@@ -97,9 +96,10 @@ export function endAction(G: CNState, ctx: Ctx) {
     if (player.actions === 0) {
         player.actions = 2
         for (const playerID in G.players) {
-            for (let i = G.players[playerID]!.hand.length; i < 6; i++) {
-                // TODO: Handle empty bag
-                G.players[playerID]!.hand.push(G.tileBag.pop()!)
+            for (let i = 0; i < 6; i++) {
+                if (!G.players[playerID]!.hand[i]) {
+                    G.players[playerID]!.hand[i] = G.tileBag.pop()!
+                }
             }
         }
         ctx.events!.endTurn!()

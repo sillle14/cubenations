@@ -1,8 +1,6 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
-import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
-
 const useStyles = makeStyles({
     root: {
         height: '100%',

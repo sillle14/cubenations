@@ -1,4 +1,5 @@
 import { Ctx, Game, PlayerID } from 'boardgame.io'
+import { TurnOrder } from 'boardgame.io/core'
 
 import { ALL_COLORS, Color, RED } from './static/colors'
 import { Board } from './models/board'
@@ -11,7 +12,7 @@ import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
 
-function setup(ctx: Ctx) {
+function setup(ctx: Ctx): CNState {
     // Board
     let board: Board = []
     for (let x = 0; x < BOARD_WIDTH; x++) {
@@ -61,17 +62,25 @@ function setup(ctx: Ctx) {
         players: players,
         board: board,
         tileBag: tileBag,
-        monuments: monuments
+        monuments: monuments,
+        conflict: null,
+        playerOrder: ctx.random!.Shuffle(Object.keys(players)) // Randomize the player order.
     }
 }
 
 export const CubeNations: Game<CNState> = {
     name: 'CubeNations',
     setup: setup,
-    minPlayers: 3,
+    minPlayers: 2,
     maxPlayers: 4,
-    moves: {
-        placeTile: placeTile,
-        placeLeader: placeLeader,
+    moves: { placeTile, placeLeader },
+    turn: {
+        // TODO: Constants for stages
+        order: TurnOrder.CUSTOM_FROM('playerOrder'),
+        stages: {
+            revolt: {
+                moves: {}
+            }
+        }
     }
 }

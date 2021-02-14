@@ -4,7 +4,7 @@ import { useDrop } from 'react-dnd'
 import { Board, Coord } from '../models/board'
 import { canPlaceLeader } from '../moves/placeLeader'
 import { canPlaceTile } from '../moves/placeTile'
-import { LEADER, TILE } from '../models/pieces'
+import { Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '../models/pieces'
 
 interface TileSquareProps {
     location: Coord, 
@@ -16,19 +16,19 @@ interface TileSquareProps {
 }
 const TileSquare = ({ location, className, children, placeTile, placeLeader, board }: TileSquareProps) => {
 
-    const canDrop = (item: any) => {
+    const canDrop = (item: Dragged) => {
         if (item.type === TILE) {
             return canPlaceTile(location, item.color, board)
         } else if (item.type === LEADER) {
-            return canPlaceLeader(item.location, location, board)
+            return canPlaceLeader((item as DraggedLeader).source, location, board)
         } else {
             return true
         }
     }
 
-    const onDrop = (item: any) => {
+    const onDrop = (item: Dragged) => {
         if (item.type === TILE) {
-            placeTile(item.position, location)
+            placeTile((item as DraggedTile).handIndex, location)
         } else if (item.type === LEADER) {
             placeLeader(item.color, location)
         }

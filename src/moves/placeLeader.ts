@@ -6,6 +6,7 @@ import { endAction, getAdjacentRegions, getNeighbors, isRedTile } from './helper
 import CNState from '../models/state'
 import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'
+import { Revolt } from '../models/conflict'
 
 
 export function canPlaceLeader(source: Coord | null, destination: Coord | null, board?: Board): boolean {
@@ -74,6 +75,23 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
 
     // If the existing kingdom contains the leader, a revolt occurs.
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {
+        const opponentId = kingdoms[0].leaders[color]!
+        const opponentPosition = G.players[opponentId]!.leaders[color]!
+        const opponentBase = getNeighbors(opponentPosition, G.board).filter(t => isRedTile(t, G.board)).length
+
+        const myBase = getNeighbors(destination, G.board).filter(t => isRedTile(t, G.board)).length
+
+        G.conflict = new Revolt({
+            [ctx.currentPlayer]: {base: myBase}, 
+            [opponentId]: {base: opponentBase}
+        })
+        ctx.events!.setActivePlayers!({
+            value: {
+                [ctx.currentPlayer]: 'revolt',
+                [opponentId]: 'revolt'
+            },
+            revert: true
+        })
         console.log('revolt!') // TODO implement this
     }
 

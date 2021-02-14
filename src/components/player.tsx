@@ -3,11 +3,11 @@ import { useDrop } from 'react-dnd'
 import React, { useContext } from 'react'
 
 import Player from '../models/player'
-import PlayerContext from './playerContext'
+import DraggableContext from './draggableContext'
 import CatastropheComp from './catastrophe'
 import { TILE_SIZE } from '../static/display'
 import { Draggable } from './draggable'
-import { LEADER, TILE } from '../models/pieces'
+import { LEADER } from '../models/pieces'
 import TileComp from './tile'
 import { Color } from '../static/colors'
 import LeaderComp from './leader'
@@ -19,12 +19,15 @@ const useStyles = makeStyles({
         background: 'tan',
         display: 'flex',
         padding: '10px',
-        width: 'max-content'
+        width: 'max-content',
+        '& div': {
+            margin: '1px'
+        }
     },
     hand: {
         display: 'flex',
         flexWrap: 'wrap',
-        width: `calc(${TILE_SIZE} * 4)`
+        width: `calc(${TILE_SIZE} * 4.5)`
     },
     leaders: {
         display: 'flex',
@@ -55,17 +58,17 @@ const LeaderContainer = ({color, playerID, className, home, placeLeader}: {color
     }
 }
 
-const PlayerComp = ({player, placeLeader}: {player: Player, placeLeader: Move}) => {
+const PlayerComp = ({player, placeLeader, myTurn}: {player: Player, placeLeader: Move, myTurn: boolean}) => {
 
     const classes = useStyles()
 
-    const {myTurn: myTurn} = useContext(PlayerContext)
+    const {canDragHand} = useContext(DraggableContext)
 
     const hand = player.hand.map((t, i) => (
         <div className={classes.tileContainer} key={`hand-${i}`}>
-            <Draggable item={{type: TILE, position: i, color: t.color}}>
+            {t ? <Draggable item={{...t, handIndex: i}} draggable={canDragHand}>
                 <TileComp color={t.color}/>
-            </Draggable>
+            </Draggable> : null}
         </div>
     ))
 
@@ -115,6 +118,9 @@ const PlayerComp = ({player, placeLeader}: {player: Player, placeLeader: Move}) 
             <div>
                 <div>{`Actions: ${player.actions}`}</div>
                 <div>{myTurn ? 'My Turn': 'Wait'}</div>
+            </div>
+            <div>
+                Score:
                 {points}
             </div>
         </div>
