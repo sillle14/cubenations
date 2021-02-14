@@ -7,7 +7,7 @@ import DraggableContext from './draggableContext'
 import CatastropheComp from './catastrophe'
 import { TILE_SIZE } from '../static/display'
 import { Draggable } from './draggable'
-import { LEADER } from '../models/pieces'
+import { DraggedLeader, LEADER } from '../models/pieces'
 import TileComp from './tile'
 import { Color } from '../static/colors'
 import LeaderComp from './leader'
@@ -45,8 +45,8 @@ const LeaderContainer = ({color, playerID, className, home, placeLeader}: {color
 
     const [, drop] = useDrop({
         accept: LEADER,
-        canDrop: (item) => canPlaceLeader(item.location, null),
-        drop: (item: any) => placeLeader(item.color, null)
+        canDrop: (item: DraggedLeader) => canPlaceLeader(item.source, null),
+        drop: (item: DraggedLeader) => placeLeader(item.color, null)
     })
 
     if (home) {
