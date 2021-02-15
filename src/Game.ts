@@ -4,6 +4,8 @@ import { TurnOrder } from 'boardgame.io/core'
 import { ALL_COLORS, Color, RED } from './static/colors'
 import { Board } from './models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
+import { commitToConflict, resolveConflict } from './moves/conflict'
+import { CONFLICT, RESOLVE_CONFLICT } from './static/stages'
 import { Monument, Tile } from './models/pieces'
 import { TILE_COUNTS } from './static/tile'
 import CNState from './models/state'
@@ -75,11 +77,13 @@ export const CubeNations: Game<CNState> = {
     maxPlayers: 4,
     moves: { placeTile, placeLeader },
     turn: {
-        // TODO: Constants for stages
         order: TurnOrder.CUSTOM_FROM('playerOrder'),
         stages: {
-            revolt: {
-                moves: {}
+            [CONFLICT]: {
+                moves: {commitToConflict}
+            },
+            [RESOLVE_CONFLICT]: {
+                moves: {resolveConflict}
             }
         }
     }

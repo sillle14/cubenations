@@ -1,18 +1,33 @@
 import { PlayerID } from 'boardgame.io'
 import { Color, RED } from '../static/colors'
 
-export interface Conflict {
-    type: 'revolt' | 'war',
-    color: Color,
+interface ConflictProps {
     players: {[id in PlayerID]: {base: number, support?: number}}
+    aggressor: PlayerID
+}
+export abstract class Conflict {
+    abstract type: 'Revolt' | 'War'
+    abstract color: Color
+    players: {[id in PlayerID]: {base: number, support?: number}}
+    aggressor: PlayerID
+    winner?: PlayerID
+
+    constructor ({players, aggressor}: ConflictProps) {
+        this.players = players
+        this.aggressor = aggressor
+    }
 }
 
-export class Revolt implements Conflict {
-    readonly type = 'revolt'
+interface RevoltProps extends ConflictProps {
+    leaderColor: Color
+}
+export class Revolt extends Conflict {
+    readonly type = 'Revolt'
     readonly color = RED
-    players: {[id in PlayerID]: {base: number, support?: number}}
+    leaderColor: Color
 
-    constructor (players: {[id in PlayerID]: {base: number, support?: number}}) {
-        this.players = players
+    constructor ({leaderColor, ...others}: RevoltProps) {
+        super(others)
+        this.leaderColor = leaderColor
     }
 }

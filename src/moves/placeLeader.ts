@@ -7,6 +7,7 @@ import CNState from '../models/state'
 import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'
 import { Revolt } from '../models/conflict'
+import { CONFLICT, RESOLVE_CONFLICT } from '../static/stages'
 
 
 export function canPlaceLeader(source: Coord | null, destination: Coord | null, board?: Board): boolean {
@@ -81,19 +82,23 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
 
         const myBase = getNeighbors(destination, G.board).filter(t => isRedTile(t, G.board)).length
 
+        // Instantiate a revolt with the current player as the aggressor.
         G.conflict = new Revolt({
-            [ctx.currentPlayer]: {base: myBase}, 
-            [opponentId]: {base: opponentBase}
+            players: {
+                [ctx.currentPlayer]: {base: myBase}, 
+                [opponentId]: {base: opponentBase}
+            },
+            aggressor: ctx.currentPlayer,
+            leaderColor: color
         })
         ctx.events!.setActivePlayers!({
             value: {
-                [ctx.currentPlayer]: 'revolt',
-                [opponentId]: 'revolt'
+                [ctx.currentPlayer]: CONFLICT,
+                [opponentId]: CONFLICT
             },
-            revert: true
+            next: {value: {[ctx.currentPlayer]: RESOLVE_CONFLICT}}
         })
-        console.log('revolt!') // TODO implement this
+    } else {
+        endAction(G, ctx)
     }
-
-    endAction(G, ctx)
 }

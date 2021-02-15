@@ -16,7 +16,7 @@ type DraggableProps = {
     draggable: boolean
 }
 
-export const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, children}) => {
+const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, children}) => {
 
     const [, drag] = useDrag({
         item: item,
@@ -28,3 +28,5 @@ export const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, c
         <div ref={drag} className={classes.root}>{children}</div>
     )
 }
+
+export default Draggable

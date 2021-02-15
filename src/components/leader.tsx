@@ -3,9 +3,9 @@ import { makeStyles } from '@material-ui/styles'
 import { PlayerID } from 'boardgame.io'
 
 import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
-import { Draggable } from './draggable'
 import { LEADER } from '../models/pieces'
 import { Coord } from '../models/board'
+import Draggable from './draggable'
 import DraggableContext from './draggableContext'
 
 const useStyles = makeStyles({

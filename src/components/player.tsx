@@ -1,28 +1,30 @@
 import { makeStyles } from '@material-ui/styles'
-import { useDrop } from 'react-dnd'
-import React, { useContext } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 
-import Player from '../models/player'
-import DraggableContext from './draggableContext'
-import CatastropheComp from './catastrophe'
 import { TILE_SIZE } from '../static/display'
-import { Draggable } from './draggable'
 import { DraggedLeader, LEADER } from '../models/pieces'
-import TileComp from './tile'
 import { Color } from '../static/colors'
-import LeaderComp from './leader'
-import { Move, PlayerID } from 'boardgame.io'
 import { canPlaceLeader } from '../moves/placeLeader'
+import Action from './action'
+import CatastropheComp from './catastrophe'
+import Draggable from './draggable'
+import DraggableContext from './draggableContext'
+import Droppable from './droppable'
+import LeaderComp from './leader'
+import Player from '../models/player'
+import TileComp from './tile'
+import { CONFLICT, RESOLVE_CONFLICT } from '../static/stages'
 
 const useStyles = makeStyles({
     root: {
         background: 'tan',
         display: 'flex',
         padding: '10px',
-        width: 'max-content',
-        '& div': {
+        width: `calc(${TILE_SIZE} * 20)`,
+        '> div': {
             margin: '1px'
-        }
+        },
+        justifyContent: 'space-around'
     },
     hand: {
         display: 'flex',
@@ -38,27 +40,25 @@ const useStyles = makeStyles({
         height: TILE_SIZE,
         width: TILE_SIZE,
         padding: '6px',
+    },
+    buttons: {
+        display: 'flex',
+        flexDirection: 'column'
     }
 })
 
-const LeaderContainer = ({color, playerID, className, home, placeLeader}: {color: Color, playerID: PlayerID, className: string, home: boolean, placeLeader: any}) => {
-
-    const [, drop] = useDrop({
-        accept: LEADER,
-        canDrop: (item: DraggedLeader) => canPlaceLeader(item.source, null),
-        drop: (item: DraggedLeader) => placeLeader(item.color, null)
-    })
-
-    if (home) {
-        return <div className={className}>
-            <LeaderComp color={color} playerID={playerID} location={null}/>
-        </div>
-    } else {
-        return <div className={className} ref={drop}></div>
-    }
+type PlayerProps = {
+    player: Player,
+    placeLeader: any,
+    myTurn: boolean,
+    sentIdxs: Array<number>,
+    clear: () => void,
+    commitToConflict: (handIdxs: Array<number>) => void,
+    resolveConflict: () => void,
+    phase: string
 }
 
-const PlayerComp = ({player, placeLeader, myTurn}: {player: Player, placeLeader: Move, myTurn: boolean}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, phase, commitToConflict, resolveConflict}) => {
 
     const classes = useStyles()
 
@@ -66,7 +66,7 @@ const PlayerComp = ({player, placeLeader, myTurn}: {player: Player, placeLeader:
 
     const hand = player.hand.map((t, i) => (
         <div className={classes.tileContainer} key={`hand-${i}`}>
-            {t ? <Draggable item={{...t, handIndex: i}} draggable={canDragHand}>
+            {t && !sentIdxs.includes(i) ? <Draggable item={{...t, handIndex: i}} draggable={canDragHand}>
                 <TileComp color={t.color}/>
             </Draggable> : null}
         </div>
@@ -74,16 +74,24 @@ const PlayerComp = ({player, placeLeader, myTurn}: {player: Player, placeLeader:
 
     let leaders = []
     for (const color in player.leaders) {
-        leaders.push(
-            <LeaderContainer
-                color={color as Color}
-                playerID={player.id}
-                className={classes.tileContainer}
-                home={!player.leaders[color as Color]} // If the leader is not mapped to coordinates, it must be in hand.
-                placeLeader={placeLeader}
-                key={color}
-            />
-        )
+        // If the leader is mapped to coordinates, it is not in hand, so the container is droppable.
+        if (player.leaders[color as Color]) {
+            leaders.push(
+                <div className={classes.tileContainer} key={color}>
+                    <Droppable
+                    accept={LEADER}
+                    canDrop={(item: DraggedLeader) => canPlaceLeader(item.source, null)}
+                    onDrop={(item: DraggedLeader) => placeLeader(item.color, null)}
+                />
+                </div>
+            )
+        } else {
+            leaders.push(
+                <div className={classes.tileContainer} key={color}>
+                    <LeaderComp color={color as Color} playerID={player.id} location={null}/>
+                </div>
+            )
+        }
     }
 
     let points = []
@@ -99,6 +107,26 @@ const PlayerComp = ({player, placeLeader, myTurn}: {player: Player, placeLeader:
                 <CatastropheComp/>
             </div>
         )
+    }
+
+    let action = null
+    switch (phase) {
+        case CONFLICT:
+            action = <Action
+                message="Commit tiles to the conflict."
+                onConfirm={() => {commitToConflict(sentIdxs); clear()}}
+                onCancel={clear}
+            />
+            break
+        case RESOLVE_CONFLICT:
+            action = <Action
+                message="Resolve conflict"
+                onConfirm={() => {resolveConflict()}}
+                onCancel={() => {}}
+            />
+            break
+        default:
+            break
     }
 
     return (
@@ -123,6 +151,7 @@ const PlayerComp = ({player, placeLeader, myTurn}: {player: Player, placeLeader:
                 Score:
                 {points}
             </div>
+            {action}
         </div>
     )
 }

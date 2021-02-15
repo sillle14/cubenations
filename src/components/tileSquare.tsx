@@ -1,10 +1,10 @@
 import React from 'react'
-import { useDrop } from 'react-dnd'
 
 import { Board, Coord } from '../models/board'
 import { canPlaceLeader } from '../moves/placeLeader'
 import { canPlaceTile } from '../moves/placeTile'
 import { Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '../models/pieces'
+import Droppable from './droppable'
 
 interface TileSquareProps {
     location: Coord, 
@@ -33,13 +33,9 @@ const TileSquare = ({ location, className, children, placeTile, placeLeader, boa
             placeLeader(item.color, location)
         }
     }
-
-    const [, drop] = useDrop({
-        accept: [TILE, LEADER],
-        canDrop: canDrop,
-        drop: onDrop
-    })
-    return <td className={className} ref={drop}>{children}</td>
+    return <td className={className}><Droppable accept={[TILE, LEADER]} canDrop={canDrop} onDrop={onDrop}>
+        {children}
+    </Droppable></td>
 }
 
 export default TileSquare
