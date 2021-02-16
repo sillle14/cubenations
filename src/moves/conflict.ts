@@ -29,6 +29,23 @@ export function commitToConflict(G: CNState, ctx: Ctx, handIdxs: Array<number>) 
     ctx.events!.endStage!()
 }
 
+function resolveRevolt(G: CNState, ctx: Ctx, loser: PlayerID) {
+    // Return the losing leader home.
+    const loserPosition = G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor]!
+    G.board[loserPosition.x][loserPosition.y].occupant = undefined
+    G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor] = null
+
+    // Award the winner one point.
+    G.players[G.conflict!.winner!]!.points[RED] += 1
+
+    G.conflict = null
+    ctx.events!.endStage!()
+    endAction(G, ctx)
+}
+
+function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
+}
+
 export function resolveConflict(G: CNState, ctx: Ctx) {
     let loser: PlayerID
     for (const playerID in G.conflict!.players) {
@@ -37,17 +54,10 @@ export function resolveConflict(G: CNState, ctx: Ctx) {
             break
         }
     }
-    // TODO: Helper functions for war and revolt resolution.
-    
-    // Return the losing leader home.
-    const loserPosition = G.players[loser!]!.leaders[(G.conflict as Revolt).leaderColor]!
-    G.board[loserPosition.x][loserPosition.y].occupant = undefined
-    G.players[loser!]!.leaders[(G.conflict as Revolt).leaderColor] = null
 
-    // Award the winner one point.
-    G.players[G.conflict!.winner!]!.points[RED] += 1
-
-    G.conflict = null
-    ctx.events!.endStage!()
-    endAction(G, ctx)
+    if (G.conflict!.type === 'Revolt') {
+        resolveRevolt(G, ctx, loser!)
+    } else {
+        resolveWar(G, ctx, loser!)
+    }
 }

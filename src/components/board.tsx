@@ -67,6 +67,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                 phase={(ctx.activePlayers || {})[playerID!]} // TODO: Handle spectator
                 commitToConflict={moves.commitToConflict}
                 resolveConflict={moves.resolveConflict}
+                pass={moves.pass}
             />
         </DraggableContext.Provider></DndProvider>
     )

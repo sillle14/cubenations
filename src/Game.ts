@@ -13,6 +13,7 @@ import placeLeader from './moves/placeLeader'
 import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
+import { endAction } from './moves/helpers'
 
 function setup(ctx: Ctx): CNState {
     // Board
@@ -75,7 +76,7 @@ export const CubeNations: Game<CNState> = {
     setup: setup,
     minPlayers: 2,
     maxPlayers: 4,
-    moves: { placeTile, placeLeader },
+    moves: { placeTile, placeLeader, pass: endAction },
     turn: {
         order: TurnOrder.CUSTOM_FROM('playerOrder'),
         stages: {

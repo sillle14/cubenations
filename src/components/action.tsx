@@ -10,17 +10,15 @@ const useStyles = makeStyles({
 
 type ActionProps = {
     message: string,
-    onConfirm: () => void,
-    onCancel: () => void
+    buttons: Array<{text: string, onClick: () => void}>
 }
-const Action: FunctionComponent<ActionProps> = ({message, onConfirm, onCancel}) => {
+const Action: FunctionComponent<ActionProps> = ({message, buttons}) => {
 
     const classes = useStyles()
 
     return <div className={classes.root}>
         <span>{message}</span>
-        <button onClick={onConfirm}>Confirm</button>
-        <button onClick={onCancel}>Cancel</button>
+        {buttons.map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}
     </div>
 }
 

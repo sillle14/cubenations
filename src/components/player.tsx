@@ -55,10 +55,11 @@ type PlayerProps = {
     clear: () => void,
     commitToConflict: (handIdxs: Array<number>) => void,
     resolveConflict: () => void,
-    phase: string
+    phase: string,
+    pass: () => void
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, phase, commitToConflict, resolveConflict}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, phase, commitToConflict, resolveConflict, pass}) => {
 
     const classes = useStyles()
 
@@ -114,18 +115,35 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
         case CONFLICT:
             action = <Action
                 message="Commit tiles to the conflict."
-                onConfirm={() => {commitToConflict(sentIdxs); clear()}}
-                onCancel={clear}
+                buttons={[
+                    {text: 'confirm', onClick: () => {commitToConflict(sentIdxs); clear()}},
+                    {text: 'cancel', onClick: clear}
+                ]}
             />
             break
         case RESOLVE_CONFLICT:
             action = <Action
                 message="Resolve conflict"
-                onConfirm={() => {resolveConflict()}}
-                onCancel={() => {}}
+                buttons={[
+                    {text: 'confirm', onClick: () => {resolveConflict()}},
+                ]}
             />
             break
         default:
+            if (myTurn) {
+                action = <Action
+                    message={`${player.actions} action${player.actions > 1 ? 's' : ''} left.`}
+                    buttons={[
+                        {text: 'pass', onClick: () => {pass()}},
+                    ]}
+                />
+            } else {
+                action = <Action
+                    message="Wait for your turn."
+                    buttons={[]}
+                />
+            }
+            // TODO: case for discarding.
             break
     }
 
@@ -142,10 +160,6 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
                 <div className={classes.leaders}>
                     {leaders}
                 </div>
-            </div>
-            <div>
-                <div>{`Actions: ${player.actions}`}</div>
-                <div>{myTurn ? 'My Turn': 'Wait'}</div>
             </div>
             <div>
                 Score:
