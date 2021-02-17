@@ -7,6 +7,7 @@ import { PlayerID } from 'boardgame.io'
 import CNState from '../models/state'
 import ConflictComp, { PeaceComp } from './conflict'
 import PlayerComp from './player'
+import MonumentsComp from './monuments'
 import DraggableContext from './draggableContext'
 import TileGrid from './tileGrid'
 import { RESOLVE_CONFLICT } from '../static/stages'
@@ -64,6 +65,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
             <div style={{display: 'flex'}}>
                 <TileGrid board={G.board} placeTile={moves.placeTile} placeLeader={moves.placeLeader}/>
                 {conflict}
+                <MonumentsComp monuments={G.monuments}/>
             </div>
             <PlayerComp 
                 player={G.players[playerID!]!} // TODO: Handle spectator

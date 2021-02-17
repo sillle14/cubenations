@@ -4,7 +4,7 @@ import { Board, Coord } from '../../models/board'
 import { CATASTROPHE, Tile, TILE } from '../../models/pieces'
 import CNState from '../../models/state'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../../static/board'
-import { RED } from '../../static/colors'
+import { Color } from '../../static/colors'
 
 /**
  * Get the coordinates of all adjacent and filled spaces for a given space.
@@ -23,22 +23,23 @@ export function getNeighbors(coord: Coord, board: Board): Array<Coord> {
         { x: coord.x, y: coord.y - 1 }
     ];
     // Remove any which are off the edge.
-    neighbors = neighbors.filter(c => c.x >= 0 && c.y >= 0 && c.x < BOARD_WIDTH && c.y < BOARD_HEIGHT);
+    neighbors = neighbors.filter(c => c.x >= 0 && c.y >= 0 && c.x < BOARD_WIDTH && c.y < BOARD_HEIGHT)
     // Remove any which are empty or catastrophes.
-    neighbors = neighbors.filter(c => board[c.x][c.y].occupant && (board[c.x][c.y].occupant!.type !== CATASTROPHE));
-    return neighbors;
+    neighbors = neighbors.filter(c => board[c.x][c.y].occupant && (board[c.x][c.y].occupant!.type !== CATASTROPHE))
+    return neighbors
 }
 
 /**
- * Check if given coordinates refer to a red tile. 
+ * Check if given coordinates refer to a certain colored tile. 
  * 
  * @param coord Coordinate of the space to check
  * @param board Current board state
+ * @param color Color to check for
  */
-export function isRedTile(coord: Coord, board: Board): boolean {
+export function isColorTile(coord: Coord, board: Board, color: Color): boolean {
     const isTile = board[coord.x][coord.y].occupant && board[coord.x][coord.y].occupant!.type === TILE
     if (isTile) {
-        return (board[coord.x][coord.y].occupant as Tile).color === RED
+        return (board[coord.x][coord.y].occupant as Tile).color === color
     } else {
         return false
     }

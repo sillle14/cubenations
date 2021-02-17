@@ -4,6 +4,7 @@ import { INVALID_MOVE } from 'boardgame.io/core'
 import { BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
 import { getAdjacentRegions } from './helpers/regions'
+import { checkForMonument } from './helpers/monument'
 import { endAction } from './helpers/utility'
 import { checkAndStartWar } from './helpers/war'
 import CNState from '../models/state'
@@ -66,7 +67,7 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
         }
     }
 
-    // TODO: Check for monuments here.
-
-    endAction(G, ctx)
+    if (!checkForMonument(destination, G.board)) {
+        endAction(G, ctx)
+    }
 }

@@ -1,8 +1,6 @@
 import { Board, Coord } from '../../models/board'
-import { Tile, TILE } from '../../models/pieces'
 import Region from '../../models/region'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../../static/board'
-import { RED } from '../../static/colors'
 import { getNeighbors } from './utility'
 
 interface BFSInput {start: Coord, exclude: Coord, board: Board}

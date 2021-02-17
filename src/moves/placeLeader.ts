@@ -1,9 +1,9 @@
 import { Ctx } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
-import { Color } from '../static/colors'
+import { Color, RED } from '../static/colors'
 import { getAdjacentRegions } from './helpers/regions'
-import { endAction, getNeighbors, isRedTile } from './helpers/utility'
+import { endAction, getNeighbors, isColorTile } from './helpers/utility'
 import CNState from '../models/state'
 import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'
@@ -29,7 +29,7 @@ export function canPlaceLeader(source: Coord | null, destination: Coord | null, 
 
     // Leaders require an adjacent red tile.
     const neighbors = getNeighbors(destination, tempBoard)
-    if (!neighbors.some(c => isRedTile(c, tempBoard))) {
+    if (!neighbors.some(c => isColorTile(c, tempBoard, RED))) {
         return false
     }
 
@@ -79,9 +79,9 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {
         const opponentId = kingdoms[0].leaders[color]!
         const opponentPosition = G.players[opponentId]!.leaders[color]!
-        const opponentBase = getNeighbors(opponentPosition, G.board).filter(t => isRedTile(t, G.board)).length
+        const opponentBase = getNeighbors(opponentPosition, G.board).filter(t => isColorTile(t, G.board, RED)).length
 
-        const myBase = getNeighbors(destination, G.board).filter(t => isRedTile(t, G.board)).length
+        const myBase = getNeighbors(destination, G.board).filter(t => isColorTile(t, G.board, RED)).length
 
         // Instantiate a revolt with the current player as the aggressor.
         G.conflict = new Revolt({

@@ -26,13 +26,11 @@ export interface DraggedTile extends Tile {
 
 export class Monument implements Occupant {
     type = MONUMENT
-    innerColor: Color
-    outerColor: Color
+    colors: [Color, Color]
     // position: number TODO: Good way of displaying these not all the same
 
-    constructor (innerColor: Color, outerColor: Color) {
-        this.innerColor = innerColor
-        this.outerColor = outerColor
+    constructor (c1: Color, c2: Color) {
+        this.colors = [c1, c2]
         // this.position = position
     }
 }

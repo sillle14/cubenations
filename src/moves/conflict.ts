@@ -6,8 +6,10 @@ import { LEADER, Tile, TILE } from '../models/pieces'
 import CNState from '../models/state'
 import { Color, RED } from '../static/colors'
 import { getAdjacentRegions } from './helpers/regions'
+import { checkForMonument } from './helpers/monument'
 import { endAction, getNeighbors } from './helpers/utility'
 import { startWar, checkAndStartWar } from './helpers/war'
+import { Coord } from '../models/board'
 
 
 export function commitToConflict(G: CNState, ctx: Ctx, handIdxs: Array<number>) {
@@ -108,15 +110,18 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
     } else {
         // Unset the unification tile.
         delete G.board[G.unificationTile!.x][G.unificationTile!.y].unification
+        const placedTile: Coord = G.unificationTile! // Keep track of the unification tile for monument purposes.
         G.unificationTile = null
-        // TODO: Check for monument
-
+        
         // Clear any war related fields.
         delete G.possibleWars
         delete G.warringKingdoms
         G.conflict = null
         ctx.events!.endStage!()
-        endAction(G, ctx)
+
+        if (!checkForMonument(placedTile, G.board)) {
+            endAction(G, ctx)
+        }
     }
 }
 
