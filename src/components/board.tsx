@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { BoardProps } from 'boardgame.io/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -19,6 +19,13 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     // Keep track of tiles sent to a conflict or the discard, until the move is confirmed.
     const [sentIdxs, setSentIdxs] = useState<Array<number>>([])
     const [sentCount, setSentCount] = useState(0)
+
+    // TODO: handle spectators
+    const mySupport = (((G.conflict || {}).players || {})[playerID!] || {}).support
+
+    useEffect(() => {
+        clearSent()
+    }, [mySupport])
 
     const sendTile = (handIdx: number) => {
         setSentCount(sentCount + 1)
@@ -68,6 +75,9 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                 commitToConflict={moves.commitToConflict}
                 resolveConflict={moves.resolveConflict}
                 pass={moves.pass}
+                anyPhase={!!ctx.activePlayers}
+                possibleWars={G.possibleWars}
+                chooseWar={moves.chooseWar}
             />
         </DraggableContext.Provider></DndProvider>
     )

@@ -80,7 +80,7 @@ const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, te
                 <span>{player1Support}</span>
                 <span>{player2Support}</span>
             </div>
-            {resolution ? <span>{`${playerMap[conflict.winner!]} wins!`}</span> : <div><span>Drag Support Here:</span>
+            {resolution ? <span>{`${playerMap[conflict.winner!]} wins!`}</span> : <div><span>{`Drag ${conflict.color} support here:`}</span>
             <div className={classes.tileContainer}>
                 <Droppable 
                     accept={TILE} 

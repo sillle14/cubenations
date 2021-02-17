@@ -48,6 +48,7 @@ const TileGrid = ({board, placeTile, placeLeader}: {board: Board, placeTile: Mov
                     placeLeader={placeLeader}
                     board={board}
                 >
+                    {board[x][y].unification ? <div style={{position: 'absolute', color: 'white'}}>U</div> : null}
                     <OccupantComp occupant={board[x][y].occupant} location={{x: x, y: y}}/>
                 </TileSquare>
             )

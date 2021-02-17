@@ -31,3 +31,16 @@ export class Revolt extends Conflict {
         this.leaderColor = leaderColor
     }
 }
+
+interface WarProps extends ConflictProps {
+    color: Color
+}
+export class War extends Conflict {
+    readonly type = 'War'
+    color: Color
+
+    constructor ({color, ...others}: WarProps) {
+        super(others)
+        this.color = color
+    }
+}

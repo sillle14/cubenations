@@ -5,5 +5,6 @@ export default interface Space {
     river: boolean,
     treasure: boolean,
     border: boolean,
+    unification?: boolean
     // TODO: Maybe add selected?
 }

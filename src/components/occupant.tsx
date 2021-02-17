@@ -16,7 +16,7 @@ const OccupantComp = ({occupant, location}: {occupant?: Occupant, location?: Coo
         case LEADER:
             return <LeaderComp {...occupant as Leader} location={location || null}/>
         default:
-            console.log('ahhh')
+            console.log('ahhh') // TODO
             return null
     }
 }

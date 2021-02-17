@@ -67,7 +67,8 @@ function setup(ctx: Ctx): CNState {
         tileBag: tileBag,
         monuments: monuments,
         conflict: null,
-        playerOrder: ctx.random!.Shuffle(Object.keys(players)) // Randomize the player order.
+        playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.
+        unificationTile: null
     }
 }
 

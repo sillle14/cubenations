@@ -1,10 +1,11 @@
 import { Ctx } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
-import { ALL_COLORS, BLACK, BLUE, Color } from '../static/colors'
+import { BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
 import { getAdjacentRegions } from './helpers/regions'
 import { endAction } from './helpers/utility'
+import { checkAndStartWar } from './helpers/war'
 import CNState from '../models/state'
 
 
@@ -43,21 +44,13 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
     G.players[ctx.currentPlayer]!.hand[handIndex] = null
 
     if (kingdoms.length === 2) {
-        let warringColors: Array<Color> = []
-        ALL_COLORS.forEach(c => {
-            if (kingdoms.every(k => !!k.leaders[c])) {
-                warringColors.push(c)
-            }
-        })
+        // Set unification tile.
+        G.unificationTile = destination
+        G.board[destination.x][destination.y].unification = true
 
-        if (warringColors) {
-            // Set unificaiton tile
-            if (warringColors.length === 1) {
-                // set the war here.
-                
-            } else if (warringColors.length > 1) {
-                // set the phase here.
-            }
+        if (checkAndStartWar(G, ctx, kingdoms, destination)) {
+            // If a war was started, this move is over.
+            return
         }
         // NOTE: Even if there is no war, points are not awarded.
     } else if (kingdoms.length === 1) {

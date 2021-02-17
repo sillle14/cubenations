@@ -13,7 +13,7 @@ import Droppable from './droppable'
 import LeaderComp from './leader'
 import Player from '../models/player'
 import TileComp from './tile'
-import { CONFLICT, RESOLVE_CONFLICT } from '../static/stages'
+import { CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT } from '../static/stages'
 
 const useStyles = makeStyles({
     root: {
@@ -47,6 +47,7 @@ const useStyles = makeStyles({
     }
 })
 
+// TODO: This is getting ridiculous
 type PlayerProps = {
     player: Player,
     placeLeader: any,
@@ -56,10 +57,13 @@ type PlayerProps = {
     commitToConflict: (handIdxs: Array<number>) => void,
     resolveConflict: () => void,
     phase: string,
-    pass: () => void
+    pass: () => void,
+    anyPhase: boolean,
+    possibleWars?: Array<Color>,
+    chooseWar: (color: Color) => void
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, phase, commitToConflict, resolveConflict, pass}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, phase, commitToConflict, resolveConflict, pass, anyPhase, possibleWars, chooseWar}) => {
 
     const classes = useStyles()
 
@@ -116,7 +120,7 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
             action = <Action
                 message="Commit tiles to the conflict."
                 buttons={[
-                    {text: 'confirm', onClick: () => {commitToConflict(sentIdxs); clear()}},
+                    {text: 'confirm', onClick: () => {commitToConflict(sentIdxs)}},
                     {text: 'cancel', onClick: clear}
                 ]}
             />
@@ -129,8 +133,14 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
                 ]}
             />
             break
+        case CHOOSE_WAR:
+            action = <Action
+                message="Choose war to resolve first"
+                buttons={possibleWars!.map(c => {return {text: c, onClick: () => {chooseWar(c)}}})}
+            />
+            break
         default:
-            if (myTurn) {
+            if (myTurn && !anyPhase) {
                 action = <Action
                     message={`${player.actions} action${player.actions > 1 ? 's' : ''} left.`}
                     buttons={[

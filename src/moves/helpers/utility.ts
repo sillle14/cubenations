@@ -63,6 +63,7 @@ export function endAction(G: CNState, ctx: Ctx) {
                 }
             }
         }
+        // TODO: check for treasure
         ctx.events!.endTurn!()
     }
 }
