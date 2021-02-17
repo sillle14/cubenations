@@ -2,7 +2,8 @@ import { Ctx } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { Color } from '../static/colors'
-import { endAction, getAdjacentRegions, getNeighbors, isRedTile } from './helpers'
+import { getAdjacentRegions } from './helpers/regions'
+import { endAction, getNeighbors, isRedTile } from './helpers/utility'
 import CNState from '../models/state'
 import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'
@@ -34,7 +35,7 @@ export function canPlaceLeader(source: Coord | null, destination: Coord | null, 
 
     // Remove the old leader before checking for revolt.
     if (source) {
-        tempBoard[source.x][source.y].occupant = undefined
+        delete tempBoard[source.x][source.y].occupant
     }
 
     const regions = getAdjacentRegions(destination, tempBoard)
@@ -58,7 +59,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
     if (!destination) {
         // Send the leader back to hand.
         G.players[ctx.currentPlayer]!.leaders[color] = null
-        G.board[source!.x][source!.y].occupant = undefined
+        delete G.board[source!.x][source!.y].occupant
         endAction(G, ctx)
         return
     }
@@ -71,7 +72,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
     targetSpace.occupant = new Leader(color, ctx.currentPlayer)
     G.players[ctx.currentPlayer]!.leaders[color] = destination
     if (source) {
-        G.board[source.x][source.y].occupant = undefined
+        delete G.board[source.x][source.y].occupant
     }
 
     // If the existing kingdom contains the leader, a revolt occurs.

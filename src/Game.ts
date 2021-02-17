@@ -4,8 +4,8 @@ import { TurnOrder } from 'boardgame.io/core'
 import { ALL_COLORS, Color, RED } from './static/colors'
 import { Board } from './models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
-import { commitToConflict, resolveConflict } from './moves/conflict'
-import { CONFLICT, RESOLVE_CONFLICT } from './static/stages'
+import { chooseWar, commitToConflict, resolveConflict } from './moves/conflict'
+import { CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT } from './static/stages'
 import { Monument, Tile } from './models/pieces'
 import { TILE_COUNTS } from './static/tile'
 import CNState from './models/state'
@@ -13,7 +13,7 @@ import placeLeader from './moves/placeLeader'
 import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
-import { endAction } from './moves/helpers'
+import { endAction } from './moves/helpers/utility'
 
 function setup(ctx: Ctx): CNState {
     // Board
@@ -85,6 +85,9 @@ export const CubeNations: Game<CNState> = {
             },
             [RESOLVE_CONFLICT]: {
                 moves: {resolveConflict}
+            },
+            [CHOOSE_WAR] :{
+                moves: {chooseWar}
             }
         }
     }

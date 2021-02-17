@@ -4,7 +4,7 @@ import { Revolt } from '../models/conflict'
 
 import CNState from '../models/state'
 import { RED } from '../static/colors'
-import { endAction } from './helpers'
+import { endAction } from './helpers/utility'
 
 
 export function commitToConflict(G: CNState, ctx: Ctx, handIdxs: Array<number>) {
@@ -32,7 +32,7 @@ export function commitToConflict(G: CNState, ctx: Ctx, handIdxs: Array<number>) 
 function resolveRevolt(G: CNState, ctx: Ctx, loser: PlayerID) {
     // Return the losing leader home.
     const loserPosition = G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor]!
-    G.board[loserPosition.x][loserPosition.y].occupant = undefined
+    delete G.board[loserPosition.x][loserPosition.y].occupant
     G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor] = null
 
     // Award the winner one point.
@@ -44,6 +44,9 @@ function resolveRevolt(G: CNState, ctx: Ctx, loser: PlayerID) {
 }
 
 function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
+    // Re-check for war using unification tile.
+    // If more, go to choose to not
+    // else, unset unification, check for monument, end turn
 }
 
 export function resolveConflict(G: CNState, ctx: Ctx) {
@@ -60,4 +63,8 @@ export function resolveConflict(G: CNState, ctx: Ctx) {
     } else {
         resolveWar(G, ctx, loser!)
     }
+}
+
+export function chooseWar(G: CNState, ctx: Ctx) {
+
 }

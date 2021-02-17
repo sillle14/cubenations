@@ -1,9 +1,10 @@
 import { Ctx } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
-import { BLACK, BLUE, Color } from '../static/colors'
+import { ALL_COLORS, BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
-import { endAction, getAdjacentRegions } from './helpers'
+import { getAdjacentRegions } from './helpers/regions'
+import { endAction } from './helpers/utility'
 import CNState from '../models/state'
 
 
@@ -42,7 +43,23 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
     G.players[ctx.currentPlayer]!.hand[handIndex] = null
 
     if (kingdoms.length === 2) {
-        console.log('maybe war!') // TODO implement this
+        let warringColors: Array<Color> = []
+        ALL_COLORS.forEach(c => {
+            if (kingdoms.every(k => !!k.leaders[c])) {
+                warringColors.push(c)
+            }
+        })
+
+        if (warringColors) {
+            // Set unificaiton tile
+            if (warringColors.length === 1) {
+                // set the war here.
+                
+            } else if (warringColors.length > 1) {
+                // set the phase here.
+            }
+        }
+        // NOTE: Even if there is no war, points are not awarded.
     } else if (kingdoms.length === 1) {
         // Award a point for the placed tile.
         const matchingLeaderPlayerID = kingdoms[0].leaders[tile.color]
@@ -54,8 +71,6 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
                 G.players[blackLeaderPlayerID]!.points[tile.color] += 1
             }
         }
-    } else {
-        console.log('no points!')
     }
 
     // TODO: Check for monuments here.
