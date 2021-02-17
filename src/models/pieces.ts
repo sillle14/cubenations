@@ -27,7 +27,7 @@ export interface DraggedTile extends Tile {
 export class Monument implements Occupant {
     type = MONUMENT
     colors: [Color, Color]
-    // position: number TODO: Good way of displaying these not all the same
+    // position: Coord Keep track of top left (null for unplaced)
 
     constructor (c1: Color, c2: Color) {
         this.colors = [c1, c2]

@@ -9,12 +9,12 @@ const useStyles = makeStyles({
     root: {
         display: 'flex',
         flexWrap: 'wrap',
-        width: `calc(${TILE_SIZE} * 4.5)`,
+        width: `calc(${TILE_SIZE} * 3)`,
         height: 'max-content'
     },
     tileContainer: {
-        height: TILE_SIZE,
-        width: TILE_SIZE,
+        height: `calc(${TILE_SIZE} * 2)`,
+        width: `calc(${TILE_SIZE} * 2)`,
         padding: '6px',
     },
 })
