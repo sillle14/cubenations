@@ -1,8 +1,10 @@
 
+import { PlayerID } from 'boardgame.io';
 import { Board, Coord } from '../../models/board'
-import { CATASTROPHE, Tile, TILE } from '../../models/pieces'
+import { CATASTROPHE, Leader, LEADER, Tile, TILE } from '../../models/pieces'
+import Player from '../../models/player';
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../../static/board'
-import { Color } from '../../static/colors'
+import { Color, RED } from '../../static/colors'
 
 /**
  * Get the coordinates of all adjacent and filled spaces for a given space.
@@ -44,4 +46,30 @@ export function isColorTile(coord: Coord, board: Board, color: Color): boolean {
     } else {
         return false
     }
+}
+
+/**
+ * Remove a tile from the board, sending leaders home as necessary.
+ * 
+ * @param coord Coordinate of space to clear
+ * @param board Current board state
+ * @param players Player map to modify if necessary
+ */
+export function safeRemoveTile(coord: Coord, board: Board, players: {[playerID in PlayerID]?: Player}) {
+    // If space is a red tile, we need to check if adjacent leaders should be sent home.
+    if (isColorTile(coord, board, RED)) {
+        getNeighbors(coord, board).forEach(neighbor => {
+            if (!board[neighbor.x][neighbor.y]) return
+            if (board[neighbor.x][neighbor.y].occupant!.type !== LEADER) return
+            const leader = board[neighbor.x][neighbor.y].occupant! as Leader
+            const leaderNeighbors = getNeighbors(neighbor, board)
+            // The leader should have at least two red neighbors, including the one we are removing here.
+            if (leaderNeighbors.map(ln => isColorTile(ln, board, RED)).length < 2) {
+                // Send the leader back to hand.
+                players[leader.playerID]!.leaders[leader.color] = null
+                delete board[neighbor.x][neighbor.y].occupant
+            }
+        })
+    }
+    delete board[coord.x][coord.y].occupant
 }

@@ -40,6 +40,7 @@ export function endAction(G: CNState, ctx: Ctx) {
                         player.points[color as Color] += 1
                         return true
                     }
+                    return false
                 })
             })
         })

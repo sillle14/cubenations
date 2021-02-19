@@ -1,10 +1,11 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 
 import { Board, Coord } from '../models/board'
 import { canPlaceLeader } from '../moves/placeLeader'
 import { canPlaceTile } from '../moves/placeTile'
-import { Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '../models/pieces'
+import { CATASTROPHE, Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '../models/pieces'
 import Droppable from './droppable'
+import { canPlaceCatastrophe } from '../moves/placeCatastrophe'
 
 interface TileSquareProps {
     location: Coord, 
@@ -12,28 +13,41 @@ interface TileSquareProps {
     children: React.ReactNode,
     placeTile: any,
     placeLeader: any,
+    placeCatastrophe: any,
     board: Board
 }
-const TileSquare = ({ location, className, children, placeTile, placeLeader, board }: TileSquareProps) => {
+const TileSquare: FunctionComponent<TileSquareProps> = ({ location, className, children, placeTile, placeLeader, placeCatastrophe, board }) => {
 
     const canDrop = (item: Dragged) => {
-        if (item.type === TILE) {
-            return canPlaceTile(location, (item as DraggedTile).color, board)
-        } else if (item.type === LEADER) {
-            return canPlaceLeader((item as DraggedLeader).source, location, board)
-        } else {
-            return true
+        switch (item.type) {
+            case TILE:
+                return canPlaceTile(location, (item as DraggedTile).color, board)
+            case LEADER:
+                return canPlaceLeader((item as DraggedLeader).source, location, board)
+            case CATASTROPHE:
+                return canPlaceCatastrophe(location, board)
+            default:
+                return false
         }
     }
 
     const onDrop = (item: Dragged) => {
-        if (item.type === TILE) {
-            placeTile((item as DraggedTile).handIndex, location)
-        } else if (item.type === LEADER) {
-            placeLeader((item as DraggedLeader).color, location)
+        switch (item.type) {
+            case TILE:
+                placeTile((item as DraggedTile).handIndex, location)
+                break
+            case LEADER:
+                placeLeader((item as DraggedLeader).color, location)
+                break
+            case CATASTROPHE:
+                placeCatastrophe(location)
+                break
+            default:
+                console.log('bad drop')
+                break
         }
     }
-    return <td className={className}><Droppable accept={[TILE, LEADER]} canDrop={canDrop} onDrop={onDrop}>
+    return <td className={className}><Droppable accept={[TILE, LEADER, CATASTROPHE]} canDrop={canDrop} onDrop={onDrop}>
         {children}
     </Droppable></td>
 }

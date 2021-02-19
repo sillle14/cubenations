@@ -57,4 +57,4 @@ export class Catastrophe implements Occupant {
     type = CATASTROPHE
 }
 
-export type Dragged = DraggedTile | DraggedLeader | DraggedMonument
+export type Dragged = DraggedTile | DraggedLeader | DraggedMonument | Catastrophe

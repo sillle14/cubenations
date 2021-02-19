@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
 import { TILE_SIZE } from '../static/display'
-import { DraggedLeader, LEADER } from '../models/pieces'
+import { Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
 import Action from './action'
@@ -67,7 +67,7 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
 
     const classes = useStyles()
 
-    const {canDragHand} = useContext(DraggableContext)
+    const {canDragHand, canDragCatastrophe} = useContext(DraggableContext)
 
     const hand = player.hand.map((t, i) => (
         <div className={classes.tileContainer} key={`hand-${i}`}>
@@ -109,7 +109,7 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
     for (let i = 0; i < player.catastrophes; i++) {
         catastrophes.push(
             <div className={classes.tileContainer} key={i}>
-                <CatastropheComp/>
+                <Draggable draggable={canDragCatastrophe} item={new Catastrophe()}><CatastropheComp/></Draggable>
             </div>
         )
     }
@@ -175,6 +175,12 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
                 <span>Leaders:</span>
                 <div className={classes.leaders}>
                     {leaders}
+                </div>
+            </div>
+            <div>
+                <span>Catastrophes:</span>
+                <div className={classes.leaders}>
+                    {catastrophes}
                 </div>
             </div>
             <div>

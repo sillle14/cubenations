@@ -33,11 +33,12 @@ interface TileGridProps {
     board: Board, 
     placeTile: Move, 
     placeLeader: Move, 
+    placeCatastrophe: Move,
     placeMonument: (position: Coord, idx: number) => void,
     possibleMonuments?: Array<Coord>,
     monuments: Array<Monument>
 }
-const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLeader, placeMonument, possibleMonuments, monuments}) => {
+const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLeader, placeMonument, placeCatastrophe, possibleMonuments, monuments}) => {
 
     let classes = useStyles()
 
@@ -56,6 +57,7 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
                     location={location}
                     placeTile={placeTile}
                     placeLeader={placeLeader}
+                    placeCatastrophe={placeCatastrophe}
                     board={board}
                 >
                     {board[x][y].unification ? <div style={{position: 'absolute', color: 'white'}}>U</div> : null}
@@ -78,6 +80,7 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
                 <MonumentComp colors={m.colors}/>
             </div>
         }
+        return null
     })
 
     return (

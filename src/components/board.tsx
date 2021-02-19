@@ -47,6 +47,8 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         (playerID === ctx.currentPlayer && !ctx.activePlayers) || 
         (!!ctx.activePlayers && ctx.activePlayers[playerID!] === CONFLICT)
     )
+    // Players can drag catastrophes if they are the current player and no stage is present.
+    let canDragCatastrophe = playerID === ctx.currentPlayer && !ctx.activePlayers
     // Players can drag their own leaders on their turn, but NOT during other stages.
     let canDragLeader = (leaderID: PlayerID) => (
         leaderID === playerID && playerID === ctx.currentPlayer && !ctx.activePlayers
@@ -69,13 +71,14 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     }
     
     return (
-        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument}}>
+        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument, canDragCatastrophe}}>
             <div style={{display: 'flex'}}>
                 <TileGrid 
                     board={G.board} 
                     placeTile={moves.placeTile} 
                     placeLeader={moves.placeLeader}
                     placeMonument={moves.placeMonument} 
+                    placeCatastrophe={moves.placeCatastrophe}
                     possibleMonuments={G.possibleMonuments}
                     monuments={G.monuments}
                 />

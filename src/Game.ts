@@ -11,6 +11,7 @@ import { TILE_COUNTS } from './static/tile'
 import CNState from './models/state'
 import placeLeader from './moves/placeLeader'
 import placeMonument from './moves/placeMonument'
+import placeCatastrophe from './moves/placeCatastrophe'
 import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
@@ -79,7 +80,7 @@ export const CubeNations: Game<CNState> = {
     setup: setup,
     minPlayers: 2,
     maxPlayers: 4,
-    moves: { placeTile, placeLeader, pass: endAction },
+    moves: { placeTile, placeLeader, placeCatastrophe, pass: endAction },
     turn: {
         order: TurnOrder.CUSTOM_FROM('playerOrder'),
         stages: {
