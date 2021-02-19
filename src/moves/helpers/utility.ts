@@ -1,8 +1,6 @@
-import { Ctx } from 'boardgame.io'
 
 import { Board, Coord } from '../../models/board'
 import { CATASTROPHE, Tile, TILE } from '../../models/pieces'
-import CNState from '../../models/state'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../../static/board'
 import { Color } from '../../static/colors'
 
@@ -45,29 +43,5 @@ export function isColorTile(coord: Coord, board: Board, color: Color): boolean {
         return (board[coord.x][coord.y].occupant as Tile).color === color
     } else {
         return false
-    }
-}
-
-/**
- * End a player's action, ending the turn if it was their second action, and refilling all players
- * tiles if so.
- * 
- * @param G Game object
- * @param ctx Context object
- */
-export function endAction(G: CNState, ctx: Ctx) {
-    let player = G.players[ctx.currentPlayer]!
-    player.actions -= 1
-    if (player.actions === 0) {
-        player.actions = 2
-        for (const playerID in G.players) {
-            for (let i = 0; i < 6; i++) {
-                if (!G.players[playerID]!.hand[i]) {
-                    G.players[playerID]!.hand[i] = G.tileBag.pop()!
-                }
-            }
-        }
-        // TODO: check for treasure
-        ctx.events!.endTurn!()
     }
 }

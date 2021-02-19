@@ -14,7 +14,7 @@ import placeMonument from './moves/placeMonument'
 import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
-import { endAction } from './moves/helpers/utility'
+import { endAction } from "./moves/helpers/endAction"
 
 function setup(ctx: Ctx): CNState {
     // Board

@@ -7,7 +7,8 @@ import CNState from '../models/state'
 import { Color, RED } from '../static/colors'
 import { getAdjacentRegions } from './helpers/regions'
 import { checkForMonument } from './helpers/monument'
-import { endAction, getNeighbors } from './helpers/utility'
+import { getNeighbors } from './helpers/utility'
+import { endAction } from "./helpers/endAction"
 import { startWar, checkAndStartWar } from './helpers/war'
 import { Coord } from '../models/board'
 

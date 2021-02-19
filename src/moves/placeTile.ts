@@ -5,7 +5,7 @@ import { BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
 import { getAdjacentRegions } from './helpers/regions'
 import { checkForMonument } from './helpers/monument'
-import { endAction } from './helpers/utility'
+import { endAction } from "./helpers/endAction"
 import { checkAndStartWar } from './helpers/war'
 import CNState from '../models/state'
 

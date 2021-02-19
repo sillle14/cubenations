@@ -3,7 +3,8 @@ import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { Color, RED } from '../static/colors'
 import { getAdjacentRegions } from './helpers/regions'
-import { endAction, getNeighbors, isColorTile } from './helpers/utility'
+import { getNeighbors, isColorTile } from './helpers/utility'
+import { endAction } from "./helpers/endAction"
 import CNState from '../models/state'
 import { Leader } from '../models/pieces'
 import { Board, Coord } from '../models/board'

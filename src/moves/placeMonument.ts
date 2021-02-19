@@ -2,7 +2,7 @@ import { Ctx } from 'boardgame.io'
 import { Coord } from '../models/board'
 
 import CNState from '../models/state'
-import { endAction } from './helpers/utility'
+import { endAction } from "./helpers/endAction"
 
 export default function placeMonument(G: CNState, ctx: Ctx, position: Coord, idx: number) {
 
