@@ -71,7 +71,14 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     return (
         <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument}}>
             <div style={{display: 'flex'}}>
-                <TileGrid board={G.board} placeTile={moves.placeTile} placeLeader={moves.placeLeader} possibleMonuments={G.possibleMonuments}/>
+                <TileGrid 
+                    board={G.board} 
+                    placeTile={moves.placeTile} 
+                    placeLeader={moves.placeLeader}
+                    placeMonument={moves.placeMonument} 
+                    possibleMonuments={G.possibleMonuments}
+                    monuments={G.monuments}
+                />
                 {conflict}
                 <MonumentsComp monuments={G.monuments}/>
             </div>

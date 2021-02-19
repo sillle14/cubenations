@@ -27,9 +27,11 @@ export interface DraggedTile extends Tile {
 export class Monument implements Occupant {
     type = MONUMENT
     colors: [Color, Color]
+    position: Coord | null
 
     constructor (c1: Color, c2: Color) {
         this.colors = [c1, c2]
+        this.position = null
     }
 }
 export interface DraggedMonument extends Monument {

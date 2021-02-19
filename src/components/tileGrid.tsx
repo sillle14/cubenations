@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
 
@@ -8,6 +8,8 @@ import { GRID_BORDER, TILE_SIZE, TILE_PAD } from '../static/display'
 import OccupantComp from './occupant'
 import TileSquare from './tileSquare'
 import MonumentDropTarget from './monumentDropTarget'
+import MonumentComp from './monument'
+import { Monument } from '../models/pieces'
 
 const useStyles = makeStyles({
     root: {
@@ -25,42 +27,17 @@ const useStyles = makeStyles({
         '& .special-border': {
             boxShadow: `inset 0px 0px 0px calc(${GRID_BORDER} * 2) black`,
         }
-    },
-    tl: {
-        position: 'absolute',
-        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        background: 'rgba(255, 0, 0, 0.5)',
-        left: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 2.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-        top: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 1.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-    },
-    tr: {
-        position: 'absolute',
-        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        background: 'rgba(0, 0, 255, 0.5)',
-        right: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 11.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-        top: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 1.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-    },
-    bl: {
-        position: 'absolute',
-        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        background: 'rgba(0, 255, 0, 0.5)',
-        left: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 2.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-        bottom: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 7.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-    },
-    br: {
-        position: 'absolute',
-        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
-        background: 'rgba(0, 255, 255, 0.5)',
-        right: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 11.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
-        bottom: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 7.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
     }
 })
-
-const TileGrid = ({board, placeTile, placeLeader, possibleMonuments}: {board: Board, placeTile: Move, placeLeader: Move, possibleMonuments?: Array<Coord>}) => {
+interface TileGridProps {
+    board: Board, 
+    placeTile: Move, 
+    placeLeader: Move, 
+    placeMonument: (position: Coord, idx: number) => void,
+    possibleMonuments?: Array<Coord>,
+    monuments: Array<Monument>
+}
+const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLeader, placeMonument, possibleMonuments, monuments}) => {
 
     let classes = useStyles()
 
@@ -89,12 +66,25 @@ const TileGrid = ({board, placeTile, placeLeader, possibleMonuments}: {board: Bo
         rows.push(<tr key={y}>{row}</tr>)
     }
 
-    const monumentDTs = possibleMonuments ? possibleMonuments.map((m, i) => <MonumentDropTarget key={i} position={m}/>) : []
+    const monumentDTs = (possibleMonuments || []).map(
+        (m, i) => <MonumentDropTarget key={i} position={m} placeMonument={placeMonument}/>
+    )
+
+    const monumentComps = monuments.map((m, i) => {
+        if (m.position) {
+            const top = `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * ${m.position.y} + ${GRID_BORDER} + ${TILE_PAD})`
+            const left = `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * ${m.position.x} + ${GRID_BORDER} + ${TILE_PAD})`
+            return <div style={{position: 'absolute', top, left}} key={i}>
+                <MonumentComp colors={m.colors}/>
+            </div>
+        }
+    })
 
     return (
         <div style={{position: 'relative'}}>
             <table className={classes.root}><tbody>{rows}</tbody></table>
             {monumentDTs}
+            {monumentComps}
         </div>
     )
 }

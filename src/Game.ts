@@ -93,7 +93,10 @@ export const CubeNations: Game<CNState> = {
                 moves: {chooseWar}
             },
             [MONUMENT]: {
-                moves: {placeMonument, pass: (G: CNState, ctx: Ctx) => {ctx.events!.endStage!(); endAction(G, ctx)}}
+                moves: {
+                    placeMonument,
+                    pass: (G: CNState, ctx: Ctx) => {ctx.events!.endStage!(); endAction(G, ctx)}
+                }
             }
         }
     }

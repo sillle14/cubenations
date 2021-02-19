@@ -2,14 +2,15 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
+import { GRID_BORDER, TILE_PAD, TILE_SIZE } from '../static/display'
 
 const useStyles = makeStyles({
     root: {
-        height: '100%',
-        width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        height: `calc((${TILE_SIZE} + ${TILE_PAD}) * 2 + ${GRID_BORDER})`,
+        width: `calc((${TILE_SIZE} + ${TILE_PAD}) * 2 + ${GRID_BORDER})`,
     },
     inner: {
         height: '50%',
