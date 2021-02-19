@@ -67,7 +67,7 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
         }
     }
 
-    if (!checkForMonument(destination, G.board)) {
+    if (!checkForMonument(G, ctx, destination)) {
         endAction(G, ctx)
     }
 }

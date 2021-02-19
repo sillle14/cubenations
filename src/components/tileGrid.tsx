@@ -2,19 +2,20 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
 
-import { Board } from '../models/board'
+import { Board, Coord } from '../models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
-import { TILE_SIZE } from '../static/display'
+import { GRID_BORDER, TILE_SIZE, TILE_PAD } from '../static/display'
 import OccupantComp from './occupant'
 import TileSquare from './tileSquare'
+import MonumentDropTarget from './monumentDropTarget'
 
 const useStyles = makeStyles({
     root: {
         background: '#ffecb3',
         borderCollapse: 'collapse',
         '& td': {
-            border: '1px solid black',
-            padding: '6px',
+            border: `${GRID_BORDER} solid black`,
+            padding: TILE_PAD,
             height: TILE_SIZE,
             width: TILE_SIZE,
         },
@@ -22,12 +23,44 @@ const useStyles = makeStyles({
             background: '#81d4fa'
         },
         '& .special-border': {
-            boxShadow: 'inset 0px 0px 0px 2px black',
+            boxShadow: `inset 0px 0px 0px calc(${GRID_BORDER} * 2) black`,
         }
     },
+    tl: {
+        position: 'absolute',
+        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        background: 'rgba(255, 0, 0, 0.5)',
+        left: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 2.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+        top: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 1.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+    },
+    tr: {
+        position: 'absolute',
+        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        background: 'rgba(0, 0, 255, 0.5)',
+        right: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 11.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+        top: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 1.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+    },
+    bl: {
+        position: 'absolute',
+        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        background: 'rgba(0, 255, 0, 0.5)',
+        left: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 2.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+        bottom: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 7.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+    },
+    br: {
+        position: 'absolute',
+        height: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        width: `calc(${TILE_SIZE} + ${GRID_BORDER})`,
+        background: 'rgba(0, 255, 255, 0.5)',
+        right: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 11.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+        bottom: `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * 7.5 + ${GRID_BORDER} * 0.5 + ${TILE_PAD})`,
+    }
 })
 
-const TileGrid = ({board, placeTile, placeLeader}: {board: Board, placeTile: Move, placeLeader: Move}) => {
+const TileGrid = ({board, placeTile, placeLeader, possibleMonuments}: {board: Board, placeTile: Move, placeLeader: Move, possibleMonuments?: Array<Coord>}) => {
 
     let classes = useStyles()
 
@@ -56,8 +89,13 @@ const TileGrid = ({board, placeTile, placeLeader}: {board: Board, placeTile: Mov
         rows.push(<tr key={y}>{row}</tr>)
     }
 
+    const monumentDTs = possibleMonuments ? possibleMonuments.map((m, i) => <MonumentDropTarget key={i} position={m}/>) : []
+
     return (
-        <table className={classes.root}><tbody>{rows}</tbody></table>
+        <div style={{position: 'relative'}}>
+            <table className={classes.root}><tbody>{rows}</tbody></table>
+            {monumentDTs}
+        </div>
     )
 }
 

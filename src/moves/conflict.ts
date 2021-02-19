@@ -119,7 +119,7 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
         G.conflict = null
         ctx.events!.endStage!()
 
-        if (!checkForMonument(placedTile, G.board)) {
+        if (!checkForMonument(G, ctx, placedTile)) {
             endAction(G, ctx)
         }
     }

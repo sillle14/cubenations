@@ -1,6 +1,6 @@
 import React from 'react'
 import { Coord } from '../models/board'
-import { Leader, LEADER, Occupant, Tile, TILE } from '../models/pieces'
+import { Leader, LEADER, MONUMENT, Occupant, Tile, TILE } from '../models/pieces'
 import LeaderComp from './leader'
 import TileComp from './tile'
 
@@ -15,6 +15,9 @@ const OccupantComp = ({occupant, location}: {occupant?: Occupant, location?: Coo
             return <TileComp {...occupant as Tile}/>
         case LEADER:
             return <LeaderComp {...occupant as Leader} location={location || null}/>
+        case MONUMENT:
+            // Monuments are overlaid
+            return null
         default:
             console.log('ahhh') // TODO
             return null

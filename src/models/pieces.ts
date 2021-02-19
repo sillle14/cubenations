@@ -27,12 +27,13 @@ export interface DraggedTile extends Tile {
 export class Monument implements Occupant {
     type = MONUMENT
     colors: [Color, Color]
-    // position: Coord Keep track of top left (null for unplaced)
 
     constructor (c1: Color, c2: Color) {
         this.colors = [c1, c2]
-        // this.position = position
     }
+}
+export interface DraggedMonument extends Monument {
+    monumentIndex: number
 }
 
 export class Leader implements Occupant {
@@ -54,4 +55,4 @@ export class Catastrophe implements Occupant {
     type = CATASTROPHE
 }
 
-export type Dragged = DraggedTile | DraggedLeader
+export type Dragged = DraggedTile | DraggedLeader | DraggedMonument

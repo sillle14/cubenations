@@ -37,6 +37,9 @@ export function getNeighbors(coord: Coord, board: Board): Array<Coord> {
  * @param color Color to check for
  */
 export function isColorTile(coord: Coord, board: Board, color: Color): boolean {
+    // Return false if the tile is off the board.
+    if (coord.x < 0 || coord.y < 0 || coord.x >= BOARD_WIDTH || coord.y >= BOARD_HEIGHT) return false
+
     const isTile = board[coord.x][coord.y].occupant && board[coord.x][coord.y].occupant!.type === TILE
     if (isTile) {
         return (board[coord.x][coord.y].occupant as Tile).color === color

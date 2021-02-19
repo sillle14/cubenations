@@ -13,7 +13,7 @@ import Droppable from './droppable'
 import LeaderComp from './leader'
 import Player from '../models/player'
 import TileComp from './tile'
-import { CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT } from '../static/stages'
+import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT } from '../static/stages'
 
 const useStyles = makeStyles({
     root: {
@@ -137,6 +137,12 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
             action = <Action
                 message="Choose war to resolve first"
                 buttons={possibleWars!.map(c => {return {text: c, onClick: () => {chooseWar(c)}}})}
+            />
+            break
+        case MONUMENT:
+            action = <Action
+                message="Choose a monument or pass"
+                buttons={[{text: 'pass', onClick: () => {pass()}}]}
             />
             break
         default:

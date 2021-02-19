@@ -18,7 +18,7 @@ const TileSquare = ({ location, className, children, placeTile, placeLeader, boa
 
     const canDrop = (item: Dragged) => {
         if (item.type === TILE) {
-            return canPlaceTile(location, item.color, board)
+            return canPlaceTile(location, (item as DraggedTile).color, board)
         } else if (item.type === LEADER) {
             return canPlaceLeader((item as DraggedLeader).source, location, board)
         } else {
@@ -30,7 +30,7 @@ const TileSquare = ({ location, className, children, placeTile, placeLeader, boa
         if (item.type === TILE) {
             placeTile((item as DraggedTile).handIndex, location)
         } else if (item.type === LEADER) {
-            placeLeader(item.color, location)
+            placeLeader((item as DraggedLeader).color, location)
         }
     }
     return <td className={className}><Droppable accept={[TILE, LEADER]} canDrop={canDrop} onDrop={onDrop}>

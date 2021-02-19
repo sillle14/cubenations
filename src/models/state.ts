@@ -15,5 +15,7 @@ export default interface CNState {
     playerOrder: Array<PlayerID>,
     unificationTile: Coord | null
     possibleWars?: Array<Color>,
-    warringKingdoms?: Array<Region>
+    warringKingdoms?: Array<Region>,
+    availableMonumentColor?: Color,
+    possibleMonuments?: Array<Coord>
 }

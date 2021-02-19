@@ -10,12 +10,13 @@ import PlayerComp from './player'
 import MonumentsComp from './monuments'
 import DraggableContext from './draggableContext'
 import TileGrid from './tileGrid'
-import { RESOLVE_CONFLICT } from '../static/stages'
+import { CONFLICT, MONUMENT, RESOLVE_CONFLICT } from '../static/stages'
+import { Color } from '../static/colors'
 
 export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardProps<CNState>) => {
     
-        let playerMap: {[id in PlayerID]: string} = {}
-        matchData!.forEach((player, i) => {playerMap[player.id] = player.name ? player.name.slice(0, 10) : `Player ${i}`})
+    let playerMap: {[id in PlayerID]: string} = {}
+    matchData!.forEach((player, i) => {playerMap[player.id] = player.name ? player.name.slice(0, 10) : `Player ${i}`})
 
     // Keep track of tiles sent to a conflict or the discard, until the move is confirmed.
     const [sentIdxs, setSentIdxs] = useState<Array<number>>([])
@@ -39,15 +40,22 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         setSentIdxs([])
     }
 
-    // Players can drag tiles from their hand if they are the current player or involved in a current conflict.
+    // TODO: Handle spectators
+    // Players can drag tiles from their hand if they are the current player and no stage is present
+    //  or if they are involved in a conflict.
     let canDragHand = (
-        !!playerID &&
-        (playerID === ctx.currentPlayer || (!!ctx.activePlayers && !!ctx.activePlayers[playerID]))
+        (playerID === ctx.currentPlayer && !ctx.activePlayers) || 
+        (!!ctx.activePlayers && ctx.activePlayers[playerID!] === CONFLICT)
     )
-    // Players can drag their own leaders on their turn, but NOT during other phases (conflicts).
+    // Players can drag their own leaders on their turn, but NOT during other stages.
     let canDragLeader = (leaderID: PlayerID) => (
         leaderID === playerID && playerID === ctx.currentPlayer && !ctx.activePlayers
     )
+    // Players can drag monuments only if they are in the monument stages.
+    let canDragMonument = (colors: Array<Color>) => (
+        !!G.availableMonumentColor && colors.includes(G.availableMonumentColor!) && !!ctx.activePlayers && ctx.activePlayers[playerID!] === MONUMENT
+    )
+
     let conflict = <PeaceComp/>
     if (G.conflict) {
         conflict = <ConflictComp 
@@ -61,9 +69,9 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     }
     
     return (
-        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader}}>
+        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument}}>
             <div style={{display: 'flex'}}>
-                <TileGrid board={G.board} placeTile={moves.placeTile} placeLeader={moves.placeLeader}/>
+                <TileGrid board={G.board} placeTile={moves.placeTile} placeLeader={moves.placeLeader} possibleMonuments={G.possibleMonuments}/>
                 {conflict}
                 <MonumentsComp monuments={G.monuments}/>
             </div>
