@@ -85,10 +85,9 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
                 if (getNeighbors({x: x, y: y}, G.board).some(
                     c => G.board[c.x][c.y].occupant!.type === LEADER)
                 ) return
-            } else {
-                delete G.board[x][y].occupant
-                winnerPoints += 1
             }
+            delete G.board[x][y].occupant
+            winnerPoints += 1
         })
     })
 
