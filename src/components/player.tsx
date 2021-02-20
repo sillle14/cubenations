@@ -56,16 +56,17 @@ type PlayerProps = {
     sentIdxs: Array<number>,
     clear: () => void,
     commitToConflict: (handIdxs: Array<number>) => void,
+    discardTiles: (handIdxs: Array<number>) => void,
     resolveConflict: () => void,
     stage: string,
     pass: () => void,
     anyStage: boolean,
     possibleWars?: Array<Color>,
     chooseWar: (color: Color) => void
-    takeTreasure: (source: Coord) => void
+    takeTreasure: (source: Coord) => void,
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles}) => {
 
     const classes = useStyles()
 
@@ -163,12 +164,22 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
             break
         default:
             if (myTurn && !anyStage) {
-                action = <Action
-                    message={`${player.actions} action${player.actions > 1 ? 's' : ''} left.`}
-                    buttons={[
-                        {text: 'pass', onClick: () => {pass()}},
-                    ]}
-                />
+                if (!sentIdxs.length) {
+                    action = <Action
+                        message={`${player.actions} action${player.actions > 1 ? 's' : ''} left.`}
+                        buttons={[
+                            {text: 'pass', onClick: () => {pass()}},
+                        ]}
+                    />
+                } else {
+                    action = <Action
+                        message={`Discard and replace ${sentIdxs.length} tile${sentIdxs.length > 1 ? 's' : ''}?`}
+                        buttons={[
+                            {text: 'confirm', onClick: () => {discardTiles(sentIdxs)}},
+                            {text: 'cancel', onClick: clear}
+                        ]}
+                    />
+                }
             } else {
                 action = <Action
                     message="Wait for your turn."

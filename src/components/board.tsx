@@ -7,6 +7,7 @@ import { PlayerID } from 'boardgame.io'
 import CNState from '../models/state'
 import ConflictComp, { PeaceComp } from './conflict'
 import PlayerComp from './player'
+import DiscardComp from './discard'
 import MonumentsComp from './monuments'
 import DraggableContext from './draggableContext'
 import TileGrid from './tileGrid'
@@ -27,9 +28,10 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     // TODO: handle spectators
     const mySupport = (((G.conflict || {}).players || {})[playerID!] || {}).support
 
+    // When a player's support changes (meaning they committed tiles) or a discard move is performed, clear the sent tiles.
     useEffect(() => {
         clearSent()
-    }, [mySupport])
+    }, [mySupport, G.discardCount])
 
     const sendTile = (handIdx: number) => {
         setSentCount(sentCount + 1)
@@ -103,9 +105,13 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         possibleWars={G.possibleWars}
                         chooseWar={moves.chooseWar}
                         takeTreasure={moves.takeTreasure}
+                        discardTiles={moves.discardTiles}
                     />
                 </div>
-                {conflict}
+                <div>
+                    {conflict}
+                    <DiscardComp discard={sendTile} allowDiscard={playerID === ctx.currentPlayer && !ctx.activePlayers}/>
+                </div>
                 <MonumentsComp monuments={G.monuments}/>
             </div>
         </DraggableContext.Provider></DndProvider>

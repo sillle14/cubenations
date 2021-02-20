@@ -14,6 +14,7 @@ import placeMonument from './moves/placeMonument'
 import placeCatastrophe from './moves/placeCatastrophe'
 import takeTreasure from './moves/takeTreasure'
 import placeTile from './moves/placeTile'
+import discardTiles from './moves/discard'
 import Player from './models/player'
 import Space from './models/space'
 import { endAction } from "./moves/helpers/endAction"
@@ -72,7 +73,8 @@ function setup(ctx: Ctx): CNState {
         monuments: monuments,
         conflict: null,
         playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.
-        unificationTile: null
+        unificationTile: null,
+        discardCount: 0 // Use to determine when discards have occurred
     }
 }
 
@@ -81,7 +83,7 @@ export const CubeNations: Game<CNState> = {
     setup: setup,
     minPlayers: 2,
     maxPlayers: 4,
-    moves: { placeTile, placeLeader, placeCatastrophe, pass: endAction },
+    moves: { placeTile, placeLeader, placeCatastrophe, discardTiles, pass: endAction },
     turn: {
         order: TurnOrder.CUSTOM_FROM('playerOrder'),
         stages: {
