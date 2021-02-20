@@ -10,8 +10,10 @@ import PlayerComp from './player'
 import MonumentsComp from './monuments'
 import DraggableContext from './draggableContext'
 import TileGrid from './tileGrid'
-import { CONFLICT, MONUMENT, RESOLVE_CONFLICT } from '../static/stages'
+import { CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
 import { Color } from '../static/colors'
+import { Coord } from '../models/board'
+import { canTakeTreasure } from '../moves/takeTreasure'
 
 export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardProps<CNState>) => {
     
@@ -57,6 +59,10 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     let canDragMonument = (colors: Array<Color>) => (
         !!G.availableMonumentColor && colors.includes(G.availableMonumentColor!) && !!ctx.activePlayers && ctx.activePlayers[playerID!] === MONUMENT
     )
+    // Players can drag treasure if they are in the correct phase and the treasure is available.
+    let canDragTreasure = (position: Coord) => (
+        !!ctx.activePlayers && ctx.activePlayers[playerID!] === TREASURE && canTakeTreasure(G, position, playerID!)
+    )
 
     let conflict = <PeaceComp/>
     if (G.conflict) {
@@ -71,34 +77,37 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     }
     
     return (
-        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument, canDragCatastrophe}}>
+        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument, canDragCatastrophe, canDragTreasure}}>
             <div style={{display: 'flex'}}>
-                <TileGrid 
-                    board={G.board} 
-                    placeTile={moves.placeTile} 
-                    placeLeader={moves.placeLeader}
-                    placeMonument={moves.placeMonument} 
-                    placeCatastrophe={moves.placeCatastrophe}
-                    possibleMonuments={G.possibleMonuments}
-                    monuments={G.monuments}
-                />
+                <div>
+                    <TileGrid 
+                        board={G.board} 
+                        placeTile={moves.placeTile} 
+                        placeLeader={moves.placeLeader}
+                        placeMonument={moves.placeMonument} 
+                        placeCatastrophe={moves.placeCatastrophe}
+                        possibleMonuments={G.possibleMonuments}
+                        monuments={G.monuments}
+                    />
+                    <PlayerComp 
+                        player={G.players[playerID!]!} // TODO: Handle spectator
+                        placeLeader={moves.placeLeader}
+                        myTurn={playerID === ctx.currentPlayer}
+                        sentIdxs={sentIdxs}
+                        clear={clearSent}
+                        stage={(ctx.activePlayers || {})[playerID!]} // TODO: Handle spectator
+                        commitToConflict={moves.commitToConflict}
+                        resolveConflict={moves.resolveConflict}
+                        pass={moves.pass}
+                        anyStage={!!ctx.activePlayers}
+                        possibleWars={G.possibleWars}
+                        chooseWar={moves.chooseWar}
+                        takeTreasure={moves.takeTreasure}
+                    />
+                </div>
                 {conflict}
                 <MonumentsComp monuments={G.monuments}/>
             </div>
-            <PlayerComp 
-                player={G.players[playerID!]!} // TODO: Handle spectator
-                placeLeader={moves.placeLeader}
-                myTurn={playerID === ctx.currentPlayer}
-                sentIdxs={sentIdxs}
-                clear={clearSent}
-                phase={(ctx.activePlayers || {})[playerID!]} // TODO: Handle spectator
-                commitToConflict={moves.commitToConflict}
-                resolveConflict={moves.resolveConflict}
-                pass={moves.pass}
-                anyPhase={!!ctx.activePlayers}
-                possibleWars={G.possibleWars}
-                chooseWar={moves.chooseWar}
-            />
         </DraggableContext.Provider></DndProvider>
     )
 }

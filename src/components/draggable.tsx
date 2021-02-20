@@ -8,6 +8,9 @@ const useStyles = makeStyles({
     root: {
         height: '100%',
         width: '100%'
+    },
+    draggable: {
+        '& *': {cursor: 'grab'}
     }
 })
 
@@ -25,7 +28,7 @@ const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, children
     const classes = useStyles()
 
     return (
-        <div ref={drag} className={classes.root}>{children}</div>
+        <div ref={drag} className={`${classes.root} ${draggable ? classes.draggable : ''}`}>{children}</div>
     )
 }
 

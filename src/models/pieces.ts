@@ -10,6 +10,7 @@ export const TILE = 'tile'
 export const MONUMENT = 'monument'
 export const LEADER = 'leader'
 export const CATASTROPHE = 'catastrophe'
+export const TREASURE = 'treasure'
 
 export class Tile implements Occupant {
     type = TILE
@@ -57,4 +58,9 @@ export class Catastrophe implements Occupant {
     type = CATASTROPHE
 }
 
-export type Dragged = DraggedTile | DraggedLeader | DraggedMonument | Catastrophe
+export interface DraggedTreasure {
+    type: typeof TREASURE,
+    source: Coord
+}
+
+export type Dragged = DraggedTile | DraggedLeader | DraggedMonument | Catastrophe | DraggedTreasure

@@ -5,13 +5,14 @@ import { ALL_COLORS, Color, RED } from './static/colors'
 import { Board } from './models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
 import { chooseWar, commitToConflict, resolveConflict } from './moves/conflict'
-import { MONUMENT, CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT } from './static/stages'
+import { MONUMENT, CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT, TREASURE } from './static/stages'
 import { Monument, Tile } from './models/pieces'
 import { TILE_COUNTS } from './static/tile'
 import CNState from './models/state'
 import placeLeader from './moves/placeLeader'
 import placeMonument from './moves/placeMonument'
 import placeCatastrophe from './moves/placeCatastrophe'
+import takeTreasure from './moves/takeTreasure'
 import placeTile from './moves/placeTile'
 import Player from './models/player'
 import Space from './models/space'
@@ -98,6 +99,9 @@ export const CubeNations: Game<CNState> = {
                     placeMonument,
                     pass: (G: CNState, ctx: Ctx) => {ctx.events!.endStage!(); endAction(G, ctx)}
                 }
+            },
+            [TREASURE]: {
+                moves: {takeTreasure}
             }
         }
     }

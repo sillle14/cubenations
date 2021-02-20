@@ -9,6 +9,7 @@ import OccupantComp from './occupant'
 import TileSquare from './tileSquare'
 import MonumentDropTarget from './monumentDropTarget'
 import MonumentComp from './monument'
+import TreasureComp from './treasure'
 import { Monument } from '../models/pieces'
 
 const useStyles = makeStyles({
@@ -42,6 +43,9 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
 
     let classes = useStyles()
 
+    // Treasures are displayed above the board using absolute positioning so they work with monuments.
+    let treasures = []
+
     let rows: Array<JSX.Element> = []
     for (let y = 0; y < BOARD_HEIGHT; y++) {
         let row: Array<JSX.Element> = []
@@ -50,6 +54,9 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
             if (board[x][y].river) classes.push('river')
             if (board[x][y].border) classes.push('special-border')
             const location = {x: x, y: y}
+            if (board[x][y].treasure) {
+                treasures.push(<TreasureComp key={`${x}${y}`} location={{x: x, y: y}}/>)
+            }
             row.push(
                 <TileSquare
                     key={x}
@@ -88,6 +95,7 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
             <table className={classes.root}><tbody>{rows}</tbody></table>
             {monumentDTs}
             {monumentComps}
+            {treasures}
         </div>
     )
 }

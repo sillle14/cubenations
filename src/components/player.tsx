@@ -2,7 +2,7 @@ import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
 import { TILE_SIZE } from '../static/display'
-import { Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
+import { Catastrophe, DraggedLeader, DraggedTreasure, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
 import Action from './action'
@@ -13,7 +13,8 @@ import Droppable from './droppable'
 import LeaderComp from './leader'
 import Player from '../models/player'
 import TileComp from './tile'
-import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT } from '../static/stages'
+import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
+import { Coord } from '../models/board'
 
 const useStyles = makeStyles({
     root: {
@@ -56,14 +57,15 @@ type PlayerProps = {
     clear: () => void,
     commitToConflict: (handIdxs: Array<number>) => void,
     resolveConflict: () => void,
-    phase: string,
+    stage: string,
     pass: () => void,
-    anyPhase: boolean,
+    anyStage: boolean,
     possibleWars?: Array<Color>,
     chooseWar: (color: Color) => void
+    takeTreasure: (source: Coord) => void
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, phase, commitToConflict, resolveConflict, pass, anyPhase, possibleWars, chooseWar}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure}) => {
 
     const classes = useStyles()
 
@@ -115,7 +117,7 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
     }
 
     let action = null
-    switch (phase) {
+    switch (stage) {
         case CONFLICT:
             action = <Action
                 message="Commit tiles to the conflict."
@@ -145,8 +147,22 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
                 buttons={[{text: 'pass', onClick: () => {pass()}}]}
             />
             break
+        case TREASURE:
+            action = <Action
+                message="Collect treasure."
+                buttons={[]}
+            >
+                <div className={classes.tileContainer} style={{background: 'white', alignSelf: 'center'}}>
+                    <Droppable 
+                        accept={TREASURE} 
+                        canDrop={() => true}
+                        onDrop={(item: DraggedTreasure) => {takeTreasure(item.source)}}
+                    />
+                </div>
+            </Action>
+            break
         default:
-            if (myTurn && !anyPhase) {
+            if (myTurn && !anyStage) {
                 action = <Action
                     message={`${player.actions} action${player.actions > 1 ? 's' : ''} left.`}
                     buttons={[

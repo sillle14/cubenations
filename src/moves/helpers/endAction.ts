@@ -1,7 +1,9 @@
-import { Ctx } from 'boardgame.io'
+import { Ctx, PlayerID } from 'boardgame.io'
+import { Coord } from '../../models/board';
 import { Monument, MONUMENT } from '../../models/pieces';
 import CNState from '../../models/state'
-import { Color } from '../../static/colors';
+import { Color, GREEN } from '../../static/colors';
+import { TREASURE } from '../../static/stages';
 
 import { breadthFirstSearch } from './regions'
 
@@ -44,7 +46,30 @@ export function endAction(G: CNState, ctx: Ctx) {
                 })
             })
         })
-        // TODO: check for treasure
-        ctx.events!.endTurn!()
+        // Check for treasure. Treasure is only awarded to green leaders.
+        const treasureStage: {[pid in PlayerID]?: string} = {}
+        for (const pid in G.players) {
+            const p = G.players[pid]!
+            if (p.leaders[GREEN]) {
+                const leaderRegion = breadthFirstSearch({start: p.leaders[GREEN]!, board: G.board})
+                let availableTreasure: Array<Coord> = []
+                leaderRegion.forEach((column, x) => {
+                    column.forEach((space, y) => {
+                        if (space && G.board[x][y].treasure) {
+                            availableTreasure.push({x: x, y: y})
+                        }
+                    })
+                })
+                if (availableTreasure.length > 1) {
+                    p.availableTreasure = availableTreasure
+                    treasureStage[pid] = TREASURE
+                }
+            }
+        }
+        if (Object.keys(treasureStage).length) {
+            ctx.events!.setActivePlayers!({value: treasureStage})
+        } else {
+            ctx.events!.endTurn!()
+        }
     }
 }

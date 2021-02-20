@@ -12,13 +12,14 @@ type ActionProps = {
     message: string,
     buttons: Array<{text: string, onClick: () => void}>
 }
-const Action: FunctionComponent<ActionProps> = ({message, buttons}) => {
+const Action: FunctionComponent<ActionProps> = ({message, buttons, children}) => {
 
     const classes = useStyles()
 
     return <div className={classes.root}>
         <span>{message}</span>
         {buttons.map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}
+        {children}
     </div>
 }
 

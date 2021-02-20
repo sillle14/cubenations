@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { FunctionComponent } from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
@@ -6,7 +6,10 @@ import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
 const useStyles = makeStyles({
     root: {
         height: '100%',
-        width: '100%'
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     [RED]: {
         background: 'red',
@@ -22,12 +25,12 @@ const useStyles = makeStyles({
     }
 })
 
-const TileComp = ({color}: {color: Color}) => {
+const TileComp: FunctionComponent<{color: Color}> = ({color, children}) => {
 
     let classes = useStyles()
 
     return (
-        <div className={`${classes.root} ${classes[color]}`}></div>
+        <div className={`${classes.root} ${classes[color]}`}>{children}</div>
     )
 }
 
