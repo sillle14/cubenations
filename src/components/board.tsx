@@ -113,6 +113,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         takeTreasure={moves.takeTreasure}
                         discardTiles={moves.discardTiles}
                         gameover={ctx.gameover}
+                        playerMap={playerMap}
                     />
                 </div>
                 <div>

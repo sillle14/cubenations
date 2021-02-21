@@ -65,10 +65,11 @@ type PlayerProps = {
     possibleWars?: Array<Color>,
     chooseWar: (color: Color) => void
     takeTreasure: (source: Coord) => void,
-    gameover?: {winnerIDs: Array<PlayerID>}
+    gameover?: {winnerIDs: Array<PlayerID>},
+    playerMap: {[id in PlayerID]: string},
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles, gameover}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles, gameover, playerMap}) => {
 
     const classes = useStyles()
 
@@ -105,8 +106,8 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
     }
 
     let points = []
-    for (const color in player.points) {
-        points.push(<div key={color}>{`${color}: ${player.points[color as Color]}`}</div>)
+    for (const color in player.score) {
+        points.push(<div key={color}>{`${color}: ${player.score[color as Color]}`}</div>)
     }
 
 
@@ -186,7 +187,15 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
     }
 
     if (gameover) {
-        action = <Action message="Game over!"/>
+        let winMessage: string
+        if (gameover.winnerIDs.length > 1) {
+            winMessage = `Players ${gameover.winnerIDs.map(pid => playerMap[pid]).join(' and ')} tie.`
+        } else {
+            winMessage = `${playerMap[gameover.winnerIDs[0]]} wins!`
+        }
+        action = <Action message="Game over.">
+            <span>{winMessage}</span>
+        </Action>
     }
 
     return (

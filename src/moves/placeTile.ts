@@ -58,11 +58,11 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
         // Award a point for the placed tile.
         const matchingLeaderPlayerID = kingdoms[0].leaders[tile.color]
         if (matchingLeaderPlayerID) {
-            G.players[matchingLeaderPlayerID]!.points[tile.color] += 1
+            G.players[matchingLeaderPlayerID]!.score[tile.color] += 1
         } else {
             const blackLeaderPlayerID = kingdoms[0].leaders[BLACK]
             if (blackLeaderPlayerID) {
-                G.players[blackLeaderPlayerID]!.points[tile.color] += 1
+                G.players[blackLeaderPlayerID]!.score[tile.color] += 1
             }
         }
     }

@@ -1,7 +1,7 @@
 import { Ctx, Game, PlayerID } from 'boardgame.io'
 import { TurnOrder } from 'boardgame.io/core'
 
-import { ALL_COLORS, Color, RED } from './static/colors'
+import { ALL_COLORS, BLACK, BLUE, Color, GREEN, RED } from './static/colors'
 import { Board } from './models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
 import { chooseWar, commitToConflict, resolveConflict } from './moves/conflict'
@@ -58,7 +58,7 @@ function setup(ctx: Ctx): CNState {
     }
 
     // Monuments
-    // TODO: switch up inner and outer to more balenced? or match the real game.
+    // TODO: switch up inner and outer to more balanced? or match the real game.
     let monuments: Array<Monument> = []
     for (let i = 0; i < ALL_COLORS.length; i++) {
         for (let j = i + 1; j < ALL_COLORS.length; j++) {
@@ -69,7 +69,7 @@ function setup(ctx: Ctx): CNState {
     return {
         players: players,
         board: board,
-        tileBag: [],
+        tileBag: tileBag,
         monuments: monuments,
         conflict: null,
         playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.

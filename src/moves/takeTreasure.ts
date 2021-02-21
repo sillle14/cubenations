@@ -4,6 +4,7 @@ import { INVALID_MOVE } from 'boardgame.io/core'
 import CNState from '../models/state'
 import { TREASURE } from '../models/pieces'
 import { Coord } from '../models/board'
+import calculateWinners from './helpers/gameOver'
 
 
 export function canTakeTreasure(G: CNState, source: Coord, playerID: PlayerID): boolean {
@@ -24,7 +25,7 @@ export default function takeTreasure(G: CNState, ctx: Ctx, source: Coord) {
 
     // Remove the treasure and award the point.
     G.board[source.x][source.y].treasure = false
-    G.players[ctx.playerID!]!.points[TREASURE] += 1
+    G.players[ctx.playerID!]!.score[TREASURE] += 1
     G.players[ctx.playerID!]!.availableTreasure!.splice(G.players[ctx.playerID!]!.availableTreasure!.indexOf(source), 1)
     G.treasureCount -= 1
 
@@ -37,7 +38,7 @@ export default function takeTreasure(G: CNState, ctx: Ctx, source: Coord) {
         } else {
             // The game ends if there are less than three treasures on the board.
             if (G.treasureCount < 3) {
-                ctx.events!.endGame!({winnerIDs: []}) // TODO: Calculate winners
+                ctx.events!.endGame!({winnerIDs: calculateWinners(G, ctx)})
             }
             ctx.events!.endTurn!()
         }

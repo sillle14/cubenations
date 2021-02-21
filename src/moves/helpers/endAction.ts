@@ -3,7 +3,8 @@ import { Coord } from '../../models/board';
 import { Monument, MONUMENT } from '../../models/pieces';
 import CNState from '../../models/state'
 import { Color, GREEN } from '../../static/colors';
-import { TREASURE } from '../../static/stages';
+import { TREASURE } from '../../static/stages'
+import calculateWinners from './gameOver'
 
 import { breadthFirstSearch } from './regions'
 
@@ -25,7 +26,7 @@ export function endAction(G: CNState, ctx: Ctx) {
                 if (!G.players[playerID]!.hand[i]) {
                     const tile = G.tileBag.pop()
                     if (!tile) {
-                        ctx.events!.endGame!({winnerIDs: []}) // TODO: Calculate winners
+                        ctx.events!.endGame!({winnerIDs: calculateWinners(G, ctx)})
                     } else {
                         G.players[playerID]!.hand[i] = tile
                     }
@@ -44,7 +45,7 @@ export function endAction(G: CNState, ctx: Ctx) {
                     // If there is a monument in the region of the same color as the leader, award
                     //  a point and return true so no other point is awarded.
                     if ((G.board[x][y].occupant! as Monument).colors.includes(color as Color)) {
-                        player.points[color as Color] += 1
+                        player.score[color as Color] += 1
                         return true
                     }
                     return false

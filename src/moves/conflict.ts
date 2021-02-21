@@ -46,7 +46,7 @@ function resolveRevolt(G: CNState, ctx: Ctx, loser: PlayerID) {
     G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor] = null
 
     // Award the winner one point.
-    G.players[G.conflict!.winner!]!.points[RED] += 1
+    G.players[G.conflict!.winner!]!.score[RED] += 1
 
     G.conflict = null
     ctx.events!.endStage!()
@@ -98,7 +98,7 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
     winnerPoints += 1
 
     // Award points.
-    G.players[G.conflict!.winner!]!.points[G.conflict!.color] += winnerPoints
+    G.players[G.conflict!.winner!]!.score[G.conflict!.color] += winnerPoints
 
     // Recalculate the kingdoms to see if another war needs to happen.
     regions = getAdjacentRegions(G.unificationTile!, G.board)
