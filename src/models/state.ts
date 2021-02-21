@@ -18,5 +18,6 @@ export default interface CNState {
     warringKingdoms?: Array<Region>,
     availableMonumentColor?: Color,
     possibleMonuments?: Array<Coord>,
-    discardCount: number
+    discardCount: number,
+    treasureCount: number
 }

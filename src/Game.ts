@@ -69,12 +69,13 @@ function setup(ctx: Ctx): CNState {
     return {
         players: players,
         board: board,
-        tileBag: tileBag,
+        tileBag: [],
         monuments: monuments,
         conflict: null,
         playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.
         unificationTile: null,
-        discardCount: 0 // Use to determine when discards have occurred
+        discardCount: 0, // Use to determine when discards have occurred
+        treasureCount: 10
     }
 }
 

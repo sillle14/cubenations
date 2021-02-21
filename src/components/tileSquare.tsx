@@ -43,7 +43,7 @@ const TileSquare: FunctionComponent<TileSquareProps> = ({ location, className, c
                 placeCatastrophe(location)
                 break
             default:
-                console.log('bad drop')
+                console.error('bad drop')
                 break
         }
     }

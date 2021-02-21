@@ -10,7 +10,7 @@ const useStyles = makeStyles({
 
 type ActionProps = {
     message: string,
-    buttons: Array<{text: string, onClick: () => void}>
+    buttons?: Array<{text: string, onClick: () => void}>
 }
 const Action: FunctionComponent<ActionProps> = ({message, buttons, children}) => {
 
@@ -18,7 +18,7 @@ const Action: FunctionComponent<ActionProps> = ({message, buttons, children}) =>
 
     return <div className={classes.root}>
         <span>{message}</span>
-        {buttons.map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}
+        {(buttons || []).map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}
         {children}
     </div>
 }

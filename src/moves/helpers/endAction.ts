@@ -23,7 +23,12 @@ export function endAction(G: CNState, ctx: Ctx) {
         for (const playerID in G.players) {
             for (let i = 0; i < 6; i++) {
                 if (!G.players[playerID]!.hand[i]) {
-                    G.players[playerID]!.hand[i] = G.tileBag.pop()!
+                    const tile = G.tileBag.pop()
+                    if (!tile) {
+                        ctx.events!.endGame!({winnerIDs: []}) // TODO: Calculate winners
+                    } else {
+                        G.players[playerID]!.hand[i] = tile
+                    }
                 }
             }
         }

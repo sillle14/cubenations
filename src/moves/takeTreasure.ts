@@ -26,6 +26,7 @@ export default function takeTreasure(G: CNState, ctx: Ctx, source: Coord) {
     G.board[source.x][source.y].treasure = false
     G.players[ctx.playerID!]!.points[TREASURE] += 1
     G.players[ctx.playerID!]!.availableTreasure!.splice(G.players[ctx.playerID!]!.availableTreasure!.indexOf(source), 1)
+    G.treasureCount -= 1
 
     // If less than two are available, end the stage.
     if (G.players[ctx.playerID!]!.availableTreasure!.length < 2) {
@@ -34,6 +35,10 @@ export default function takeTreasure(G: CNState, ctx: Ctx, source: Coord) {
         if (Object.keys(ctx.activePlayers!).length > 1) {
             ctx.events!.endStage!()
         } else {
+            // The game ends if there are less than three treasures on the board.
+            if (G.treasureCount < 3) {
+                ctx.events!.endGame!({winnerIDs: []}) // TODO: Calculate winners
+            }
             ctx.events!.endTurn!()
         }
     }

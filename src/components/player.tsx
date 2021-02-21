@@ -15,6 +15,7 @@ import Player from '../models/player'
 import TileComp from './tile'
 import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
 import { Coord } from '../models/board'
+import { PlayerID } from 'boardgame.io'
 
 const useStyles = makeStyles({
     root: {
@@ -64,9 +65,10 @@ type PlayerProps = {
     possibleWars?: Array<Color>,
     chooseWar: (color: Color) => void
     takeTreasure: (source: Coord) => void,
+    gameover?: {winnerIDs: Array<PlayerID>}
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles, gameover}) => {
 
     const classes = useStyles()
 
@@ -149,10 +151,7 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
             />
             break
         case TREASURE:
-            action = <Action
-                message="Collect treasure."
-                buttons={[]}
-            >
+            action = <Action message="Collect treasure.">
                 <div className={classes.tileContainer} style={{background: 'white', alignSelf: 'center'}}>
                     <Droppable 
                         accept={TREASURE} 
@@ -181,12 +180,13 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
                     />
                 }
             } else {
-                action = <Action
-                    message="Wait for your turn."
-                    buttons={[]}
-                />
+                action = <Action message="Wait for your turn."/>
             }
             break
+    }
+
+    if (gameover) {
+        action = <Action message="Game over!"/>
     }
 
     return (

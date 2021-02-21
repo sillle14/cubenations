@@ -47,23 +47,29 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     // TODO: Handle spectators
     // Players can drag tiles from their hand if they are the current player and no stage is present
     //  or if they are involved in a conflict.
-    let canDragHand = (
+    let canDragHand = !!!ctx.gameover && (
         (playerID === ctx.currentPlayer && !ctx.activePlayers) || 
         (!!ctx.activePlayers && ctx.activePlayers[playerID!] === CONFLICT)
     )
     // Players can drag catastrophes if they are the current player and no stage is present.
-    let canDragCatastrophe = playerID === ctx.currentPlayer && !ctx.activePlayers
+    let canDragCatastrophe = playerID === ctx.currentPlayer && !ctx.activePlayers && !!!ctx.gameover
     // Players can drag their own leaders on their turn, but NOT during other stages.
     let canDragLeader = (leaderID: PlayerID) => (
-        leaderID === playerID && playerID === ctx.currentPlayer && !ctx.activePlayers
+        leaderID === playerID && playerID === ctx.currentPlayer && !ctx.activePlayers && !!!ctx.gameover
     )
     // Players can drag monuments only if they are in the monument stages.
     let canDragMonument = (colors: Array<Color>) => (
-        !!G.availableMonumentColor && colors.includes(G.availableMonumentColor!) && !!ctx.activePlayers && ctx.activePlayers[playerID!] === MONUMENT
+        !!G.availableMonumentColor && 
+        colors.includes(G.availableMonumentColor!) && 
+        !!ctx.activePlayers && 
+        ctx.activePlayers[playerID!] === MONUMENT &&
+        !!!ctx.gameover
     )
     // Players can drag treasure if they are in the correct phase and the treasure is available.
     let canDragTreasure = (position: Coord) => (
-        !!ctx.activePlayers && ctx.activePlayers[playerID!] === TREASURE && canTakeTreasure(G, position, playerID!)
+        !!ctx.activePlayers && ctx.activePlayers[playerID!] === TREASURE &&
+        canTakeTreasure(G, position, playerID!) &&
+        !!!ctx.gameover
     )
 
     let conflict = <PeaceComp/>
@@ -106,6 +112,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         chooseWar={moves.chooseWar}
                         takeTreasure={moves.takeTreasure}
                         discardTiles={moves.discardTiles}
+                        gameover={ctx.gameover}
                     />
                 </div>
                 <div>
