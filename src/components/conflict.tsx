@@ -38,10 +38,9 @@ export const PeaceComp = () => {
         </div>
 }
 
-// TODO: playerMap types
 type ConflictProps = {
     conflict: Conflict,
-    playerMap: any,
+    playerMap: {[id in PlayerID]: string},
     tempSupport: number,
     addSupport: (handIdx: number) => void,
     playerID: PlayerID,

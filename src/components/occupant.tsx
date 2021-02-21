@@ -26,7 +26,7 @@ const OccupantComp: FunctionComponent<OccupantProps> = ({occupant, location}) =>
             // Monuments are overlaid
             return null
         default:
-            console.log('ahhh') // TODO
+            console.error('Bad occupant.')
             return null
     }
 }

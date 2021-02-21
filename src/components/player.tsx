@@ -186,7 +186,6 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
                     buttons={[]}
                 />
             }
-            // TODO: case for discarding.
             break
     }
 

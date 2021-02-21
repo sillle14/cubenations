@@ -6,5 +6,4 @@ export default interface Space {
     treasure: boolean,
     border: boolean,
     unification?: boolean
-    // TODO: Maybe add selected?
 }

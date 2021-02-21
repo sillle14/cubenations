@@ -9,11 +9,10 @@ const useStyles = makeStyles({
     }
 })
 
-// TODO: Better typing here
 type DroppableProps = {
-    accept: any,
-    canDrop: any,
-    onDrop: any
+    accept: string | Array<string>,
+    canDrop: (item: any) => boolean,
+    onDrop: (item: any) => void
 }
 
 const Droppable: FunctionComponent<DroppableProps> = ({accept, canDrop, onDrop, children}) => {
