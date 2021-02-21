@@ -1,7 +1,7 @@
 import { Ctx, Game, PlayerID } from 'boardgame.io'
 import { TurnOrder } from 'boardgame.io/core'
 
-import { ALL_COLORS, BLACK, BLUE, Color, GREEN, RED } from './static/colors'
+import { ALL_COLORS, Color, RED } from './static/colors'
 import { Board } from './models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
 import { chooseWar, commitToConflict, resolveConflict } from './moves/conflict'
@@ -69,7 +69,7 @@ function setup(ctx: Ctx): CNState {
     return {
         players: players,
         board: board,
-        tileBag: [],
+        tileBag: tileBag,
         monuments: monuments,
         conflict: null,
         playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.

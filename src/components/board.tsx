@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react'
+import { makeStyles } from '@material-ui/styles'
 import { BoardProps } from 'boardgame.io/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -15,8 +16,20 @@ import { CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages
 import { Color } from '../static/colors'
 import { Coord } from '../models/board'
 import { canTakeTreasure } from '../moves/takeTreasure'
+import ScoreDetailsModal from './scoreDetails'
+
+const useStyles = makeStyles({
+    root: {
+        display: 'flex',
+        '& *': {
+            boxSizing: 'content-box'
+        }
+    }
+})
 
 export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardProps<CNState>) => {
+
+    const classes = useStyles()
     
     let playerMap: {[id in PlayerID]: string} = {}
     matchData!.forEach((player, i) => {playerMap[player.id] = player.name ? player.name.slice(0, 10) : `Player ${i}`})
@@ -24,6 +37,10 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     // Keep track of tiles sent to a conflict or the discard, until the move is confirmed.
     const [sentIdxs, setSentIdxs] = useState<Array<number>>([])
     const [sentCount, setSentCount] = useState(0)
+
+    const [modalOpen, setModalOpen] = useState(false)
+
+    const toggleModal = () => {setModalOpen(!modalOpen)}
 
     // TODO: handle spectators
     const mySupport = (((G.conflict || {}).players || {})[playerID!] || {}).support
@@ -86,7 +103,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     
     return (
         <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragHand, canDragLeader, canDragMonument, canDragCatastrophe, canDragTreasure}}>
-            <div style={{display: 'flex'}}>
+            <div className={classes.root}>
                 <div>
                     <TileGrid 
                         board={G.board} 
@@ -114,7 +131,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         discardTiles={moves.discardTiles}
                         gameover={ctx.gameover}
                         playerMap={playerMap}
-                        players={G.players}
+                        toggleModal={toggleModal}
                     />
                 </div>
                 <div>
@@ -122,6 +139,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                     <DiscardComp discard={sendTile} allowDiscard={playerID === ctx.currentPlayer && !ctx.activePlayers && !!!ctx.gameover}/>
                 </div>
                 <MonumentsComp monuments={G.monuments}/>
+                {!!ctx.gameover ? <ScoreDetailsModal open={modalOpen} toggle={toggleModal} players={G.players} playerMap={playerMap}/> : null}
             </div>
         </DraggableContext.Provider></DndProvider>
     )

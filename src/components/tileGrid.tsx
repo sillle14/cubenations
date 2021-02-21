@@ -14,6 +14,7 @@ import { Monument } from '../models/pieces'
 
 const useStyles = makeStyles({
     root: {
+        width: 'max-content',
         background: '#ffecb3',
         borderCollapse: 'collapse',
         '& td': {

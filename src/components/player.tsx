@@ -1,5 +1,5 @@
 import { makeStyles } from '@material-ui/styles'
-import React, { FunctionComponent, useContext, useState } from 'react'
+import React, { FunctionComponent, useContext } from 'react'
 
 import { TILE_SIZE } from '../static/display'
 import { Catastrophe, DraggedLeader, DraggedTreasure, LEADER } from '../models/pieces'
@@ -16,7 +16,6 @@ import TileComp from './tile'
 import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
 import { Coord } from '../models/board'
 import { PlayerID } from 'boardgame.io'
-import ScoreDetailsModal from './scoreDetails'
 
 const useStyles = makeStyles({
     root: {
@@ -24,7 +23,7 @@ const useStyles = makeStyles({
         display: 'flex',
         padding: '10px',
         width: `calc(${TILE_SIZE} * 20)`,
-        '> div': {
+        '& div': {
             margin: '1px'
         },
         justifyContent: 'space-around'
@@ -68,16 +67,12 @@ type PlayerProps = {
     takeTreasure: (source: Coord) => void,
     gameover?: {winnerIDs: Array<PlayerID>},
     playerMap: {[id in PlayerID]: string},
-    players: {[playerID in PlayerID]?: Player}
+    toggleModal: () => void,
 }
 
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles, gameover, playerMap, players}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles, gameover, playerMap, toggleModal}) => {
 
     const classes = useStyles()
-
-    const [modalOpen, setModalOpen] = useState(false)
-
-    const toggleModal = () => {setModalOpen(!modalOpen)}
 
     const {canDragHand, canDragCatastrophe} = useContext(DraggableContext)
 
@@ -202,7 +197,6 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
         action = <Action message="Game over.">
             <span>{winMessage}</span>
             <button onClick={toggleModal}>Score Details:</button>
-            <ScoreDetailsModal open={modalOpen} toggle={toggleModal} players={players}/>
         </Action>
     }
 
