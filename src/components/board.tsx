@@ -114,11 +114,12 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         discardTiles={moves.discardTiles}
                         gameover={ctx.gameover}
                         playerMap={playerMap}
+                        players={G.players}
                     />
                 </div>
                 <div>
                     {conflict}
-                    <DiscardComp discard={sendTile} allowDiscard={playerID === ctx.currentPlayer && !ctx.activePlayers}/>
+                    <DiscardComp discard={sendTile} allowDiscard={playerID === ctx.currentPlayer && !ctx.activePlayers && !!!ctx.gameover}/>
                 </div>
                 <MonumentsComp monuments={G.monuments}/>
             </div>
