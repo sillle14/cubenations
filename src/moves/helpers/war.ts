@@ -94,8 +94,6 @@ export function checkAndStartWar(G: CNState, ctx: Ctx, kingdoms: Array<Region>, 
         return true
     } else {
         // Unset the unification tile.
-        delete G.board[G.unificationTile!.x][G.unificationTile!.y].unification
-        G.unificationTile = null
         return false
     }
 }

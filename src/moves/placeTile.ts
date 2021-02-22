@@ -45,10 +45,6 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
     G.players[ctx.currentPlayer]!.hand[handIndex] = null
 
     if (kingdoms.length === 2) {
-        // Set unification tile.
-        G.unificationTile = destination
-        G.board[destination.x][destination.y].unification = true
-
         if (checkAndStartWar(G, ctx, kingdoms, destination)) {
             // If a war was started, this move is over.
             return

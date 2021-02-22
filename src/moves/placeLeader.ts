@@ -66,15 +66,16 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
     }
     
     const targetSpace = G.board[destination!.x][destination!.y]
-    const regions = getAdjacentRegions(destination!, G.board)
-    const kingdoms = regions.filter(r => r.isKingdom)
-
     // Place the leader
     targetSpace.occupant = new Leader(color, ctx.currentPlayer)
     G.players[ctx.currentPlayer]!.leaders[color] = destination
     if (source) {
         delete G.board[source.x][source.y].occupant
     }
+
+    // Check for a conflict.
+    const regions = getAdjacentRegions(destination!, G.board)
+    const kingdoms = regions.filter(r => r.isKingdom)
 
     // If the existing kingdom contains the leader, a revolt occurs.
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {

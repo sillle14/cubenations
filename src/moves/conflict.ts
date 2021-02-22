@@ -108,7 +108,7 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
         // This move is over if there's another war.
         return
     } else {
-        // Unset the unification tile.
+        // Unset the unification tile. 
         delete G.board[G.unificationTile!.x][G.unificationTile!.y].unification
         const placedTile: Coord = G.unificationTile! // Keep track of the unification tile for monument purposes.
         G.unificationTile = null

@@ -65,7 +65,8 @@ export function checkForMonument(G: CNState, ctx: Ctx, coord: Coord): boolean {
         }
     })
 
-    if (possibleMonuments.length) {
+    // Enter the monument phase if there are possible monuments and available monuments of that color.
+    if (possibleMonuments.length && G.monuments.some(m => m.colors.includes(color) && !m.position)) {
         G.availableMonumentColor = color
         G.possibleMonuments = possibleMonuments
         ctx.events!.setStage!(MONUMENT)
