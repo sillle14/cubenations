@@ -14,20 +14,23 @@ import { Monument } from '../models/pieces'
 
 const useStyles = makeStyles({
     root: {
-        width: 'max-content',
-        background: '#ffecb3',
-        borderCollapse: 'collapse',
-        '& td': {
-            border: `${GRID_BORDER} solid black`,
-            padding: TILE_PAD,
-            height: TILE_SIZE,
-            width: TILE_SIZE,
-        },
-        '& .river': {
-            background: '#81d4fa'
-        },
-        '& .special-border': {
-            boxShadow: `inset 0px 0px 0px calc(${GRID_BORDER} * 2) black`,
+        position: 'relative',
+        '& table': {
+            width: 'max-content',
+            background: '#ffecb3',
+            borderCollapse: 'collapse',
+            '& td': {
+                border: `${GRID_BORDER} solid black`,
+                padding: TILE_PAD,
+                height: TILE_SIZE,
+                width: TILE_SIZE,
+            },
+            '& .river': {
+                background: '#81d4fa'
+            },
+            '& .special-border': {
+                boxShadow: `inset 0px 0px 0px calc(${GRID_BORDER} * 2) black`,
+            }
         }
     }
 })
@@ -92,8 +95,8 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
     })
 
     return (
-        <div style={{position: 'relative'}}>
-            <table className={classes.root}><tbody>{rows}</tbody></table>
+        <div className={classes.root}>
+            <table><tbody>{rows}</tbody></table>
             {monumentDTs}
             {monumentComps}
             {treasures}

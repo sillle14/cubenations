@@ -17,6 +17,7 @@ export default function placeMonument(G: CNState, ctx: Ctx, position: Coord, idx
     ]
 
     coords.forEach(c => {
+        // TODO: this isn't working
         safeRemoveTile(c, G.board, G.players)
         G.board[c.x][c.y].occupant = monument
     })

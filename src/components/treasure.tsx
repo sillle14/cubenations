@@ -21,6 +21,8 @@ const useStyles = makeStyles({
     }
 })
 
+// TODO: Make the treasure a bit asymetrical so we don't need the tilesize to be divisble for it to look right.
+
 const TreasureComp = ({location}: {location: Coord}) => {
 
     let classes = useStyles()

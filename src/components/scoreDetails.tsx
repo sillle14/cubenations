@@ -23,17 +23,18 @@ const modalStyles = {
 const useStyles = makeStyles({
     root: {
         borderCollapse: 'collapse',
-        // tableLayout: 'fixed',
         '& thead th:nth-child(1)': {
             width: '100px'
         },
         '& thead th:nth-child(n+2)': {
-            width: '50px'
+            width: '50px',
+            textTransform: 'capitalize'
         },
         '& th, td': {
             padding: '10px',
             border: '1px solid black'
-        }
+        },
+        width: 'max-content',
     },
     footer: {
         display: 'flex',
@@ -41,6 +42,8 @@ const useStyles = makeStyles({
         flexDirection: 'row-reverse'
     }
 })
+
+// TODO: Make this prettier
 
 type ScoreDetailProps = {
     open: boolean,

@@ -64,7 +64,7 @@ export function safeRemoveTile(coord: Coord, board: Board, players: {[playerID i
             const leader = board[neighbor.x][neighbor.y].occupant! as Leader
             const leaderNeighbors = getNeighbors(neighbor, board)
             // The leader should have at least two red neighbors, including the one we are removing here.
-            if (leaderNeighbors.map(ln => isColorTile(ln, board, RED)).length < 2) {
+            if (leaderNeighbors.filter(ln => isColorTile(ln, board, RED)).length < 2) { 
                 // Send the leader back to hand.
                 players[leader.playerID]!.leaders[leader.color] = null
                 delete board[neighbor.x][neighbor.y].occupant

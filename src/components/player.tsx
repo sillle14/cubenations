@@ -1,11 +1,10 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
-import { TILE_SIZE } from '../static/display'
-import { Catastrophe, DraggedLeader, DraggedTreasure, LEADER } from '../models/pieces'
+import { TILE_PAD, TILE_SIZE } from '../static/display'
+import { Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
-import Action from './action'
 import CatastropheComp from './catastrophe'
 import Draggable from './draggable'
 import DraggableContext from './draggableContext'
@@ -13,73 +12,65 @@ import Droppable from './droppable'
 import LeaderComp from './leader'
 import Player from '../models/player'
 import TileComp from './tile'
-import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
-import { Coord } from '../models/board'
-import { PlayerID } from 'boardgame.io'
 
 const useStyles = makeStyles({
     root: {
-        background: 'tan',
         display: 'flex',
-        padding: '10px',
-        width: `calc(${TILE_SIZE} * 20)`,
-        '& div': {
-            margin: '1px'
+        padding: TILE_PAD,
+        justifyContent: 'space-around',
+    },
+    tileGroup: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        '& span': {
+            width: 'max-content',
+            fontSize: 'larger',
+            fontWeight: 'bolder',
+            paddingBottom: `calc(${TILE_PAD} / 2)`,
+            marginTop: `calc(-1 * ${TILE_PAD} / 2)`
         },
-        justifyContent: 'space-around'
-    },
-    hand: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        width: `calc(${TILE_SIZE} * 4.5)`
-    },
-    leaders: {
-        display: 'flex',
-        flexWrap: 'wrap',
-        width: `calc(${TILE_SIZE} * 3)`
+        '& div': {
+            display: 'flex',
+        }
     },
     tileContainer: {
         height: TILE_SIZE,
         width: TILE_SIZE,
-        padding: '6px',
+        padding: `0 ${TILE_PAD}`,
     },
-    buttons: {
-        display: 'flex',
-        flexDirection: 'column'
+    selectable: {
+        '& > div': {
+            cursor: 'pointer'
+        }
+    },
+    selected: {
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        background: 'white',
+        opacity: '0.5'
     }
 })
 
-// TODO: This is getting ridiculous
 type PlayerProps = {
     player: Player,
     placeLeader: any,
-    myTurn: boolean,
-    sentIdxs: Array<number>,
-    clear: () => void,
-    commitToConflict: (handIdxs: Array<number>) => void,
-    discardTiles: (handIdxs: Array<number>) => void,
-    resolveConflict: () => void,
-    stage: string,
-    pass: () => void,
-    anyStage: boolean,
-    possibleWars?: Array<Color>,
-    chooseWar: (color: Color) => void
-    takeTreasure: (source: Coord) => void,
-    gameover?: {winnerIDs: Array<PlayerID>},
-    playerMap: {[id in PlayerID]: string},
-    toggleModal: () => void,
+    selected: Array<number>,
+    toggleSelectTile: (handIdx: number) => void
 }
-
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn, sentIdxs, clear, stage, commitToConflict, resolveConflict, pass, anyStage, possibleWars, chooseWar, takeTreasure, discardTiles, gameover, playerMap, toggleModal}) => {
+const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, selected, toggleSelectTile}) => {
 
     const classes = useStyles()
 
-    const {canDragHand, canDragCatastrophe} = useContext(DraggableContext)
+    const {canDragTile, canSelectHand} = useContext(DraggableContext)
 
+    // TODO: formattin
     const hand = player.hand.map((t, i) => (
-        <div className={classes.tileContainer} key={`hand-${i}`}>
-            {t && !sentIdxs.includes(i) ? <Draggable item={{...t, handIndex: i}} draggable={canDragHand}>
+        <div className={`${classes.tileContainer} ${t && canSelectHand(t.color) ? classes.selectable : ''}`} key={`hand-${i}`} onClick={() => {if (t && canSelectHand(t.color)) toggleSelectTile(i)}}>
+            {t ? <Draggable item={{...t, handIndex: i}} draggable={canDragTile}>
                 <TileComp color={t.color}/>
+                {selected.includes(i) ? <div className={classes.selected}></div>: null}
             </Draggable> : null}
         </div>
     ))
@@ -111,120 +102,35 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, myTurn
         points.push(<div key={color}>{`${color}: ${player.score[color as Color]}`}</div>)
     }
 
-
     let catastrophes = []
     for (let i = 0; i < player.catastrophes; i++) {
         catastrophes.push(
             <div className={classes.tileContainer} key={i}>
-                <Draggable draggable={canDragCatastrophe} item={new Catastrophe()}><CatastropheComp/></Draggable>
+                <Draggable draggable={canDragTile} item={new Catastrophe()}><CatastropheComp/></Draggable>
             </div>
         )
     }
 
-    let action = null
-    switch (stage) {
-        case CONFLICT:
-            action = <Action
-                message="Commit tiles to the conflict."
-                buttons={[
-                    {text: 'confirm', onClick: () => {commitToConflict(sentIdxs)}},
-                    {text: 'cancel', onClick: clear}
-                ]}
-            />
-            break
-        case RESOLVE_CONFLICT:
-            action = <Action
-                message="Resolve conflict"
-                buttons={[
-                    {text: 'confirm', onClick: () => {resolveConflict()}},
-                ]}
-            />
-            break
-        case CHOOSE_WAR:
-            action = <Action
-                message="Choose war to resolve first"
-                buttons={possibleWars!.map(c => {return {text: c, onClick: () => {chooseWar(c)}}})}
-            />
-            break
-        case MONUMENT:
-            action = <Action
-                message="Choose a monument or pass"
-                buttons={[{text: 'pass', onClick: () => {pass()}}]}
-            />
-            break
-        case TREASURE:
-            action = <Action message="Collect treasure.">
-                <div className={classes.tileContainer} style={{background: 'white', alignSelf: 'center'}}>
-                    <Droppable 
-                        accept={TREASURE} 
-                        canDrop={() => true}
-                        onDrop={(item: DraggedTreasure) => {takeTreasure(item.source)}}
-                    />
-                </div>
-            </Action>
-            break
-        default:
-            if (myTurn && !anyStage) {
-                if (!sentIdxs.length) {
-                    action = <Action
-                        message={`${player.actions} action${player.actions > 1 ? 's' : ''} left.`}
-                        buttons={[
-                            {text: 'pass', onClick: () => {pass()}},
-                        ]}
-                    />
-                } else {
-                    action = <Action
-                        message={`Discard and replace ${sentIdxs.length} tile${sentIdxs.length > 1 ? 's' : ''}?`}
-                        buttons={[
-                            {text: 'confirm', onClick: () => {discardTiles(sentIdxs)}},
-                            {text: 'cancel', onClick: clear}
-                        ]}
-                    />
-                }
-            } else {
-                action = <Action message="Wait for your turn."/>
-            }
-            break
-    }
-
-    if (gameover) {
-        let winMessage: string
-        if (gameover.winnerIDs.length > 1) {
-            winMessage = `Players ${gameover.winnerIDs.map(pid => playerMap[pid]).join(' and ')} tie.`
-        } else {
-            winMessage = `${playerMap[gameover.winnerIDs[0]]} wins!`
-        }
-        action = <Action message="Game over.">
-            <span>{winMessage}</span>
-            <button onClick={toggleModal}>Score Details:</button>
-        </Action>
-    }
-
     return (
         <div className={classes.root}>
-            <div>
-                <span>Hand:</span>
-                <div className={classes.hand}>
+            <div className={classes.tileGroup}>
+                <span>Hand</span>
+                <div>
                     {hand}
                 </div>
             </div>
-            <div>
-                <span>Leaders:</span>
-                <div className={classes.leaders}>
+            <div className={classes.tileGroup}>
+                <span>Leaders</span>
+                <div>
                     {leaders}
                 </div>
             </div>
-            <div>
-                <span>Catastrophes:</span>
-                <div className={classes.leaders}>
+            <div className={classes.tileGroup}>
+                <span>Catastrophes</span>
+                <div>
                     {catastrophes}
                 </div>
             </div>
-            <div>
-                Score:
-                {points}
-            </div>
-            {action}
         </div>
     )
 }

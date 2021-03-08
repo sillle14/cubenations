@@ -1,10 +1,10 @@
 import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
-import { BLACK, BLUE, Color, GREEN, RED } from '../static/colors'
-import { GRID_BORDER, TILE_PAD, TILE_SIZE } from '../static/display'
+import { Color } from '../static/colors'
+import { backgroundColors, GRID_BORDER, TILE_PAD, TILE_SIZE } from '../static/display'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles(Object.assign({
     root: {
         display: 'flex',
         justifyContent: 'center',
@@ -15,20 +15,9 @@ const useStyles = makeStyles({
     inner: {
         height: '50%',
         width: '50%',
-    },
-    [RED]: {
-        background: 'red',
-    },
-    [BLUE]: {
-        background: 'blue',
-    },
-    [GREEN]: {
-        background: 'green',
-    },
-    [BLACK]: {
-        background: 'black',
+        border: 'solid rgba(0, 0, 0, 0.5)'
     }
-})
+}, backgroundColors))
 
 
 const MonumentComp = ({colors}: {colors: [Color, Color]}) => {

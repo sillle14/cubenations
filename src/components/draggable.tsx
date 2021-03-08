@@ -7,7 +7,8 @@ import { Dragged } from '../models/pieces'
 const useStyles = makeStyles({
     root: {
         height: '100%',
-        width: '100%'
+        width: '100%',
+        position: 'relative'
     },
     draggable: {
         '& *': {cursor: 'grab'}

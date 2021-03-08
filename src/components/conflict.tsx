@@ -1,52 +1,50 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent } from 'react'
 
-import { TILE_SIZE } from '../static/display'
+import { TILE_PAD } from '../static/display'
 import { Conflict } from '../models/conflict'
-import { DraggedTile, TILE } from '../models/pieces'
-import Droppable from './droppable'
 import { PlayerID } from 'boardgame.io'
 
 const useStyles = makeStyles({
     root: {
-        background: 'tan',
-        padding: '10px',
-        height: 'max-content',
         display: 'flex',
         flexDirection: 'column',
-        alignItems: 'center'
+        alignItems: 'center',
+        padding: `${TILE_PAD} 0`,
+        '& hr': {
+            width: '90%',
+            color: 'black',
+            border: 'solid 1px',
+            margin: '3% 0'
+        }
+    },
+    header: {
+        fontSize: 'larger',
+        fontWeight: 'bolder',
     },
     split: {
         display: 'flex',
         justifyContent: 'space-around',
         width: '100%'
     },
-    tileContainer: {
-        height: TILE_SIZE,
-        width: TILE_SIZE,
-        padding: '6px',
-        background: 'white'
+    aggressor: {
+        alignSelf: 'start',
+        marginLeft: '10%',
+        fontSize: 'smaller'
+    },
+    winner: {
+        margin: '5% 0'
     }
 })
-
-export const PeaceComp = () => {
-
-    const classes = useStyles()
-    
-    return <div className={classes.root}>
-            <span>Peace</span>
-        </div>
-}
 
 type ConflictProps = {
     conflict: Conflict,
     playerMap: {[id in PlayerID]: string},
     tempSupport: number,
-    addSupport: (handIdx: number) => void,
     playerID: PlayerID,
     resolution: boolean
 }
-const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, tempSupport, addSupport, playerID, resolution}) => {
+const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, tempSupport, playerID, resolution}) => {
 
     const classes = useStyles()
 
@@ -66,9 +64,9 @@ const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, te
 
     return (
         <div className={classes.root}>
-            <span>{conflict.type}</span>
-            <span>{`${playerMap[player1]} vs ${playerMap[player2]}`}</span>
-            <span>{`Aggressor: ${playerMap[conflict.aggressor]}`}</span>
+            <span className={classes.header}>{conflict.type}</span>
+            <span>{`${playerMap[player1]}${conflict.aggressor === player1 ? '*' : ''} vs ${playerMap[player2]}${conflict.aggressor === player2 ? '*' : ''}`}</span>
+            <hr/>
             <span>Base</span>
             <div className={classes.split}>
                 <span>{conflict.players[player1].base}</span>
@@ -79,18 +77,8 @@ const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, te
                 <span>{player1Support}</span>
                 <span>{player2Support}</span>
             </div>
-            {resolution ? <span>{`${playerMap[conflict.winner!]} wins!`}</span> : (
-                <div style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                    <span>{`Drag ${conflict.color} support here:`}</span>
-                    <div className={classes.tileContainer}>
-                        <Droppable 
-                            accept={TILE} 
-                            canDrop={(item: DraggedTile) => item.color === conflict.color}
-                            onDrop={(item: DraggedTile) => {addSupport(item.handIndex)}}
-                        />
-                    </div>
-                </div>
-            )}
+            {resolution ? <span className={classes.winner}>{`${playerMap[conflict.winner!]} wins!`}</span> : <br/>}
+            <span className={classes.aggressor}>*Aggressor</span>
         </div>
     )
 }
