@@ -2,8 +2,10 @@ import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent } from 'react'
 
 import { colors, TILE_PAD } from '../static/display'
-import { TREASURE } from '../models/pieces'
+import { DraggedTreasure, TREASURE } from '../models/pieces'
 import { Color } from '../static/colors'
+import Droppable from './droppable'
+import { Coord } from '../models/board'
 
 const useStyles = makeStyles(Object.assign({
     root: {
@@ -32,9 +34,10 @@ const useStyles = makeStyles(Object.assign({
 }, colors))
 
 type ScoreProps = {
-    score: {[color in Color | typeof TREASURE]: number}
+    score: {[color in Color | typeof TREASURE]: number},
+    takeTreasure: (source: Coord) => void,
 }
-const ScoreComp: FunctionComponent<ScoreProps> = ({score}) => {
+const ScoreComp: FunctionComponent<ScoreProps> = ({score, takeTreasure}) => {
 
     const classes = useStyles()
 
@@ -49,9 +52,15 @@ const ScoreComp: FunctionComponent<ScoreProps> = ({score}) => {
     return (
         <div className={classes.root}>
             <span>Score</span>
-            <table className={classes.table}><tbody>
-                {scoreRows}
-            </tbody></table>
+            <Droppable 
+                accept={TREASURE} 
+                canDrop={() => true}
+                onDrop={(item: DraggedTreasure) => {takeTreasure(item.source)}}
+            >
+                <table className={classes.table}><tbody>
+                    {scoreRows}
+                </tbody></table>
+            </Droppable>
         </div>
     )
 }

@@ -91,20 +91,13 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
             break
         case MONUMENT:
             title = 'Choose a Monument'
-            message = 'Drag an availble monument or pass'
+            message = 'Drag an available monument or pass'
             buttons = [{text: 'pass', onClick: () => {pass()}}]
             break
-        // case TREASURE:
-        //     action = <Action message="Collect treasure.">
-        //         <div className={classes.tileContainer} style={{background: 'white', alignSelf: 'center'}}>
-        //             <Droppable 
-        //                 accept={TREASURE} 
-        //                 canDrop={() => true}
-        //                 onDrop={(item: DraggedTreasure) => {takeTreasure(item.source)}}
-        //             />
-        //         </div>
-        //     </Action>
-        //     break
+        case TREASURE:
+            title = 'Collect treasure'
+            message = 'Drag available treasure to your score board.'
+            break
         default:
             if (myTurn && !anyStage) {
                 if (!selected.length) {

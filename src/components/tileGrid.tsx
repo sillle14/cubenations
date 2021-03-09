@@ -24,6 +24,7 @@ const useStyles = makeStyles({
                 padding: TILE_PAD,
                 height: TILE_SIZE,
                 width: TILE_SIZE,
+                position: 'relative'
             },
             '& .river': {
                 background: '#81d4fa'
@@ -32,6 +33,15 @@ const useStyles = makeStyles({
                 boxShadow: `inset 0px 0px 0px calc(${GRID_BORDER} * 2) black`,
             }
         }
+    },
+    unification: {
+        position: 'absolute', 
+        color: '#f5f5f5',
+        top: '50%',
+        left: '50%',
+        transform: 'translate(-50%, -50%)',
+        fontSize: 'x-large',
+        fontWeight: 'bolder',
     }
 })
 interface TileGridProps {
@@ -48,15 +58,16 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
     let classes = useStyles()
 
     // Treasures are displayed above the board using absolute positioning so they work with monuments.
+    // Otherwise, they won't be in the correct z-index context.
     let treasures = []
 
     let rows: Array<JSX.Element> = []
     for (let y = 0; y < BOARD_HEIGHT; y++) {
         let row: Array<JSX.Element> = []
         for (let x = 0; x < BOARD_WIDTH; x++) {
-            let classes = []
-            if (board[x][y].river) classes.push('river')
-            if (board[x][y].border) classes.push('special-border')
+            let tdClasses = []
+            if (board[x][y].river) tdClasses.push('river')
+            if (board[x][y].border) tdClasses.push('special-border')
             const location = {x: x, y: y}
             if (board[x][y].treasure) {
                 treasures.push(<TreasureComp key={`${x}${y}`} location={{x: x, y: y}}/>)
@@ -64,14 +75,14 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
             row.push(
                 <TileSquare
                     key={x}
-                    className={classes.join(' ')}
+                    className={tdClasses.join(' ')}
                     location={location}
                     placeTile={placeTile}
                     placeLeader={placeLeader}
                     placeCatastrophe={placeCatastrophe}
                     board={board}
                 >
-                    {board[x][y].unification ? <div style={{position: 'absolute', color: 'white'}}>U</div> : null}
+                    {board[x][y].unification ? <div className={classes.unification}>U</div> : null}
                     <OccupantComp occupant={board[x][y].occupant} location={{x: x, y: y}}/>
                 </TileSquare>
             )

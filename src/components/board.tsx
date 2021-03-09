@@ -139,7 +139,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragTile, canSelectHand, canDragLeader, canDragMonument, canDragTreasure}}>
             <div className={classes.root}>
                 <div className={`${classes.column} ${classes.firstColumn}`}>
-                    <ScoreComp score={G.players[playerID!]!.score}/>
+                    <ScoreComp score={G.players[playerID!]!.score} takeTreasure={moves.takeTreasure}/>
                     <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder}/>
                     {conflict}
                 </div>

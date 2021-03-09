@@ -26,7 +26,7 @@ export default function takeTreasure(G: CNState, ctx: Ctx, source: Coord) {
     // Remove the treasure and award the point.
     G.board[source.x][source.y].treasure = false
     G.players[ctx.playerID!]!.score[TREASURE] += 1
-    G.players[ctx.playerID!]!.availableTreasure!.splice(G.players[ctx.playerID!]!.availableTreasure!.indexOf(source), 1)
+    G.players[ctx.playerID!]!.availableTreasure = G.players[ctx.playerID!]!.availableTreasure!.filter(c => c.x !== source.x && c.y !== source.y)
     G.treasureCount -= 1
 
     // If less than two are available, end the stage.
