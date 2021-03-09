@@ -54,7 +54,7 @@ const useStyles = makeStyles({
     lastColumn: {
         justifyContent: 'flex-start',
         '& > div': {
-            marginTop: `calc(${TILE_SIZE} * 2)`
+            marginTop: `calc(${TILE_SIZE} * 1.5)`,
         }
     }
 })

@@ -17,6 +17,28 @@ const useStyles = makeStyles({
             width: 'max-content',
             fontSize: 'larger',
             fontWeight: 'bolder',
+        },
+        '& > p': {
+            margin: `${TILE_PAD} calc(${TILE_PAD} * 2)`,
+        },
+        '& > button': {
+            minWidth: '40%',
+            textTransform: 'capitalize',
+            background: '#f5f5f5',
+            borderRadius: '3px',
+            border: '2px solid #455a64',
+            color: '#455a64',
+            fontWeight: 'bolder',
+            cursor: 'pointer',
+            padding: '2%',
+            marginBottom: '2%',
+        },
+        '& > button:hover': {
+            background: '#455a64',
+            color: '#f5f5f5',
+        },
+        '& > button:focus': {
+            outline: 'none'
         }
     }
 })
