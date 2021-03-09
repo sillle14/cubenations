@@ -14,7 +14,7 @@ import PlayerOrderComp from './playerOrder'
 import MonumentsComp from './monuments'
 import DraggableContext from './draggableContext'
 import TileGrid from './tileGrid'
-import { CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
+import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
 import { Color } from '../static/colors'
 import { Coord } from '../models/board'
 import { canTakeTreasure } from '../moves/takeTreasure'
@@ -124,7 +124,8 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     )
 
     let conflict = null
-    if (G.conflict) {
+    // Don't show the conflict if any player is in the choose war phase.
+    if (G.conflict && !Object.values(ctx.activePlayers || {}).some(stage => stage === CHOOSE_WAR)) {
         conflict = <ConflictComp 
             conflict={G.conflict} 
             playerMap={playerMap}

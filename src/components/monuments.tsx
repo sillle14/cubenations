@@ -22,8 +22,10 @@ const useStyles = makeStyles({
     monuments: {
         display: 'flex',
         flexWrap: 'wrap',
+        alignContent: 'flex-start',
         justifyContent: 'center',
-        width: `calc(${TILE_SIZE} * 4 + ${TILE_PAD} * 10 + ${GRID_BORDER} * 2)`
+        width: `calc(${TILE_SIZE} * 4 + ${TILE_PAD} * 10 + ${GRID_BORDER} * 2)`,
+        minHeight: `calc(${TILE_SIZE} * 6 + ${TILE_PAD} * 12 + ${GRID_BORDER} * 3)`
     },
     monumentContainer: {
         padding: TILE_PAD,

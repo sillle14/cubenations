@@ -20,6 +20,7 @@ const useStyles = makeStyles({
         },
         '& > p': {
             margin: `${TILE_PAD} calc(${TILE_PAD} * 2)`,
+            textAlign: 'center'
         },
         '& > button': {
             minWidth: '40%',
@@ -78,18 +79,18 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
             ]
             break
         case RESOLVE_CONFLICT:
-            title = 'Conflict Resolved.'
+            title = 'Conflict Resolved'
             buttons = [
                 {text: 'confirm', onClick: () => {resolveConflict()}},
             ]
             break
         case CHOOSE_WAR:
-            title = 'Choose war.'
+            title = 'Choose war'
             message = 'Pick a color to resolve first.'
             buttons = possibleWars!.map(c => {return {text: c, onClick: () => {chooseWar(c)}}})
             break
         case MONUMENT:
-            title = 'Choose a Monument.'
+            title = 'Choose a Monument'
             message = 'Drag an availble monument or pass'
             buttons = [{text: 'pass', onClick: () => {pass()}}]
             break
@@ -107,20 +108,20 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
         default:
             if (myTurn && !anyStage) {
                 if (!selected.length) {
-                    title = `${actionsLeft} action${actionsLeft > 1 ? 's' : ''} left.`
+                    title = `${actionsLeft} action${actionsLeft > 1 ? 's' : ''} left`
                     message = 'Place a tile or catastrophe, move a leader, discard, or pass.'
                     buttons = [
                         {text: 'pass', onClick: () => {pass()}},
                     ]
                 } else {
-                    title = 'Discard.'
+                    title = 'Discard'
                     message = `Discard and replace ${selected.length} selected tile${selected.length > 1 ? 's' : ''}?`
                     buttons = [
                         {text: 'confirm', onClick: () => {discardTiles(selected)}}
                     ]
                 }
             } else {
-                title = 'Wait for your turn.'
+                title = 'Wait for your turn'
             }
             break
     }
