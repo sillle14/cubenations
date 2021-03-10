@@ -70,21 +70,38 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         setSelected([])
     }
 
-    const [size, setSize] = useState<{width: number, height: number}>({width: 0, height: 0})
+    const [tileSize, setTileSize] = useState<number>(0)
     const ref = useRef<HTMLDivElement>(null)
 
-    useLayoutEffect(() => {
-        function handleResize() {
-            if (ref.current !== null) {
-                setSize({width: ref.current.clientWidth, height: ref.current.clientHeight})
-            }
+    // The following are calculated from the space we need vertically and horizontally. 
+    // This will be recalculated on window resize so in theory, we never need to scroll.
+    // Note that we divide and multiply by 2 to make sure the final size is even.
+    function handleResize() {
+        if (ref.current !== null) {
+            setTileSize(Math.min(
+                Math.floor((ref.current.clientWidth - 250) / 50) * 2,
+                Math.floor((ref.current.clientHeight - 200) / 26) * 2
+            ))
         }
+    }
+
+    useLayoutEffect(() => {
         window.addEventListener('resize', handleResize)
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
+    const [init, setInit] = useState(true)
+
+    useEffect(() => {
+        // Handle resize once on load.
+        if (init) {
+            handleResize()
+            setInit(false)
+        }
+    }, [init])
+
     const theme: sizingTheme = {
-        tileSize: '42px',
+        tileSize: `${tileSize}px`,
         tilePad: '4px',
         border: '1px'
     }
