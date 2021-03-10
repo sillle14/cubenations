@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react'
-import { makeStyles } from '@material-ui/styles'
+import React, { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import { makeStyles, ThemeProvider } from '@material-ui/styles'
 import { BoardProps } from 'boardgame.io/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
@@ -10,6 +10,7 @@ import ConflictComp from './conflict'
 import PlayerComp from './player'
 import ScoreComp from './score'
 import ActionBox from './action'
+import Column from './column'
 import PlayerOrderComp from './playerOrder'
 import MonumentsComp from './monuments'
 import DraggableContext from './draggableContext'
@@ -19,7 +20,7 @@ import { Color } from '../static/colors'
 import { Coord } from '../models/board'
 import { canTakeTreasure } from '../moves/takeTreasure'
 import ScoreDetailsModal from './scoreDetails'
-import { TILE_SIZE } from '../static/display'
+import { sizingTheme } from '../static/display'
 
 const useStyles = makeStyles({
     root: {
@@ -27,40 +28,15 @@ const useStyles = makeStyles({
         '& *': {
             boxSizing: 'content-box'
         },
-        height: '100vh',
+        height: '100%',
         justifyContent: 'space-around',
         background: '#607d8b',
-        '& > div:first-child': {
-            width: `calc(${TILE_SIZE} * 4.5)`,
-        }
     },
-    column: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: 'space-around',
-        '& > div': {
-            borderRadius: '10px',
-            border: '5px solid #f5f5f5',
-            boxShadow: '3px 3px 5px black',
-            background: '#b0bec5'
-        }
-    },
-    firstColumn: {
-        justifyContent: 'flex-start',
-        '& > div': {
-            marginTop: `calc(${TILE_SIZE} * 1.5)`
-        }
-    },
-    lastColumn: {
-        justifyContent: 'flex-start',
-        '& > div': {
-            marginTop: `calc(${TILE_SIZE} * 1.5)`,
-        }
-    }
 })
 
 export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardProps<CNState>) => {
 
+    // TODO: Organization
     const classes = useStyles()
     
     let playerMap: {[id in PlayerID]: string} = {}
@@ -92,6 +68,25 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     // Function to clear all temporarily sent tiles.
     const clearSelected = () => {
         setSelected([])
+    }
+
+    const [size, setSize] = useState<{width: number, height: number}>({width: 0, height: 0})
+    const ref = useRef<HTMLDivElement>(null)
+
+    useLayoutEffect(() => {
+        function handleResize() {
+            if (ref.current !== null) {
+                setSize({width: ref.current.clientWidth, height: ref.current.clientHeight})
+            }
+        }
+        window.addEventListener('resize', handleResize)
+        return () => window.removeEventListener('resize', handleResize)
+    }, [])
+
+    const theme: sizingTheme = {
+        tileSize: '42px',
+        tilePad: '4px',
+        border: '1px'
     }
 
     // TODO: Handle spectators
@@ -136,14 +131,16 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     }
     
     return (
-        <DndProvider backend={HTML5Backend}><DraggableContext.Provider value={{canDragTile, canSelectHand, canDragLeader, canDragMonument, canDragTreasure}}>
-            <div className={classes.root}>
-                <div className={`${classes.column} ${classes.firstColumn}`}>
+        <DndProvider backend={HTML5Backend}>
+        <DraggableContext.Provider value={{canDragTile, canSelectHand, canDragLeader, canDragMonument, canDragTreasure}}>
+        <ThemeProvider theme={theme}>
+            <div className={classes.root} ref={ref}>
+                <Column fixed={true} width={4.5}>
                     <ScoreComp score={G.players[playerID!]!.score} takeTreasure={moves.takeTreasure}/>
                     <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder}/>
                     {conflict}
-                </div>
-                <div className={classes.column}>
+                </Column>
+                <Column fixed={false}>
                     <TileGrid 
                         board={G.board} 
                         placeTile={moves.placeTile} 
@@ -159,8 +156,8 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         selected={selected}
                         toggleSelectTile={toggleSelectTile}
                     />
-                </div>
-                <div className={`${classes.column} ${classes.lastColumn}`}>
+                </Column>
+                <Column fixed={true}>
                     <MonumentsComp monuments={G.monuments}/>
                     <ActionBox
                         selected={selected}
@@ -179,10 +176,12 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         discardTiles={moves.discardTiles}
                         conflict={G.conflict}
                     />
-                </div>
+                </Column>
                 {!!ctx.gameover ? <ScoreDetailsModal open={modalOpen} toggle={toggleModal} players={G.players} playerMap={playerMap}/> : null}
             </div>
-        </DraggableContext.Provider></DndProvider>
+        </ThemeProvider>
+        </DraggableContext.Provider>
+        </DndProvider>
     )
 }
 

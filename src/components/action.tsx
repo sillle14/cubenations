@@ -3,23 +3,23 @@ import { PlayerID } from 'boardgame.io'
 import React, { FunctionComponent } from 'react'
 import { Conflict } from '../models/conflict'
 import { Color } from '../static/colors'
-import { GRID_BORDER, TILE_PAD, TILE_SIZE } from '../static/display'
+import { sizingTheme } from '../static/display'
 import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: `${TILE_PAD} 0`,
-        maxWidth: `calc(${TILE_SIZE} * 4 + ${TILE_PAD} * 10 + ${GRID_BORDER} * 2)`,
+        padding: `${theme.tilePad} 0`,
+        maxWidth: `calc(${theme.tileSize} * 4 + ${theme.tilePad} * 10 + ${theme.border} * 2)`,
         '& span:first-child': {
             width: 'max-content',
             fontSize: 'larger',
             fontWeight: 'bolder',
         },
         '& > p': {
-            margin: `${TILE_PAD} calc(${TILE_PAD} * 2)`,
+            margin: `${theme.tilePad} calc(${theme.tilePad} * 2)`,
             textAlign: 'center'
         },
         '& > button': {
@@ -42,7 +42,7 @@ const useStyles = makeStyles({
             outline: 'none'
         }
     }
-})
+}))
 
 // TODO: Clean this up
 type ActionProps = {

@@ -1,10 +1,6 @@
 import { TREASURE } from "../models/pieces"
 import { BLACK, BLUE, GREEN, RED } from "./colors"
 
-export const TILE_SIZE = '42px'
-export const TILE_PAD = '4px'
-export const GRID_BORDER = '1px'
-
 export const backgroundColors = {
     [RED]: {
         background: '#f44336',
@@ -36,6 +32,12 @@ export const colors = {
     [TREASURE]: {
         color: '#fff176'
     }
+}
+
+export type sizingTheme = {
+    tileSize: string,
+    tilePad: string,
+    border: string
 }
 
 

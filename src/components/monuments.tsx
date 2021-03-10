@@ -1,18 +1,18 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
-import { GRID_BORDER, TILE_PAD, TILE_SIZE } from '../static/display'
+import { sizingTheme } from '../static/display'
 import { Monument } from '../models/pieces'
 import MonumentComp from './monument'
 import Draggable from './draggable'
 import DraggableContext from './draggableContext'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: `${TILE_PAD} 0`,
+        padding: `${theme.tilePad} 0`,
         '& span': {
             width: 'max-content',
             fontSize: 'larger',
@@ -24,13 +24,13 @@ const useStyles = makeStyles({
         flexWrap: 'wrap',
         alignContent: 'flex-start',
         justifyContent: 'center',
-        width: `calc(${TILE_SIZE} * 4 + ${TILE_PAD} * 10 + ${GRID_BORDER} * 2)`,
-        minHeight: `calc(${TILE_SIZE} * 6 + ${TILE_PAD} * 12 + ${GRID_BORDER} * 3)`
+        width: `calc(${theme.tileSize} * 4 + ${theme.tilePad} * 10 + ${theme.border} * 2)`,
+        minHeight: `calc(${theme.tileSize} * 6 + ${theme.tilePad} * 12 + ${theme.border} * 3)`
     },
     monumentContainer: {
-        padding: TILE_PAD,
+        padding: theme.tilePad,
     },
-})
+}))
 
 type MonumentProps = {
     monuments: Array<Monument>

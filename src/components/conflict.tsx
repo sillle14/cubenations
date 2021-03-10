@@ -1,16 +1,16 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent } from 'react'
 
-import { TILE_PAD } from '../static/display'
+import { sizingTheme } from '../static/display'
 import { Conflict } from '../models/conflict'
 import { PlayerID } from 'boardgame.io'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: `${TILE_PAD} 0`,
+        padding: `${theme.tilePad} 0`,
         '& hr': {
             width: '90%',
             color: 'black',
@@ -35,7 +35,7 @@ const useStyles = makeStyles({
     winner: {
         margin: '5% 0'
     }
-})
+}))
 
 type ConflictProps = {
     conflict: Conflict,

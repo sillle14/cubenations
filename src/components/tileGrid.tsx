@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles, useTheme } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
 
 import { Board, Coord } from '../models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
-import { GRID_BORDER, TILE_SIZE, TILE_PAD } from '../static/display'
+import { sizingTheme } from '../static/display'
 import OccupantComp from './occupant'
 import TileSquare from './tileSquare'
 import MonumentDropTarget from './monumentDropTarget'
@@ -12,7 +12,7 @@ import MonumentComp from './monument'
 import TreasureComp from './treasure'
 import { Monument } from '../models/pieces'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         position: 'relative',
         '& table': {
@@ -20,17 +20,17 @@ const useStyles = makeStyles({
             background: '#ffecb3',
             borderCollapse: 'collapse',
             '& td': {
-                border: `${GRID_BORDER} solid black`,
-                padding: TILE_PAD,
-                height: TILE_SIZE,
-                width: TILE_SIZE,
+                border: `${theme.border} solid black`,
+                padding: theme.tilePad,
+                height: theme.tileSize,
+                width: theme.tileSize,
                 position: 'relative'
             },
             '& .river': {
                 background: '#81d4fa'
             },
             '& .special-border': {
-                boxShadow: `inset 0px 0px 0px calc(${GRID_BORDER} * 2) black`,
+                boxShadow: `inset 0px 0px 0px calc(${theme.border} * 2) black`,
             }
         }
     },
@@ -43,7 +43,7 @@ const useStyles = makeStyles({
         fontSize: 'x-large',
         fontWeight: 'bolder',
     }
-})
+}))
 interface TileGridProps {
     board: Board, 
     placeTile: Move, 
@@ -56,6 +56,7 @@ interface TileGridProps {
 const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLeader, placeMonument, placeCatastrophe, possibleMonuments, monuments}) => {
 
     let classes = useStyles()
+    const theme: sizingTheme = useTheme()
 
     // Treasures are displayed above the board using absolute positioning so they work with monuments.
     // Otherwise, they won't be in the correct z-index context.
@@ -96,8 +97,8 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
 
     const monumentComps = monuments.map((m, i) => {
         if (m.position) {
-            const top = `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * ${m.position.y} + ${GRID_BORDER} + ${TILE_PAD})`
-            const left = `calc((${TILE_SIZE} + 2 * ${TILE_PAD} + ${GRID_BORDER}) * ${m.position.x} + ${GRID_BORDER} + ${TILE_PAD})`
+            const top = `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${m.position.y} + ${theme.border} + ${theme.tilePad})`
+            const left = `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${m.position.x} + ${theme.border} + ${theme.tilePad})`
             return <div style={{position: 'absolute', top, left}} key={i}>
                 <MonumentComp colors={m.colors}/>
             </div>

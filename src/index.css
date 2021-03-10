@@ -11,3 +11,8 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+/* For development, make sure the client uses the full height */
+.bgio-client {
+  height: 100%;
+}

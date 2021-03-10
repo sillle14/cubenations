@@ -1,15 +1,15 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent } from 'react'
 
-import { TILE_PAD, TILE_SIZE } from '../static/display'
+import { sizingTheme } from '../static/display'
 import { PlayerID } from 'boardgame.io'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        padding: `${TILE_PAD} 0`,
+        padding: `${theme.tilePad} 0`,
         '& > span': {
             width: 'max-content',
             fontSize: 'larger',
@@ -27,8 +27,8 @@ const useStyles = makeStyles({
             width: '50%',
             fontWeight: 'bolder',
             '& div': {
-                height: `calc(${TILE_SIZE} / 2)`,
-                width: `calc(${TILE_SIZE} / 2)`,
+                height: `calc(${theme.tileSize} / 2)`,
+                width: `calc(${theme.tileSize} / 2)`,
                 background: 'black'
             }
         },
@@ -37,7 +37,7 @@ const useStyles = makeStyles({
             width: '50%'
         },
     },
-})
+}))
 
 type PlayerOrderProps = {
     playerMap: {[id in PlayerID]: string},
@@ -48,7 +48,7 @@ const PlayerOrderComp: FunctionComponent<PlayerOrderProps> = ({playerMap, player
     const classes = useStyles()
 
     const rows = playerOrder.map(id => (
-        <tr><td><div className={classes[id as '0' | '1' | '2' | '3']}/></td><td>{playerMap[id]}</td></tr>
+        <tr key={id}><td><div className={classes[id as '0' | '1' | '2' | '3']}/></td><td>{playerMap[id]}</td></tr>
     ))
 
     return (

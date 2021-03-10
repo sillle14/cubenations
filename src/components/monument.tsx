@@ -2,15 +2,15 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import { Color } from '../static/colors'
-import { backgroundColors, GRID_BORDER, TILE_PAD, TILE_SIZE } from '../static/display'
+import { backgroundColors, sizingTheme } from '../static/display'
 
-const useStyles = makeStyles(Object.assign({
+const useStyles = makeStyles((theme: sizingTheme) => Object.assign({
     root: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
-        height: `calc((${TILE_SIZE} + ${TILE_PAD}) * 2 + ${GRID_BORDER})`,
-        width: `calc((${TILE_SIZE} + ${TILE_PAD}) * 2 + ${GRID_BORDER})`,
+        height: `calc((${theme.tileSize} + ${theme.tilePad}) * 2 + ${theme.border})`,
+        width: `calc((${theme.tileSize} + ${theme.tilePad}) * 2 + ${theme.border})`,
     },
     inner: {
         height: '50%',

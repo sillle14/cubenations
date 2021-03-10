@@ -1,18 +1,18 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent } from 'react'
 
-import { colors, TILE_PAD } from '../static/display'
+import { colors, sizingTheme } from '../static/display'
 import { DraggedTreasure, TREASURE } from '../models/pieces'
 import { Color } from '../static/colors'
 import Droppable from './droppable'
 import { Coord } from '../models/board'
 
-const useStyles = makeStyles(Object.assign({
+const useStyles = makeStyles((theme: sizingTheme) => Object.assign({
     root: {
         display: 'flex',
         flexDirection: 'column' as 'column',
         alignItems: 'center',
-        padding: `${TILE_PAD} 0`,
+        padding: `${theme.tilePad} 0`,
         '& span': {
             width: 'max-content',
             fontSize: 'larger',

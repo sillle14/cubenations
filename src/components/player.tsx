@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
-import { TILE_PAD, TILE_SIZE } from '../static/display'
+import { sizingTheme } from '../static/display'
 import { Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
@@ -13,10 +13,10 @@ import LeaderComp from './leader'
 import Player from '../models/player'
 import TileComp from './tile'
 
-const useStyles = makeStyles({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         display: 'flex',
-        padding: TILE_PAD,
+        padding: theme.tilePad,
         justifyContent: 'space-around',
     },
     tileGroup: {
@@ -27,17 +27,17 @@ const useStyles = makeStyles({
             width: 'max-content',
             fontSize: 'larger',
             fontWeight: 'bolder',
-            paddingBottom: `calc(${TILE_PAD} / 2)`,
-            marginTop: `calc(-1 * ${TILE_PAD} / 2)`
+            paddingBottom: `calc(${theme.tilePad} / 2)`,
+            marginTop: `calc(-1 * ${theme.tilePad} / 2)`
         },
         '& div': {
             display: 'flex',
         }
     },
     tileContainer: {
-        height: TILE_SIZE,
-        width: TILE_SIZE,
-        padding: `0 ${TILE_PAD}`,
+        height: theme.tileSize,
+        width: theme.tileSize,
+        padding: `0 ${theme.tilePad}`,
     },
     selectable: {
         '& > div': {
@@ -51,7 +51,7 @@ const useStyles = makeStyles({
         background: 'white',
         opacity: '0.5'
     }
-})
+}))
 
 type PlayerProps = {
     player: Player,
