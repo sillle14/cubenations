@@ -25,8 +25,12 @@ import { sizingTheme } from '../static/display'
 const useStyles = makeStyles({
     root: {
         display: 'flex',
+        // TODO: Remove the following once LHOG css has been cleaned up.
         '& *': {
             boxSizing: 'content-box'
+        },
+        '& table': {
+            width: 'auto'
         },
         height: '100%',
         justifyContent: 'space-around',
@@ -90,15 +94,10 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         return () => window.removeEventListener('resize', handleResize)
     }, [])
 
-    const [init, setInit] = useState(true)
-
     useEffect(() => {
         // Handle resize once on load.
-        if (init) {
-            handleResize()
-            setInit(false)
-        }
-    }, [init])
+        handleResize()
+    }, [])
 
     const theme: sizingTheme = {
         tileSize: `${tileSize}px`,

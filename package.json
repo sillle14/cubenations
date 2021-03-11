@@ -1,6 +1,6 @@
 {
   "name": "cubenations",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "private": false,
   "dependencies": {
     "@material-ui/styles": "^4.11.2",

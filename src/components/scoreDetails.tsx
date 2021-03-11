@@ -33,8 +33,7 @@ const useStyles = makeStyles({
         '& th, td': {
             padding: '10px',
             border: '1px solid black'
-        },
-        width: 'max-content',
+        }
     },
     footer: {
         display: 'flex',

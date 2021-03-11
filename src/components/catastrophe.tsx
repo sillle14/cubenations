@@ -5,13 +5,13 @@ const useStyles = makeStyles({
     root: {
         height: '100%',
         width: '100%',
-        background: 'grey'
+        background: '#263238'
     },
     cross: {
         height: '100%',
         width: '100%',
-        background: 'black',
-        clipPath: 'polygon(20% 0%, 0% 20%, 30% 50%, 0% 80%, 20% 100%, 50% 70%, 80% 100%, 100% 80%, 70% 50%, 100% 20%, 80% 0%, 50% 30%)'
+        background: '#f44336',
+        clipPath: 'polygon(50% 30%, 35% 55%, 25% 15%, 10% 50%, 20% 80%, 50% 90%, 80% 80%, 90% 50%, 75% 15%, 65% 55%)'
     }
 })
 
