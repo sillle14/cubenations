@@ -25,13 +25,6 @@ import { sizingTheme } from '../static/display'
 const useStyles = makeStyles({
     root: {
         display: 'flex',
-        // TODO: Remove the following once LHOG css has been cleaned up.
-        '& *': {
-            boxSizing: 'content-box'
-        },
-        '& table': {
-            width: 'auto'
-        },
         height: '100%',
         justifyContent: 'space-around',
         background: '#607d8b',
@@ -53,8 +46,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
 
     const toggleModal = () => {setModalOpen(!modalOpen)}
 
-    // TODO: handle spectators
-    const mySupport = (((G.conflict || {}).players || {})[playerID!] || {}).support
+    const mySupport = (((G.conflict || {}).players || {})[playerID || ''] || {}).support
 
     // When a player's support changes (meaning they committed tiles) or a discard move is performed, clear the sent tiles.
     useEffect(() => {
@@ -105,15 +97,14 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         border: '1px'
     }
 
-    // TODO: Handle spectators
     // Players can drag tiles from their hand if they are the current player and no stage is present
     //  or if they are involved in a conflict. Players can't drag when some tiles are selected.
     let canDragTile = playerID === ctx.currentPlayer && !ctx.activePlayers && selected.length === 0 && !!!ctx.gameover 
     // Players can select tiles on their turn or if they are involved in a conflict.
     //  or if they are involved in a conflict.
-    let canSelectHand = (color: Color) => (!!!ctx.gameover && (
+    let canSelectHand = (color: Color) => (!!!ctx.gameover && !!playerID && (
         (playerID === ctx.currentPlayer && !ctx.activePlayers) || 
-        (!!ctx.activePlayers && ctx.activePlayers[playerID!] === CONFLICT && G.conflict!.color === color)
+        (!!ctx.activePlayers && ctx.activePlayers[playerID] === CONFLICT && G.conflict!.color === color)
     ))
     // Players can drag their own leaders on their turn, but NOT during other stages.
     let canDragLeader = (leaderID: PlayerID) => (
@@ -121,16 +112,18 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
     )
     // Players can drag monuments only if they are in the monument stages.
     let canDragMonument = (colors: Array<Color>) => (
+        !!playerID && 
         !!G.availableMonumentColor && 
         colors.includes(G.availableMonumentColor!) && 
         !!ctx.activePlayers && 
-        ctx.activePlayers[playerID!] === MONUMENT &&
+        ctx.activePlayers[playerID] === MONUMENT &&
         !!!ctx.gameover
     )
     // Players can drag treasure if they are in the correct phase and the treasure is available.
     let canDragTreasure = (position: Coord) => (
-        !!ctx.activePlayers && ctx.activePlayers[playerID!] === TREASURE &&
-        canTakeTreasure(G, position, playerID!) &&
+        !!playerID &&
+        !!ctx.activePlayers && ctx.activePlayers[playerID] === TREASURE &&
+        canTakeTreasure(G, position, playerID) &&
         !!!ctx.gameover
     )
 
@@ -141,7 +134,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
             conflict={G.conflict} 
             playerMap={playerMap}
             tempSupport={selected.length}
-            playerID={playerID!} // TODO: Handle spectator
+            playerID={playerID}
             resolution={!!ctx.activePlayers && (Object.values(ctx.activePlayers)[0] === RESOLVE_CONFLICT)}
         />
     }
@@ -152,7 +145,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         <ThemeProvider theme={theme}>
             <div className={classes.root} ref={ref}>
                 <Column fixed={true} width={4.5}>
-                    <ScoreComp score={G.players[playerID!]!.score} takeTreasure={moves.takeTreasure}/>
+                    {!!playerID && <ScoreComp score={G.players[playerID]!.score} takeTreasure={moves.takeTreasure}/>}
                     <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder}/>
                     {conflict}
                 </Column>
@@ -166,18 +159,18 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         possibleMonuments={G.possibleMonuments}
                         monuments={G.monuments}
                     />
-                    <PlayerComp 
-                        player={G.players[playerID!]!} // TODO: Handle spectator
+                    {!!playerID && <PlayerComp 
+                        player={G.players[playerID]!}
                         placeLeader={moves.placeLeader}
                         selected={selected}
                         toggleSelectTile={toggleSelectTile}
-                    />
+                    />}
                 </Column>
                 <Column fixed={true}>
                     <MonumentsComp monuments={G.monuments}/>
                     <ActionBox
                         selected={selected}
-                        stage={(ctx.activePlayers || {})[playerID!]} // TODO: Handle spectator
+                        stage={(ctx.activePlayers || {})[playerID || '']}
                         commitToConflict={moves.commitToConflict}
                         resolveConflict={moves.resolveConflict}
                         pass={moves.pass}
@@ -187,10 +180,11 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         gameover={ctx.gameover}
                         playerMap={playerMap}
                         toggleModal={toggleModal}
-                        actionsLeft={G.players[playerID!]!.actions}
+                        actionsLeft={!!playerID ? G.players[playerID]!.actions : 0}
                         myTurn={playerID === ctx.currentPlayer}
                         discardTiles={moves.discardTiles}
                         conflict={G.conflict}
+                        spectator={!!!playerID}
                     />
                 </Column>
                 {!!ctx.gameover ? <ScoreDetailsModal open={modalOpen} toggle={toggleModal} players={G.players} playerMap={playerMap}/> : null}

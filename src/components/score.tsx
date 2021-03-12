@@ -21,7 +21,7 @@ const useStyles = makeStyles((theme: sizingTheme) => Object.assign({
     },
     table: {
         textTransform: 'capitalize' as 'capitalize',
-        marginLeft: `calc(${theme.tilePad} * 3)`,
+        marginLeft: `calc(${theme.tileSize} / 2)`,
         '& td:first-child': {
             textAlign: 'right',
             width: '50%',

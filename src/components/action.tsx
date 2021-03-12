@@ -60,9 +60,10 @@ type ActionProps = {
     playerMap: {[id in PlayerID]: string},
     toggleModal: () => void,
     actionsLeft: number,
-    conflict: Conflict | null
+    conflict: Conflict | null,
+    spectator: boolean
 }
-const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, discardTiles, resolveConflict, selected, possibleWars, chooseWar, pass, anyStage, myTurn, gameover, playerMap, toggleModal, actionsLeft, conflict}) => {
+const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, discardTiles, resolveConflict, selected, possibleWars, chooseWar, pass, anyStage, myTurn, gameover, playerMap, toggleModal, actionsLeft, conflict, spectator}) => {
 
     const classes = useStyles()
 
@@ -114,7 +115,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
                     ]
                 }
             } else {
-                title = 'Wait for your turn'
+                title = spectator ? 'Spectating' : 'Wait for your turn'
             }
             break
     }

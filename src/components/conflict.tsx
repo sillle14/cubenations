@@ -41,7 +41,7 @@ type ConflictProps = {
     conflict: Conflict,
     playerMap: {[id in PlayerID]: string},
     tempSupport: number,
-    playerID: PlayerID,
+    playerID: PlayerID | null,
     resolution: boolean
 }
 const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, tempSupport, playerID, resolution}) => {
