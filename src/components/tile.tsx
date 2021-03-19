@@ -2,24 +2,26 @@ import React, { FunctionComponent } from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import { Color } from '../static/colors'
-import { backgroundColors } from '../static/display'
+import { sizingTheme, tiles } from '../static/display'
 
-const useStyles = makeStyles(Object.assign({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         height: '100%',
         width: '100%',
         display: 'flex',
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderRadius: `calc(0.2 * ${theme.tileSize})`,
+        boxShadow: '2px 2px 5px #616161'
     }
-}, backgroundColors))
+}))
 
-const TileComp: FunctionComponent<{color: Color}> = ({color, children}) => {
+const TileComp: FunctionComponent<{color: Color, opacity?: number}> = ({color, opacity}) => {
 
     let classes = useStyles()
 
     return (
-        <div className={`${classes.root} ${classes[color]}`}>{children}</div>
+        <div className={classes.root}><img draggable={false} src={tiles[color]} alt={`${color} tile`} style={{opacity: opacity}}/></div>
     )
 }
 

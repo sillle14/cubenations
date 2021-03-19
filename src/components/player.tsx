@@ -1,7 +1,7 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
-import { sizingTheme } from '../static/display'
+import { sizingTheme, tiles } from '../static/display'
 import { Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
@@ -43,13 +43,6 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
         '& > div': {
             cursor: 'pointer'
         }
-    },
-    selected: {
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-        background: 'white',
-        opacity: '0.5'
     }
 }))
 
@@ -68,9 +61,8 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, select
     // TODO: formattin
     const hand = player.hand.map((t, i) => (
         <div className={`${classes.tileContainer} ${t && canSelectHand(t.color) ? classes.selectable : ''}`} key={`hand-${i}`} onClick={() => {if (t && canSelectHand(t.color)) toggleSelectTile(i)}}>
-            {t ? <Draggable item={{...t, handIndex: i}} draggable={canDragTile}>
-                <TileComp color={t.color}/>
-                {selected.includes(i) ? <div className={classes.selected}></div>: null}
+            {t ? <Draggable item={{...t, handIndex: i}} draggable={canDragTile} previewImg={tiles[t.color]}>
+                <TileComp color={t.color} opacity={selected.includes(i) ? 0.3: 1}/>
             </Draggable> : null}
         </div>
     ))

@@ -1,5 +1,9 @@
 import { TREASURE } from "../models/pieces"
 import { BLACK, BLUE, GREEN, RED } from "./colors"
+import red from '../assets/tiles/red.svg'
+import blue from '../assets/tiles/blue.svg'
+import black from '../assets/tiles/black.svg'
+import green from '../assets/tiles/green.svg'
 
 export const backgroundColors = {
     [RED]: {
@@ -40,6 +44,9 @@ export type sizingTheme = {
     border: string
 }
 
-
-// TODO: Use something like this to make this all dynamic.https://stackoverflow.com/questions/36862334/get-viewport-window-height-in-reactjs
-// Note that using fractional units didn't work that well because of rounding errors.
+export const tiles = {
+    [RED]: red,
+    [BLUE]: blue,
+    [GREEN]: green,
+    [BLACK]: black,
+}
