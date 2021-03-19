@@ -5,6 +5,7 @@ import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { PlayerID } from 'boardgame.io'
 
+import DragLayer from './dragLayer'
 import CNState from '../models/state'
 import ConflictComp from './conflict'
 import PlayerComp from './player'
@@ -28,6 +29,7 @@ const useStyles = makeStyles({
         height: '100%',
         justifyContent: 'space-around',
         background: '#607d8b',
+        pointerEvents: 'auto'
     },
 })
 
@@ -143,6 +145,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         <DndProvider backend={HTML5Backend}>
         <DraggableContext.Provider value={{canDragTile, canSelectHand, canDragLeader, canDragMonument, canDragTreasure}}>
         <ThemeProvider theme={theme}>
+        {/* <DragLayer> */}
             <div className={classes.root} ref={ref}>
                 <Column fixed={true} width={4.5}>
                     {!!playerID && <ScoreComp score={G.players[playerID]!.score} takeTreasure={moves.takeTreasure}/>}
@@ -189,6 +192,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                 </Column>
                 {!!ctx.gameover ? <ScoreDetailsModal open={modalOpen} toggle={toggleModal} players={G.players} playerMap={playerMap}/> : null}
             </div>
+        {/* </DragLayer> */}
         </ThemeProvider>
         </DraggableContext.Provider>
         </DndProvider>
