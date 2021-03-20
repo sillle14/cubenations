@@ -3,6 +3,8 @@ import { makeStyles } from '@material-ui/styles'
 
 import { Color } from '../static/colors'
 import { sizingTheme, tiles } from '../static/display'
+import { CATASTROPHE } from '../models/pieces'
+import catastrophe from '../assets/tiles/catastrophe.svg'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
@@ -16,7 +18,7 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
     }
 }))
 type TileProps = {
-    color: Color,
+    color: Color | typeof CATASTROPHE,
     opacity?: number,
     noShadow?: boolean
 }
@@ -24,9 +26,11 @@ const TileComp: FunctionComponent<TileProps> = ({color, opacity, noShadow}) => {
 
     let classes = useStyles()
 
+    const src = color === CATASTROPHE ? catastrophe : tiles[color]
+
     return (
         <div className={classes.root} style={noShadow ? {boxShadow: 'unset'} : {}}>
-            <img draggable={false} src={tiles[color]} alt={`${color} tile`} style={{opacity: opacity}}/>
+            <img draggable={false} src={src} alt={`${color} tile`} style={{opacity: opacity}}/>
         </div>
     )
 }

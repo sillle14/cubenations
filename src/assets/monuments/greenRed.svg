@@ -5,8 +5,8 @@
   <rect x="41.25" y="30" width="7.5" height="40" rx="3.75" fill="#4caf50"/>
   <rect x="51.25" y="35" width="7.5" height="30" rx="3.75" fill="#4caf50"/>
   <rect x="61.25" y="30" width="7.5" height="40" rx="3.75" fill="#4caf50"/>
-  <path d="M 10 45 v -35 h 25" fill="#f44336"/>
-  <path d="M 55 10 h 35 v 25" fill="#f44336"/>
-  <path d="M 90 55 v 35 h -25" fill="#f44336"/>
-  <path d="M 45 90 h -35 v -25" fill="#f44336"/>
+  <path d="M 26 26 l -11 -21 l -10 10" fill="#f44336"/>
+  <path d="M 74 26 l 11 -21 l 10 10" fill="#f44336"/>
+  <path d="M 26 74 l -11 21 l -10 -10" fill="#f44336"/>
+  <path d="M 74 74 l 11 21 l 10 -10" fill="#f44336"/>
 </svg>

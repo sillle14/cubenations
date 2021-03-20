@@ -2,10 +2,9 @@ import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
 import { sizingTheme } from '../static/display'
-import { Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
+import { CATASTROPHE, Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
-import CatastropheComp from './catastrophe'
 import Draggable from './draggable'
 import DraggableContext from './draggableContext'
 import Droppable from './droppable'
@@ -108,9 +107,9 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, select
     let catastrophes = []
     for (let i = 0; i < player.catastrophes; i++) {
         catastrophes.push(
-            <div className={classes.tileContainer} key={i}>
-                <Draggable draggable={canDragTile} item={new Catastrophe()}><CatastropheComp/></Draggable>
-            </div>
+            <div className={classes.tileContainer} key={i}><div className={classes.shadow}>
+                <Draggable draggable={canDragTile} item={new Catastrophe()}><TileComp color={CATASTROPHE} noShadow/></Draggable>
+            </div></div>
         )
     }
 

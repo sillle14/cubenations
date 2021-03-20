@@ -4,8 +4,8 @@
   <circle cx="42.5" cy="52.5" r="10" fill="#90caf9"/>
   <circle cx="57.5" cy="62.5" r="5" fill="#90caf9"/>
   <circle cx="57.5" cy="37.5" r="7.5" fill="#90caf9"/>
-  <path d="M 10 45 v -35 h 25" fill="#f44336"/>
-  <path d="M 55 10 h 35 v 25" fill="#f44336"/>
-  <path d="M 90 55 v 35 h -25" fill="#f44336"/>
-  <path d="M 45 90 h -35 v -25" fill="#f44336"/>
+  <path d="M 26 26 l -11 -21 l -10 10" fill="#f44336"/>
+  <path d="M 74 26 l 11 -21 l 10 10" fill="#f44336"/>
+  <path d="M 26 74 l -11 21 l -10 -10" fill="#f44336"/>
+  <path d="M 74 74 l 11 21 l 10 -10" fill="#f44336"/>
 </svg>

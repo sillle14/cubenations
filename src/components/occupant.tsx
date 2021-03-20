@@ -1,7 +1,6 @@
 import React, { FunctionComponent } from 'react'
 import { Coord } from '../models/board'
 import { CATASTROPHE, Leader, LEADER, MONUMENT, Occupant, Tile, TILE } from '../models/pieces'
-import CatastropheComp from './catastrophe'
 import LeaderComp from './leader'
 import TileComp from './tile'
 
@@ -21,7 +20,7 @@ const OccupantComp: FunctionComponent<OccupantProps> = ({occupant, location}) =>
         case LEADER:
             return <LeaderComp {...occupant as Leader} location={location || null}/>
         case CATASTROPHE:
-            return <CatastropheComp/>
+            return <TileComp color={CATASTROPHE}/>
         case MONUMENT:
             // Monuments are overlaid
             return null
