@@ -5,6 +5,14 @@ import blue from '../assets/tiles/blue.svg'
 import black from '../assets/tiles/black.svg'
 import green from '../assets/tiles/green.svg'
 
+import blueGreen from '../assets/monuments/blueGreen.svg'
+import blueRed from '../assets/monuments/blueRed.svg'
+import blueBlack from '../assets/monuments/blueBlack.svg'
+import greenRed from '../assets/monuments/greenRed.svg'
+import greenBlack from '../assets/monuments/greenBlack.svg'
+import redBlack from '../assets/monuments/redBlack.svg'
+
+// TODO: Deprecate
 export const backgroundColors = {
     [RED]: {
         background: '#f44336',
@@ -34,7 +42,7 @@ export const colors = {
         color: '#424242',
     },
     [TREASURE]: {
-        color: '#fff176'
+        color: '#ffee58'
     }
 }
 
@@ -49,4 +57,13 @@ export const tiles = {
     [BLUE]: blue,
     [GREEN]: green,
     [BLACK]: black,
+}
+
+export const monuments = {
+    [`${BLUE}${GREEN}`]: blueGreen,
+    [`${BLUE}${RED}`]: blueRed,
+    [`${BLUE}${BLACK}`]: blueBlack,
+    [`${GREEN}${RED}`]: greenRed,
+    [`${GREEN}${BLACK}`]: greenBlack,
+    [`${RED}${BLACK}`]: redBlack,
 }

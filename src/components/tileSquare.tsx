@@ -47,9 +47,11 @@ const TileSquare: FunctionComponent<TileSquareProps> = ({ location, className, c
                 break
         }
     }
-    return <td className={className}><Droppable accept={[TILE, LEADER, CATASTROPHE]} canDrop={canDrop} onDrop={onDrop}>
-        {children}
-    </Droppable></td>
+    return <td className={className}>
+        <Droppable accept={[TILE, LEADER, CATASTROPHE]} canDrop={canDrop} onDrop={onDrop} showTarget>
+            {children}
+        </Droppable>
+    </td>
 }
 
 export default TileSquare

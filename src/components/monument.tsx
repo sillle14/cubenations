@@ -2,31 +2,29 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import { Color } from '../static/colors'
+import { monuments } from '../static/display'
 import { backgroundColors, sizingTheme } from '../static/display'
 
-const useStyles = makeStyles((theme: sizingTheme) => Object.assign({
+const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         height: `calc((${theme.tileSize} + ${theme.tilePad}) * 2 + ${theme.border})`,
         width: `calc((${theme.tileSize} + ${theme.tilePad}) * 2 + ${theme.border})`,
-    },
-    inner: {
-        height: '50%',
-        width: '50%',
-        border: 'solid rgba(0, 0, 0, 0.5)'
+        borderRadius: `calc(0.4 * ${theme.tileSize})`,
+        boxShadow: '2px 2px 5px #616161'
     }
-}, backgroundColors))
+}))
 
 
-const MonumentComp = ({colors}: {colors: [Color, Color]}) => {
+const MonumentComp = ({colors, noShadow}: {colors: [Color, Color], noShadow?: boolean}) => {
 
     let classes = useStyles()
 
     return (
-        <div className={`${classes.root} ${classes[colors[0]]}`}>
-            <div className={`${classes.inner} ${classes[colors[1]]}`}/>
+        <div className={`${classes.root}`} style={noShadow ? {boxShadow: 'unset'} : {}}>
+            <img src={monuments[`${colors[0]}${colors[1]}`]} alt={`${colors[0]}${colors[1]}Monument`} draggable={false}/>
         </div>
     )
 }

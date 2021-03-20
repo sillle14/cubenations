@@ -30,6 +30,12 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
     monumentContainer: {
         padding: theme.tilePad,
     },
+    shadow: {
+        height: '100%',
+        width: '100%',
+        borderRadius: `calc(0.4 * ${theme.tileSize})`,
+        boxShadow: '2px 2px 5px #616161'
+    },
 }))
 
 type MonumentProps = {
@@ -42,9 +48,13 @@ const MonumentsComp: FunctionComponent<MonumentProps> = ({monuments}) => {
     const {canDragMonument} = useContext(DraggableContext)
 
     const monumentComps = monuments.map((m, i) => 
-        m.position ? null : <div className={classes.monumentContainer} key={i}>
-            <Draggable item={{...m, monumentIndex: i}} draggable={canDragMonument(m.colors)}><MonumentComp colors={m.colors}/></Draggable>
-        </div>
+        m.position ? null : (
+            <div className={classes.monumentContainer} key={i}><div className={classes.shadow}>
+                <Draggable item={{...m, monumentIndex: i}} draggable={canDragMonument(m.colors)}>
+                    <MonumentComp colors={m.colors} noShadow/>
+                </Draggable>
+            </div></div>
+        )
     )
 
     return (

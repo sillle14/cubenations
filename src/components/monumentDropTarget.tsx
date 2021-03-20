@@ -25,12 +25,18 @@ const MonumentDropTarget: FunctionComponent<MDTProps> = ({position, placeMonumen
     const top = `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${position.y + 0.5} + ${theme.border} * 0.5 + ${theme.tilePad})`
     const left = `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${position.x + 0.5} + ${theme.border} * 0.5 + ${theme.tilePad})`
 
+    const monumentSize = `calc((${theme.tileSize} + ${theme.tilePad}) * 2 + ${theme.border})`
+    const offset = `calc(${theme.tileSize} / -2 - ${theme.tilePad})`
+
     return (
         <div className={classes.root} style={{top, left}}>
             <Droppable 
                 accept={MONUMENT} 
                 canDrop={() => true} 
                 onDrop={(item: DraggedMonument) => {placeMonument(position, item.monumentIndex)}}
+                showTarget
+                targetOffset={offset}
+                targetSize={monumentSize}
             />
         </div>
     )
