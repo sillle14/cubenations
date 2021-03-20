@@ -8,10 +8,16 @@ const useStyles = makeStyles({
     root: {
         height: '100%',
         width: '100%',
-        position: 'relative'
+        position: 'relative',
+        zIndex: 0       // This ensures that only the div is dragged, and not the background.
     },
     draggable: {
         '& *': {cursor: 'grab'}
+    },
+    dragging: {
+        '& img': {
+            opacity: 0.4
+        }
     }
 })
 
@@ -22,14 +28,19 @@ type DraggableProps = {
 
 const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, children}) => {
 
-    const [, drag] = useDrag({
+    const [{isDragging}, drag] = useDrag({
         item: item,
-        canDrag: draggable
+        canDrag: draggable,
+        collect: (monitor) => ({isDragging: !!monitor.isDragging()})
     })
     const classes = useStyles()
 
+    let className = classes.root
+    if (draggable) {className += ` ${classes.draggable}`}
+    if (isDragging) {className += ` ${classes.dragging}`}
+
     return (
-        <div ref={drag} className={`${classes.root} ${draggable ? classes.draggable : ''}`}>{children}</div>
+        <div ref={drag} className={className}>{children}</div>
     )
 }
 

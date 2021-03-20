@@ -6,12 +6,15 @@ import { Coord } from '../models/board'
 import Draggable from './draggable'
 import { TREASURE } from '../models/pieces'
 import DraggableContext from './draggableContext'
+import treasure from '../assets/tiles/treasure.svg'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
-        height: `calc(${theme.tileSize} / 3)`,
-        width: `calc(${theme.tileSize} / 3)`,
+        height: `calc(${theme.tileSize} / 2)`,
+        width: `calc(${theme.tileSize} / 2)`,
         position: 'absolute',
+        borderRadius: `calc(0.1 * ${theme.tileSize})`,
+        boxShadow: '2px 2px 5px #616161'
     },
     color: {
         background: 'tan',
@@ -21,8 +24,6 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
     }
 }))
 
-// TODO: Make the treasure a bit asymetrical so we don't need the tilesize to be divisble for it to look right.
-
 const TreasureComp = ({location}: {location: Coord}) => {
 
     let classes = useStyles()
@@ -30,14 +31,14 @@ const TreasureComp = ({location}: {location: Coord}) => {
 
     const {canDragTreasure} = useContext(DraggableContext)
 
-    const top = `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.y + 0.5} + ${theme.border} * ${location.y} - ${theme.tileSize} / 6)`
-    const left = `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.x + 0.5} + ${theme.border} * ${location.x} - ${theme.tileSize} / 6)`
+    const top = `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.y + 0.5} + ${theme.border} * ${location.y + 1} - ${theme.tileSize} / 4)`
+    const left = `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.x + 0.5} + ${theme.border} * ${location.x + 1} - ${theme.tileSize} / 4)`
 
     return (
         <div className={classes.root} style={{top, left}}>
             {/* Note that the draggable is within the absolutely positioned object. */}
             <Draggable item={{type: TREASURE, source: location}} draggable={canDragTreasure(location)}>
-                <div className={classes.color}/>
+                <img src={treasure} draggable={false} alt="treasure"/>
             </Draggable>
         </div>
     )

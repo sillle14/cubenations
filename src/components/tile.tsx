@@ -15,13 +15,19 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
         boxShadow: '2px 2px 5px #616161'
     }
 }))
-
-const TileComp: FunctionComponent<{color: Color, opacity?: number}> = ({color, opacity}) => {
+type TileProps = {
+    color: Color,
+    opacity?: number,
+    noShadow?: boolean
+}
+const TileComp: FunctionComponent<TileProps> = ({color, opacity, noShadow}) => {
 
     let classes = useStyles()
 
     return (
-        <div className={classes.root}><img draggable={false} src={tiles[color]} alt={`${color} tile`} style={{opacity: opacity}}/></div>
+        <div className={classes.root} style={noShadow ? {boxShadow: 'unset'} : {}}>
+            <img draggable={false} src={tiles[color]} alt={`${color} tile`} style={{opacity: opacity}}/>
+        </div>
     )
 }
 
