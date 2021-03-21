@@ -3,7 +3,7 @@ import { makeStyles } from '@material-ui/styles'
 
 import { Color } from '../static/colors'
 import { monuments } from '../static/display'
-import { backgroundColors, sizingTheme } from '../static/display'
+import { sizingTheme } from '../static/display'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {

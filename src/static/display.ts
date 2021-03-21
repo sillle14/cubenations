@@ -12,19 +12,18 @@ import greenRed from '../assets/monuments/greenRed.svg'
 import greenBlack from '../assets/monuments/greenBlack.svg'
 import redBlack from '../assets/monuments/redBlack.svg'
 
-// TODO: Deprecate
 export const backgroundColors = {
     [RED]: {
-        background: '#f44336',
+        fill: '#f44336',
     },
     [BLUE]: {
-        background: '#1e88e5',
+        fill: '#1e88e5',
     },
     [GREEN]: {
-        background: '#4caf50',
+        fill: '#4caf50',
     },
     [BLACK]: {
-        background: '#424242',
+        fill: '#616161',
     },
 }
 

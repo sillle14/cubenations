@@ -5,6 +5,7 @@ import { PlayerID } from 'boardgame.io'
 import { Color } from '../static/colors'
 import { LEADER } from '../models/pieces'
 import { Coord } from '../models/board'
+import LeaderImg from './leaderImage'
 import Draggable from './draggable'
 import DraggableContext from './draggableContext'
 import { backgroundColors } from '../static/display'
@@ -12,12 +13,20 @@ import { backgroundColors } from '../static/display'
 const useStyles = makeStyles(Object.assign({
     root: {
         height: '100%',
-        width: '100%'
+        width: '100%',
+        display: 'block'
     },
-    '0': {clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'},
-    '1': {clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'},
-    '2': {clipPath: 'circle(50% at 50% 50%)'},
-    '3': {clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)'}
+    shadow: {
+        position: 'absolute' as 'absolute',
+        height: '100%',
+        width: '100%',
+        top: 0,
+        left: 0,
+        display: 'block',
+        filter: 'drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.6))',
+        fill: 'transparent',
+        stroke: 'transparent'
+    }
 }, backgroundColors))
 
 const LeaderComp = ({color, playerID, location}: {color: Color, playerID: PlayerID, location: Coord | null}) => {
@@ -27,12 +36,16 @@ const LeaderComp = ({color, playerID, location}: {color: Color, playerID: Player
     const {canDragLeader} = useContext(DraggableContext)
 
     return (
+        <div style={{position: 'relative'}}>
+        {/* Use a second leader img for the shadow so the shadow doesn't mess with the drag. */}
+        <LeaderImg playerID={playerID} className={classes.shadow}/>
         <Draggable 
             item={{type: LEADER, color: color, playerID: playerID, source: location}}
             draggable={canDragLeader(playerID)}
         >
-            <div className={`${classes.root} ${classes[color]} ${classes[playerID as '0' | '1' | '2' | '3']}`}/>
+            <LeaderImg playerID={playerID} className={`${classes.root} ${classes[color]}`}/>
         </Draggable>
+        </div>
     )
 }
 

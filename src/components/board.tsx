@@ -28,6 +28,7 @@ const useStyles = makeStyles({
         height: '100%',
         justifyContent: 'space-around',
         background: '#607d8b',
+        color: '#37474f'
     },
 })
 

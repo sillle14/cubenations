@@ -17,6 +17,10 @@ const useStyles = makeStyles({
     dragging: {
         '& img': {
             opacity: 0.4
+        },
+        '& svg': {
+            opacity: 0.4,
+            strokeOpacity: 0.4,
         }
     }
 })

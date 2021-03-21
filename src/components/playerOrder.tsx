@@ -3,6 +3,7 @@ import React, { FunctionComponent } from 'react'
 
 import { sizingTheme } from '../static/display'
 import { PlayerID } from 'boardgame.io'
+import LeaderImg from './leaderImage'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
@@ -16,25 +17,24 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
             fontWeight: 'bolder',
         },
     },
-    '0': {clipPath: 'polygon(50% 0%, 0% 100%, 100% 100%)'},
-    '1': {clipPath: 'polygon(50% 0%, 100% 50%, 50% 100%, 0% 50%)'},
-    '2': {clipPath: 'circle(50% at 50% 50%)'},
-    '3': {clipPath: 'polygon(50% 0%, 100% 38%, 82% 100%, 18% 100%, 0% 38%)'},
+    leader: {
+        height: `calc(${theme.tileSize} / 2)`,
+        width: `calc(${theme.tileSize} / 2)`,
+        display: 'block',
+        fill: '#37474f'
+    },
     table: {
         textTransform: 'capitalize',
         '& td:first-child': {
-            textAlign: 'right',
+            textAlign: 'center',
             width: '50%',
-            fontWeight: 'bolder',
-            '& div': {
-                height: `calc(${theme.tileSize} / 2)`,
-                width: `calc(${theme.tileSize} / 2)`,
-                background: 'black'
-            }
+            fontWeight: 'bold'
         },
         '& td:last-child': {
-            textAlign: 'center',
-            width: '50%'
+            width: '100%',
+            fontWeight: 'bolder',
+            display: 'flex',
+            justifyContent: 'center'
         },
     },
 }))
@@ -48,7 +48,10 @@ const PlayerOrderComp: FunctionComponent<PlayerOrderProps> = ({playerMap, player
     const classes = useStyles()
 
     const rows = playerOrder.map(id => (
-        <tr key={id}><td><div className={classes[id as '0' | '1' | '2' | '3']}/></td><td>{playerMap[id]}</td></tr>
+        <tr key={id}>
+            <td>{playerMap[id]}</td>
+            <td><LeaderImg playerID={id} className={classes.leader}/></td>
+        </tr>
     ))
 
     return (

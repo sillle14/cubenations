@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
             background: '#ffecb3',
             borderCollapse: 'collapse',
             '& td': {
-                border: `${theme.border} solid black`,
+                border: `${theme.border} solid #37474f`,
                 padding: theme.tilePad,
                 height: theme.tileSize,
                 width: theme.tileSize,
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
                 background: '#81d4fa'
             },
             '& .special-border': {
-                boxShadow: `inset 0px 0px 0px calc(${theme.border} * 2) black`,
+                boxShadow: `inset 0px 0px 0px calc(${theme.border} * 2) #37474f`,
             }
         }
     },
