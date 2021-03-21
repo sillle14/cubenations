@@ -58,7 +58,6 @@ function setup(ctx: Ctx): CNState {
     }
 
     // Monuments
-    // TODO: switch up inner and outer to more balanced? or match the real game.
     let monuments: Array<Monument> = []
     for (let i = 0; i < ALL_COLORS.length; i++) {
         for (let j = i + 1; j < ALL_COLORS.length; j++) {

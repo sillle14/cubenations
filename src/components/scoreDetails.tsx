@@ -42,8 +42,6 @@ const useStyles = makeStyles({
     }
 })
 
-// TODO: Make this prettier
-
 type ScoreDetailProps = {
     open: boolean,
     toggle: () => void,

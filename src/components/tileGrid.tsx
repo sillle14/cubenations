@@ -31,17 +31,16 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
             },
             '& .special-border': {
                 boxShadow: `inset 0px 0px 0px calc(${theme.border} * 2) #37474f`,
+            },
+            '& .unification': {
+                '& img': {
+                    opacity: 0.3
+                },
+                '& svg': {
+                    opacity: 0.3 // TODO: stroke as well?
+                }
             }
         }
-    },
-    unification: {
-        position: 'absolute', 
-        color: '#f5f5f5',
-        top: '50%',
-        left: '50%',
-        transform: 'translate(-50%, -50%)',
-        fontSize: 'x-large',
-        fontWeight: 'bolder',
     }
 }))
 interface TileGridProps {
@@ -73,6 +72,7 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
             if (board[x][y].treasure) {
                 treasures.push(<TreasureComp key={`${x}${y}`} location={{x: x, y: y}}/>)
             }
+            if (board[x][y].unification) tdClasses.push('unification')
             row.push(
                 <TileSquare
                     key={x}
@@ -83,7 +83,6 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
                     placeCatastrophe={placeCatastrophe}
                     board={board}
                 >
-                    {board[x][y].unification ? <div className={classes.unification}>U</div> : null}
                     <OccupantComp occupant={board[x][y].occupant} location={{x: x, y: y}}/>
                 </TileSquare>
             )
