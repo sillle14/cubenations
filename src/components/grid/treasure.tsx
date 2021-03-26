@@ -6,7 +6,7 @@ import { Coord } from '../../models/board'
 import Draggable from '../dnd/draggable'
 import { TREASURE } from '../../models/pieces'
 import DraggableContext from '../dnd/draggableContext'
-import treasure from '../assets/tiles/treasure.svg'
+import treasure from '../../assets/tiles/treasure.svg'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
@@ -38,7 +38,15 @@ const TreasureComp = ({location}: {location: Coord}) => {
         <div className={classes.root} style={{top, left}}>
             {/* Note that the draggable is within the absolutely positioned object. */}
             <Draggable item={{type: TREASURE, source: location}} draggable={canDragTreasure(location)}>
-                <img src={treasure} draggable={false} alt="treasure"/>
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                    <rect width="90" height="90" rx="15" x="5" y="5" fill="url('#treasure')" stroke="#37474f" stroke-width="10"/>
+                    <defs>
+                        <radialGradient id="treasure" cx="70%" cy="35%" r="100%">
+                        <stop offset="0%" stop-color="#ffee58"/>
+                        <stop offset="120%" stop-color="#ff6f00"/>
+                        </radialGradient>
+                    </defs>
+                </svg>
             </Draggable>
         </div>
     )

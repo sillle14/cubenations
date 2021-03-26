@@ -50,19 +50,3 @@ export type sizingTheme = {
     tilePad: string,
     border: string
 }
-
-export const tiles = {
-    [RED]: red,
-    [BLUE]: blue,
-    [GREEN]: green,
-    [BLACK]: black,
-}
-
-export const monuments = {
-    [`${BLUE}${GREEN}`]: blueGreen,
-    [`${BLUE}${RED}`]: blueRed,
-    [`${BLUE}${BLACK}`]: blueBlack,
-    [`${GREEN}${RED}`]: greenRed,
-    [`${GREEN}${BLACK}`]: greenBlack,
-    [`${RED}${BLACK}`]: redBlack,
-}

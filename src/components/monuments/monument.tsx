@@ -2,8 +2,8 @@ import React from 'react'
 import { makeStyles } from '@material-ui/styles'
 
 import { Color } from '../../static/colors'
-import { monuments } from '../../static/display'
 import { sizingTheme } from '../../static/display'
+import MonumentImg from './monumentImage'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
@@ -24,7 +24,7 @@ const MonumentComp = ({colors, noShadow}: {colors: [Color, Color], noShadow?: bo
 
     return (
         <div className={`${classes.root}`} style={noShadow ? {boxShadow: 'unset'} : {}}>
-            <img src={monuments[`${colors[0]}${colors[1]}`]} alt={`${colors[0]}${colors[1]}Monument`} draggable={false}/>
+            <MonumentImg colors={colors}/>
         </div>
     )
 }
