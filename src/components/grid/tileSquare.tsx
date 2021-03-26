@@ -1,11 +1,11 @@
 import React, { FunctionComponent } from 'react'
 
-import { Board, Coord } from '../models/board'
-import { canPlaceLeader } from '../moves/placeLeader'
-import { canPlaceTile } from '../moves/placeTile'
-import { CATASTROPHE, Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '../models/pieces'
-import Droppable from './droppable'
-import { canPlaceCatastrophe } from '../moves/placeCatastrophe'
+import { Board, Coord } from '../../models/board'
+import { canPlaceLeader } from '../../moves/placeLeader'
+import { canPlaceTile } from '../../moves/placeTile'
+import { CATASTROPHE, Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '../../models/pieces'
+import Droppable from '../dnd/droppable'
+import { canPlaceCatastrophe } from '../../moves/placeCatastrophe'
 
 interface TileSquareProps {
     location: Coord, 

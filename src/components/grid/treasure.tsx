@@ -1,11 +1,11 @@
 import React, { useContext } from 'react'
 import { makeStyles, useTheme } from '@material-ui/styles'
 
-import { sizingTheme } from '../static/display'
-import { Coord } from '../models/board'
-import Draggable from './draggable'
-import { TREASURE } from '../models/pieces'
-import DraggableContext from './draggableContext'
+import { sizingTheme } from '../../static/display'
+import { Coord } from '../../models/board'
+import Draggable from '../dnd/draggable'
+import { TREASURE } from '../../models/pieces'
+import DraggableContext from '../dnd/draggableContext'
 import treasure from '../assets/tiles/treasure.svg'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({

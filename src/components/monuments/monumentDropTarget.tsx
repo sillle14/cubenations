@@ -1,10 +1,10 @@
 import React, { FunctionComponent } from 'react'
 import { makeStyles, useTheme } from '@material-ui/styles'
 
-import { Coord } from '../models/board'
-import { sizingTheme } from '../static/display'
-import Droppable from './droppable'
-import { MONUMENT, DraggedMonument } from '../models/pieces'
+import { Coord } from '../../models/board'
+import { sizingTheme } from '../../static/display'
+import Droppable from '../dnd/droppable'
+import { MONUMENT, DraggedMonument } from '../../models/pieces'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {

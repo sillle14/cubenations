@@ -2,15 +2,15 @@ import React, { FunctionComponent } from 'react'
 import { makeStyles, useTheme } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
 
-import { Board, Coord } from '../models/board'
-import { BOARD_HEIGHT, BOARD_WIDTH } from '../static/board'
-import { sizingTheme } from '../static/display'
+import { Board, Coord } from '../../models/board'
+import { BOARD_HEIGHT, BOARD_WIDTH } from '../../static/board'
+import { sizingTheme } from '../../static/display'
 import OccupantComp from './occupant'
 import TileSquare from './tileSquare'
-import MonumentDropTarget from './monumentDropTarget'
-import MonumentComp from './monument'
+import MonumentDropTarget from '../monuments/monumentDropTarget'
+import MonumentComp from '../monuments/monument'
 import TreasureComp from './treasure'
-import { Monument } from '../models/pieces'
+import { Monument } from '../../models/pieces'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {

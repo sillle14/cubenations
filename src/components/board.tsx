@@ -12,9 +12,9 @@ import ScoreComp from './score'
 import ActionBox from './action'
 import Column from './column'
 import PlayerOrderComp from './playerOrder'
-import MonumentsComp from './monuments'
-import DraggableContext from './draggableContext'
-import TileGrid from './tileGrid'
+import MonumentListComp from './monuments/monumentList'
+import DraggableContext from './dnd/draggableContext'
+import TileGrid from './grid/tileGrid'
 import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
 import { Color } from '../static/colors'
 import { Coord } from '../models/board'
@@ -168,7 +168,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                     />}
                 </Column>
                 <Column fixed={true}>
-                    <MonumentsComp monuments={G.monuments}/>
+                    <MonumentListComp monuments={G.monuments}/>
                     <ActionBox
                         selected={selected}
                         stage={(ctx.activePlayers || {})[playerID || '']}

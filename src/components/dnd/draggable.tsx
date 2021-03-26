@@ -2,7 +2,7 @@ import React, { FunctionComponent } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useDrag } from 'react-dnd'
 
-import { Dragged } from '../models/pieces'
+import { Dragged } from '../../models/pieces'
 
 const useStyles = makeStyles({
     root: {

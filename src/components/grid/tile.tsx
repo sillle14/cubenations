@@ -1,9 +1,9 @@
 import React, { FunctionComponent } from 'react'
 import { makeStyles } from '@material-ui/styles'
 
-import { Color } from '../static/colors'
-import { sizingTheme, tiles } from '../static/display'
-import { CATASTROPHE } from '../models/pieces'
+import { Color } from '../../static/colors'
+import { sizingTheme, tiles } from '../../static/display'
+import { CATASTROPHE } from '../../models/pieces'
 import catastrophe from '../assets/tiles/catastrophe.svg'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({

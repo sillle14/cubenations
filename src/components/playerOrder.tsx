@@ -3,7 +3,7 @@ import React, { FunctionComponent } from 'react'
 
 import { sizingTheme } from '../static/display'
 import { PlayerID } from 'boardgame.io'
-import LeaderImg from './leaderImage'
+import LeaderImg from './grid/leaderImage'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {

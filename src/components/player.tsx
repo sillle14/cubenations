@@ -5,12 +5,12 @@ import { sizingTheme } from '../static/display'
 import { CATASTROPHE, Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
 import { Color } from '../static/colors'
 import { canPlaceLeader } from '../moves/placeLeader'
-import Draggable from './draggable'
-import DraggableContext from './draggableContext'
-import Droppable from './droppable'
-import LeaderComp from './leader'
+import Draggable from './dnd/draggable'
+import DraggableContext from './dnd/draggableContext'
+import Droppable from './dnd/droppable'
+import LeaderComp from './grid/leader'
 import Player from '../models/player'
-import TileComp from './tile'
+import TileComp from './grid/tile'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {

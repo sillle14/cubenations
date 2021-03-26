@@ -1,7 +1,7 @@
 import { PlayerID } from 'boardgame.io'
 import React from 'react'
-import { Coord } from '../models/board'
-import { Color } from '../static/colors'
+import { Coord } from '../../models/board'
+import { Color } from '../../static/colors'
 
 type ContextProps = {
     canDragTile: boolean, 

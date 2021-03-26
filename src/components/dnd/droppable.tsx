@@ -1,7 +1,7 @@
 import React, { FunctionComponent } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { useDrop } from 'react-dnd'
-import { sizingTheme } from '../static/display'
+import { sizingTheme } from '../../static/display'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {

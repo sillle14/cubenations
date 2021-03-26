@@ -16,7 +16,8 @@ const modalStyles = {
         right: 'auto',
         bottom: 'auto',
         marginRight: '-50%',
-        transform: 'translate(-50%, -50%)'
+        transform: 'translate(-50%, -50%)',
+        color: '#37474f'
     }
 }
 
@@ -32,7 +33,7 @@ const useStyles = makeStyles({
         },
         '& th, td': {
             padding: '10px',
-            border: '1px solid black'
+            border: '1px solid #37474f'
         }
     },
     footer: {

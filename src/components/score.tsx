@@ -4,7 +4,7 @@ import React, { FunctionComponent } from 'react'
 import { colors, sizingTheme } from '../static/display'
 import { DraggedTreasure, TREASURE } from '../models/pieces'
 import { Color } from '../static/colors'
-import Droppable from './droppable'
+import Droppable from './dnd/droppable'
 import { Coord } from '../models/board'
 
 const useStyles = makeStyles((theme: sizingTheme) => Object.assign({

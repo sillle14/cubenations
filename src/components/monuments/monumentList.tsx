@@ -1,11 +1,11 @@
 import { makeStyles } from '@material-ui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
-import { sizingTheme } from '../static/display'
-import { Monument } from '../models/pieces'
+import { sizingTheme } from '../../static/display'
+import { Monument } from '../../models/pieces'
 import MonumentComp from './monument'
-import Draggable from './draggable'
-import DraggableContext from './draggableContext'
+import Draggable from '../dnd/draggable'
+import DraggableContext from '../dnd/draggableContext'
 
 const useStyles = makeStyles((theme: sizingTheme) => ({
     root: {
@@ -38,10 +38,10 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
     },
 }))
 
-type MonumentProps = {
+type MonumentListProps = {
     monuments: Array<Monument>
 }
-const MonumentsComp: FunctionComponent<MonumentProps> = ({monuments}) => {
+const MonumentListComp: FunctionComponent<MonumentListProps> = ({monuments}) => {
 
     const classes = useStyles()
 
@@ -67,4 +67,4 @@ const MonumentsComp: FunctionComponent<MonumentProps> = ({monuments}) => {
     )
 }
 
-export default MonumentsComp
+export default MonumentListComp

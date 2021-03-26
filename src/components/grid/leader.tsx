@@ -2,13 +2,13 @@ import React, { useContext } from 'react'
 import { makeStyles } from '@material-ui/styles'
 import { PlayerID } from 'boardgame.io'
 
-import { Color } from '../static/colors'
-import { LEADER } from '../models/pieces'
-import { Coord } from '../models/board'
+import { Color } from '../../static/colors'
+import { LEADER } from '../../models/pieces'
+import { Coord } from '../../models/board'
 import LeaderImg from './leaderImage'
-import Draggable from './draggable'
-import DraggableContext from './draggableContext'
-import { backgroundColors } from '../static/display'
+import Draggable from '../dnd/draggable'
+import DraggableContext from '../dnd/draggableContext'
+import { backgroundColors } from '../../static/display'
 
 const useStyles = makeStyles(Object.assign({
     root: {
