@@ -31,7 +31,7 @@ const TreasureComp = ({location}: {location: Coord}) => {
         <div className={classes.root} style={{top, left}}>
             {/* Note that the draggable is within the absolutely positioned object. */}
             <Draggable item={{type: TREASURE, source: location}} draggable={canDragTreasure(location)}>
-                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                     <rect width="90" height="90" rx="15" x="5" y="5" fill="url('#treasure')" stroke="#37474f" strokeWidth="10"/>
                     <defs>
                         <radialGradient id="treasure" cx="70%" cy="35%" r="100%">

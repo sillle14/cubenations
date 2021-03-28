@@ -42,7 +42,7 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
             outline: 'none'
         }
     },
-    myTurn: {
+    emphasis: {
         background: '#ffecb3!important'
     }
 }))
@@ -73,6 +73,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
     let title = ''
     let message = null
     let buttons: Array<{text: string, onClick: () => void}> = []
+    let emphasis = true
 
     switch (stage) {
         case CONFLICT:
@@ -118,6 +119,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
                     ]
                 }
             } else {
+                emphasis = false
                 title = spectator ? 'Spectating' : 'Wait for your turn'
             }
             break
@@ -125,6 +127,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
 
     if (gameover) {
         let winMessage: string
+        emphasis = false
         if (gameover.winnerIDs.length > 1) {
             winMessage = `Players ${gameover.winnerIDs.map(pid => playerMap[pid]).join(' and ')} tie.`
         } else {
@@ -135,7 +138,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
         buttons = [{text: 'Score Details', onClick: toggleModal}]
     }
 
-    return <div className={`${classes.root} ${myTurn ? classes.myTurn : ''}`}>
+    return <div className={`${classes.root} ${emphasis ? classes.emphasis : ''}`}>
         <span>{title}</span>
         {!!message ? <p>{message}</p> : null}
         {(buttons || []).map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}

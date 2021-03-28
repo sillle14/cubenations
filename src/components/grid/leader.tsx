@@ -23,9 +23,10 @@ const useStyles = makeStyles(Object.assign({
         top: 0,
         left: 0,
         display: 'block',
-        filter: 'drop-shadow(2px 2px 3px rgba(0, 0, 0, 0.6))',
+        filter: 'drop-shadow(2px 2px 3px black)',
         fill: 'transparent',
-        stroke: 'transparent'
+        stroke: 'transparent',
+        opacity: 0.6
     }
 }, backgroundColors))
 

@@ -5,7 +5,7 @@ const MonumentImg = ({colors}: {colors: [Color, Color]}) => {
 
     switch (`${colors[0]}${colors[1]}`) {
         case `${BLUE}${GREEN}`:
-            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                 <rect width="97.5" height="97.5" rx="15" x="1.25" y="1.25" fill="#a5d6a7" stroke="#37474f" strokeWidth="2.5"/>
                 <rect width="47.5" height="47.5" rx="10" x="26.25" y="26.25" fill="#1e88e5" stroke="#37474f" strokeWidth="2.5"/>
                 <circle cx="42.5" cy="52.5" r="10" fill="#90caf9"/>
@@ -17,7 +17,7 @@ const MonumentImg = ({colors}: {colors: [Color, Color]}) => {
                 <rect x="36.875" y="81.875" width="55" height="10" rx="5" fill="#4caf50"/>
             </svg>)
         case `${BLUE}${RED}`:
-            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                 <rect width="97.5" height="97.5" rx="15" x="1.25" y="1.25" fill="#ef9a9a" stroke="#37474f" strokeWidth="2.5"/>
                 <rect width="47.5" height="47.5" rx="10" x="26.25" y="26.25" fill="#1e88e5" stroke="#37474f" strokeWidth="2.5"/>
                 <circle cx="42.5" cy="52.5" r="10" fill="#90caf9"/>
@@ -29,7 +29,7 @@ const MonumentImg = ({colors}: {colors: [Color, Color]}) => {
                 <path d="M 74 74 l 11 21 l 10 -10" fill="#f44336"/>
             </svg>)
         case `${BLUE}${BLACK}`:
-            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                 <rect width="97.5" height="97.5" rx="15" x="1.25" y="1.25" fill="#9e9e9e" stroke="#37474f" strokeWidth="2.5"/>
                 <rect width="47.5" height="47.5" rx="10" x="26.25" y="26.25" fill="#1e88e5" stroke="#37474f" strokeWidth="2.5"/>
                 <circle cx="42.5" cy="52.5" r="10" fill="#90caf9"/>
@@ -41,7 +41,7 @@ const MonumentImg = ({colors}: {colors: [Color, Color]}) => {
                 <rect x="75" y="75" width="15" height="15" rx="2" fill="#424242"/>
             </svg>)
         case `${GREEN}${RED}`: 
-            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                 <rect width="97.5" height="97.5" rx="15" x="1.25" y="1.25" fill="#ef9a9a" stroke="#37474f" strokeWidth="2.5"/>
                 <rect width="47.5" height="47.5" rx="10" x="26.25" y="26.25" fill="#a5d6a7" stroke="#37474f" strokeWidth="2.5"/>
                 <rect x="31.25" y="35" width="7.5" height="30" rx="3.75" fill="#4caf50"/>
@@ -54,7 +54,7 @@ const MonumentImg = ({colors}: {colors: [Color, Color]}) => {
                 <path d="M 74 74 l 11 21 l 10 -10" fill="#f44336"/>
             </svg>)
         case `${GREEN}${BLACK}`:
-            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                 <rect width="97.5" height="97.5" rx="15" x="1.25" y="1.25" fill="#9e9e9e" stroke="#37474f" strokeWidth="2.5"/>
                 <rect width="47.5" height="47.5" rx="10" x="26.25" y="26.25" fill="#a5d6a7" stroke="#37474f" strokeWidth="2.5"/>
                 <rect x="31.25" y="35" width="7.5" height="30" rx="3.75" fill="#4caf50"/>
@@ -67,7 +67,7 @@ const MonumentImg = ({colors}: {colors: [Color, Color]}) => {
                 <rect x="75" y="75" width="15" height="15" rx="2" fill="#424242"/>
             </svg>)
         case `${RED}${BLACK}`: 
-            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            return (<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">
                 <rect width="97.5" height="97.5" rx="15" x="1.25" y="1.25" fill="#9e9e9e" stroke="#37474f" strokeWidth="2.5"/>
                 <rect width="47.5" height="47.5" rx="10" x="26.25" y="26.25" fill="#ef9a9a" stroke="#37474f" strokeWidth="2.5"/>
                 <rect x="10" y="10" width="15" height="15" rx="2" fill="#424242"/>
