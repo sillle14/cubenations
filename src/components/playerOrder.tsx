@@ -37,18 +37,28 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
             justifyContent: 'center'
         },
     },
+    current: {
+        color: '#f5f5f5',
+        '& svg': {
+            fill: '#f5f5f5',
+            '& path': {
+                stroke: '#f5f5f5'
+            }
+        }
+    }
 }))
 
 type PlayerOrderProps = {
     playerMap: {[id in PlayerID]: string},
-    playerOrder: Array<PlayerID>
+    playerOrder: Array<PlayerID>,
+    currentPlayer: PlayerID
 }
-const PlayerOrderComp: FunctionComponent<PlayerOrderProps> = ({playerMap, playerOrder}) => {
+const PlayerOrderComp: FunctionComponent<PlayerOrderProps> = ({playerMap, playerOrder, currentPlayer}) => {
 
     const classes = useStyles()
 
     const rows = playerOrder.map(id => (
-        <tr key={id}>
+        <tr key={id} className={currentPlayer === id ? classes.current : ''}>
             <td>{playerMap[id]}</td>
             <td><LeaderImg playerID={id} className={classes.leader}/></td>
         </tr>

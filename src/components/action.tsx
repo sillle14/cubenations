@@ -41,6 +41,9 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
         '& > button:focus': {
             outline: 'none'
         }
+    },
+    myTurn: {
+        background: '#ffecb3!important'
     }
 }))
 
@@ -132,7 +135,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
         buttons = [{text: 'Score Details', onClick: toggleModal}]
     }
 
-    return <div className={classes.root}>
+    return <div className={`${classes.root} ${myTurn ? classes.myTurn : ''}`}>
         <span>{title}</span>
         {!!message ? <p>{message}</p> : null}
         {(buttons || []).map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}

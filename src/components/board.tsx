@@ -147,7 +147,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
             <div className={classes.root} ref={ref}>
                 <Column fixed={true} width={4.5}>
                     {!!playerID && <ScoreComp score={G.players[playerID]!.score} takeTreasure={moves.takeTreasure}/>}
-                    <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder}/>
+                    <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder} currentPlayer={ctx.currentPlayer}/>
                     {conflict}
                 </Column>
                 <Column fixed={false}>

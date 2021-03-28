@@ -15,12 +15,8 @@ const useStyles = makeStyles({
         '& *': {cursor: 'grab'}
     },
     dragging: {
-        '& img': {
-            opacity: 0.4
-        },
         '& svg': {
             opacity: 0.4,
-            strokeOpacity: 0.4,
         }
     }
 })

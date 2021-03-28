@@ -1,16 +1,5 @@
 import { TREASURE } from "../models/pieces"
 import { BLACK, BLUE, GREEN, RED } from "./colors"
-import red from '../assets/tiles/red.svg'
-import blue from '../assets/tiles/blue.svg'
-import black from '../assets/tiles/black.svg'
-import green from '../assets/tiles/green.svg'
-
-import blueGreen from '../assets/monuments/blueGreen.svg'
-import blueRed from '../assets/monuments/blueRed.svg'
-import blueBlack from '../assets/monuments/blueBlack.svg'
-import greenRed from '../assets/monuments/greenRed.svg'
-import greenBlack from '../assets/monuments/greenBlack.svg'
-import redBlack from '../assets/monuments/redBlack.svg'
 
 export const backgroundColors = {
     [RED]: {
