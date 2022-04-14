@@ -16,6 +16,10 @@ export abstract class Conflict {
         this.players = players
         this.aggressor = aggressor
     }
+
+    static isRevolt(conflict: Conflict): conflict is Revolt {
+        return (conflict as Revolt).leaderColor !== undefined;
+    }
 }
 
 interface RevoltProps extends ConflictProps {

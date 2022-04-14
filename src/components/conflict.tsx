@@ -62,9 +62,16 @@ const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, te
         player2Support = conflict.players[player2].support || tempSupport
     }
 
+    let color
+    if (Conflict.isRevolt(conflict)) {
+        color = `${conflict.leaderColor.charAt(0).toUpperCase()}${conflict.leaderColor.slice(1)}`
+    } else {
+        color = `${conflict.color.charAt(0).toUpperCase()}${conflict.color.slice(1)}`
+    }
+
     return (
         <div className={classes.root}>
-            <span className={classes.header}>{conflict.type}</span>
+            <span className={classes.header}>{color} {conflict.type}</span>
             <span>{`${playerMap[player1]}${conflict.aggressor === player1 ? '*' : ''} vs ${playerMap[player2]}${conflict.aggressor === player2 ? '*' : ''}`}</span>
             <hr/>
             <span>Base</span>
