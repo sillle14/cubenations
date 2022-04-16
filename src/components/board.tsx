@@ -184,6 +184,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         actionsLeft={!!playerID ? G.players[playerID]!.actions : 0}
                         myTurn={playerID === ctx.currentPlayer}
                         discardTiles={moves.discardTiles}
+                        clearSelected={clearSelected}
                         conflict={G.conflict}
                         spectator={!!!playerID}
                     />

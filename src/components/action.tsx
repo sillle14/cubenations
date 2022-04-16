@@ -47,12 +47,12 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
     }
 }))
 
-// TODO: Clean this up
 type ActionProps = {
     stage: string,
     selected: Array<number>,
     commitToConflict: (handIdxs: Array<number>) => void,
     discardTiles: (handIdxs: Array<number>) => void,
+    clearSelected: () => void,
     resolveConflict: () => void,
     possibleWars?: Array<Color>,
     chooseWar: (color: Color) => void,
@@ -66,7 +66,25 @@ type ActionProps = {
     conflict: Conflict | null,
     spectator: boolean
 }
-const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, discardTiles, resolveConflict, selected, possibleWars, chooseWar, pass, anyStage, myTurn, gameover, playerMap, toggleModal, actionsLeft, conflict, spectator}) => {
+const ActionBox: FunctionComponent<ActionProps> = ({
+    stage, 
+    commitToConflict, 
+    discardTiles, 
+    clearSelected,
+    resolveConflict, 
+    selected, 
+    possibleWars, 
+    chooseWar, 
+    pass, 
+    anyStage, 
+    myTurn, 
+    gameover, 
+    playerMap, 
+    toggleModal, 
+    actionsLeft, 
+    conflict, 
+    spectator
+}) => {
 
     const classes = useStyles()
 
@@ -107,7 +125,8 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
             if (myTurn && !anyStage) {
                 if (!selected.length) {
                     title = `${actionsLeft} action${actionsLeft > 1 ? 's' : ''} left`
-                    message = 'Place a tile or catastrophe, move a leader, discard, or pass.'
+                    // TODO: Add undo for basic moves
+                    message = 'Place a tile or catastrophe, move a leader, click a tile to discard, or pass.'
                     buttons = [
                         {text: 'pass', onClick: () => {pass()}},
                     ]
@@ -115,7 +134,8 @@ const ActionBox: FunctionComponent<ActionProps> = ({stage, commitToConflict, dis
                     title = 'Discard'
                     message = `Discard and replace ${selected.length} selected tile${selected.length > 1 ? 's' : ''}?`
                     buttons = [
-                        {text: 'confirm', onClick: () => {discardTiles(selected)}}
+                        {text: 'confirm', onClick: () => {discardTiles(selected)}},
+                        {text: 'cancel', onClick: () => {clearSelected()}}
                     ]
                 }
             } else {
