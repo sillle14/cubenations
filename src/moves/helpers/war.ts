@@ -2,6 +2,7 @@ import { Ctx, PlayerID } from 'boardgame.io'
 import { Coord } from '../../models/board'
 
 import { War } from '../../models/conflict'
+import { Leader } from '../../models/pieces'
 import Region from '../../models/region'
 import CNState from '../../models/state'
 import { ALL_COLORS, Color } from '../../static/colors'
@@ -24,7 +25,6 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
     })
 
     // The aggressor is the player closest in turn order to the current player.
-    // TODO: Heavy testing here in multiplayer.
     const playerIDs = Object.keys(players)
     let aggressor: PlayerID
     const currentPlayerIdx = G.playerOrder.indexOf(ctx.currentPlayer)
@@ -49,6 +49,13 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
         aggressor: aggressor,
         color: color
     })
+
+    const leaderCoords = Object.keys(players).map((player) => G.players[player]!.leaders[color]!)
+    leaderCoords.forEach((coord) => {
+        (G.board[coord.x][coord.y].occupant as Leader).inConflict = true
+    })
+
+    // TODO: Aggressor first!
     ctx.events!.setActivePlayers!({
         value: {
             [playerIDs[0]]: CONFLICT,

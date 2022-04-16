@@ -94,6 +94,12 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
             aggressor: ctx.currentPlayer,
             leaderColor: color
         })
+
+        const leaderPositions = [destination, opponentPosition]
+        leaderPositions.forEach((coord) => {
+            (G.board[coord.x][coord.y].occupant as Leader).inConflict = true
+        })
+        
         ctx.events!.setActivePlayers!({
             value: {
                 [ctx.currentPlayer]: CONFLICT,

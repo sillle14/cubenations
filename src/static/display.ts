@@ -34,6 +34,20 @@ export const colors = {
     }
 }
 
+export const pulse = {
+    '@keyframes pulse': {
+        '0%': {
+            transform: 'scale(0.95)'
+        },
+        '50%': {
+            transform: 'scale(1.1)'
+        },
+        '100%': {
+            transform: 'scale(0.95)'
+        }
+    }
+}
+
 export type sizingTheme = {
     tileSize: string,
     tilePad: string,

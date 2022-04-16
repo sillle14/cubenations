@@ -6,16 +6,20 @@ import { Coord } from '../../models/board'
 import Draggable from '../dnd/draggable'
 import { TREASURE } from '../../models/pieces'
 import DraggableContext from '../dnd/draggableContext'
+import { pulse } from '../../static/display'
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
+
+const useStyles = makeStyles((theme: sizingTheme) => Object.assign({
     root: {
         height: `calc(${theme.tileSize} / 2)`,
         width: `calc(${theme.tileSize} / 2)`,
-        position: 'absolute',
+        position: 'absolute' as 'absolute',
         borderRadius: `calc(0.1 * ${theme.tileSize})`,
         boxShadow: '2px 2px 5px #616161'
-    }
-}))
+    }, emph: {
+        animation: '$pulse 2s infinite',
+    },
+}, pulse))
 
 const TreasureComp = ({location}: {location: Coord}) => {
 
@@ -27,8 +31,13 @@ const TreasureComp = ({location}: {location: Coord}) => {
     const top = `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.y + 0.5} + ${theme.border} * ${location.y + 1} - ${theme.tileSize} / 4)`
     const left = `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.x + 0.5} + ${theme.border} * ${location.x + 1} - ${theme.tileSize} / 4)`
 
+    const className = [classes.root]
+    if (canDragTreasure(location)) {
+        className.push(classes.emph)
+    }
+
     return (
-        <div className={classes.root} style={{top, left}}>
+        <div className={className.join(' ')} style={{top, left}}>
             {/* Note that the draggable is within the absolutely positioned object. */}
             <Draggable item={{type: TREASURE, source: location}} draggable={canDragTreasure(location)}>
                 <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" height="100%">

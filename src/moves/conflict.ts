@@ -1,7 +1,7 @@
 import { Ctx, PlayerID } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 import { Revolt } from '../models/conflict'
-import { LEADER, Tile, TILE } from '../models/pieces'
+import { Leader, LEADER, Tile, TILE } from '../models/pieces'
 
 import CNState from '../models/state'
 import { Color, RED } from '../static/colors'
@@ -48,6 +48,11 @@ function resolveRevolt(G: CNState, ctx: Ctx, loser: PlayerID) {
     // Award the winner one point.
     G.players[G.conflict!.winner!]!.score[RED] += 1
 
+    // Unset the inConflict on the remaining leader
+    const winnerLeaderPostion = G.players[G.conflict!.winner!]!.leaders[(G.conflict as Revolt).leaderColor]!
+    const winnerLeader = G.board[winnerLeaderPostion.x][winnerLeaderPostion.y].occupant as Leader
+    winnerLeader.inConflict = false
+
     G.conflict = null
     ctx.events!.endStage!()
     endAction(G, ctx)
@@ -80,6 +85,7 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
             if (tile.color !== G.conflict!.color) return
 
             // If the tile is red, remove only if it has no treasure and no adjacent leader.
+            // TODO: Do remove if it's a RED war
             if (tile.color === RED) {
                 if (G.board[x][y].treasure) return
                 if (getNeighbors({x: x, y: y}, G.board).some(
@@ -99,6 +105,11 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
 
     // Award points.
     G.players[G.conflict!.winner!]!.score[G.conflict!.color] += winnerPoints
+
+    // Unset the inConflict on the remaining leader
+    const winnerLeaderPostion = G.players[G.conflict!.winner!]!.leaders[G.conflict!.color]!
+    const winnerLeader = G.board[winnerLeaderPostion.x][winnerLeaderPostion.y].occupant as Leader
+    winnerLeader.inConflict = false
 
     // Recalculate the kingdoms to see if another war needs to happen.
     regions = getAdjacentRegions(G.unificationTile!, G.board)

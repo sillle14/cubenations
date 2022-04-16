@@ -8,13 +8,16 @@ import { Coord } from '../../models/board'
 import LeaderImg from './leaderImage'
 import Draggable from '../dnd/draggable'
 import DraggableContext from '../dnd/draggableContext'
-import { backgroundColors } from '../../static/display'
+import { backgroundColors, pulse } from '../../static/display'
 
 const useStyles = makeStyles(Object.assign({
     root: {
         height: '100%',
         width: '100%',
         display: 'block'
+    },
+    emph: {
+        animation: '$pulse 2s infinite'
     },
     shadow: {
         position: 'absolute' as 'absolute',
@@ -27,17 +30,23 @@ const useStyles = makeStyles(Object.assign({
         fill: 'transparent',
         stroke: 'transparent',
         opacity: 0.6
-    }
-}, backgroundColors))
+    },
+}, backgroundColors, pulse))
 
-const LeaderComp = ({color, playerID, location}: {color: Color, playerID: PlayerID, location: Coord | null}) => {
+interface LeaderCompProps {
+    color: Color,
+    playerID: PlayerID, 
+    location: Coord | null,
+    inConflict?: boolean
+}
+const LeaderComp = ({color, playerID, location, inConflict}: LeaderCompProps) => {
 
     let classes = useStyles()
 
     const {canDragLeader} = useContext(DraggableContext)
 
     return (
-        <div style={{position: 'relative'}}>
+        <div className={!!inConflict ? classes.emph : ''} style={{position: 'relative'}}>
         {/* Use a second leader img for the shadow so the shadow doesn't mess with the drag. */}
         <LeaderImg playerID={playerID} className={classes.shadow}/>
         <Draggable 

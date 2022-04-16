@@ -43,6 +43,7 @@ export class Leader implements Occupant {
     type = LEADER
     color: Color
     playerID: PlayerID
+    inConflict = false
 
     constructor (color: Color, player: PlayerID) {
         this.color = color
