@@ -51,8 +51,10 @@ const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, te
     // There are always exactly two players involved in a conflict.
     const player1 = Object.keys(conflict.players)[0]
     const player2 = Object.keys(conflict.players)[1]
-    let player1Support: number | '?' = conflict.players[player1].support || '?'
-    let player2Support: number | '?' = conflict.players[player2].support || '?'
+    let player1Support: number | '?'
+    let player2Support: number | '?'
+    player1Support = conflict.players[player1].support === undefined ? '?' : conflict.players[player1].support!
+    player2Support = conflict.players[player2].support === undefined ? '?' : conflict.players[player2].support!
     if (playerID === player1) {
         player1Support = conflict.players[player1].support || tempSupport
     } else if (playerID === player2) {
