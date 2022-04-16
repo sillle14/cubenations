@@ -84,13 +84,14 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
             const tile = G.board[x][y].occupant as Tile
             if (tile.color !== G.conflict!.color) return
 
-            // If the tile is red, remove only if it has no treasure and no adjacent leader.
-            // TODO: Do remove if it's a RED war
+            // If the tile is red, remove only if it has no treasure and no adjacent non-red leader.
             if (tile.color === RED) {
                 if (G.board[x][y].treasure) return
-                if (getNeighbors({x: x, y: y}, G.board).some(
-                    c => G.board[c.x][c.y].occupant!.type === LEADER)
-                ) return
+                const protectedByLeader = getNeighbors({x: x, y: y}, G.board).some((c) => {
+                    const occupant = G.board[c.x][c.y].occupant!
+                    return occupant.type === LEADER && (occupant as Leader).color !== RED
+                })
+                if (protectedByLeader) return
             }
             delete G.board[x][y].occupant
             winnerPoints += 1

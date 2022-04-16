@@ -37,7 +37,7 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
                     opacity: 0.3
                 },
                 '& svg': {
-                    opacity: 0.3 // TODO: stroke as well?
+                    opacity: 0.3
                 }
             }
         }
