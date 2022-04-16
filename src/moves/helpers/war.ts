@@ -27,6 +27,7 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
     // The aggressor is the player closest in turn order to the current player.
     const playerIDs = Object.keys(players)
     let aggressor: PlayerID
+    let defender: PlayerID
     const currentPlayerIdx = G.playerOrder.indexOf(ctx.currentPlayer)
     const turnDiffs = playerIDs.map(pid => {
         let turnIdx = G.playerOrder.indexOf(pid)
@@ -38,8 +39,10 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
     })
     if (turnDiffs[0] < turnDiffs[1]) {
         aggressor = playerIDs[0]
+        defender = playerIDs[1]
     } else {
         aggressor = playerIDs[1]
+        defender = playerIDs[0]
     }
 
     // Set the conflict and the new active players. Note that the current player always resolves
@@ -55,13 +58,14 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
         (G.board[coord.x][coord.y].occupant as Leader).inConflict = true
     })
 
-    // TODO: Aggressor first!
     ctx.events!.setActivePlayers!({
         value: {
-            [playerIDs[0]]: CONFLICT,
-            [playerIDs[1]]: CONFLICT
+            [aggressor]: CONFLICT,
         },
-        next: { value: { [ctx.currentPlayer]: RESOLVE_CONFLICT } }
+        next: { 
+            value: { [defender]: CONFLICT },
+            next: { value: { [ctx.currentPlayer]: RESOLVE_CONFLICT } }
+        }
     })
 }
 

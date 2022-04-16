@@ -103,9 +103,11 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
         ctx.events!.setActivePlayers!({
             value: {
                 [ctx.currentPlayer]: CONFLICT,
-                [opponentId]: CONFLICT
             },
-            next: {value: {[ctx.currentPlayer]: RESOLVE_CONFLICT}}
+            next: { 
+                value: { [opponentId]: CONFLICT },
+                next: { value: { [ctx.currentPlayer]: RESOLVE_CONFLICT } }
+            }
         })
     } else {
         endAction(G, ctx)
