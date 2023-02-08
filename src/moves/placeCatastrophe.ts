@@ -22,6 +22,9 @@ export function canPlaceCatastrophe(destination: Coord, board: Board): boolean {
 
 export default function placeCatastrophe(G: CNState, ctx: Ctx, destination: Coord) {    
     if (!canPlaceCatastrophe(destination, G.board)) return INVALID_MOVE
+
+    // TODO: Confirm here. Actually, this is a little weird, annoying to undo
+
     safeRemoveTile(destination, G.board, G.players)
     G.board[destination.x][destination.y].occupant = new Catastrophe()
     G.players[ctx.currentPlayer]!.catastrophes -= 1

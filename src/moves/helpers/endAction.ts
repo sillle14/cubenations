@@ -73,6 +73,7 @@ export function endAction(G: CNState, ctx: Ctx) {
                 }
             }
         }
+        // TODO: Before each, go to context
         if (Object.keys(treasureStage).length) {
             ctx.events!.setActivePlayers!({value: treasureStage})
         } else {

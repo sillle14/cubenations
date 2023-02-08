@@ -44,6 +44,8 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
     targetSpace.occupant = tile
     G.players[ctx.currentPlayer]!.hand[handIndex] = null
 
+    // TODO: confirm before this, maybe check war first?
+
     if (kingdoms.length === 2) {
         if (checkAndStartWar(G, ctx, kingdoms, destination)) {
             // If a war was started, this move is over.

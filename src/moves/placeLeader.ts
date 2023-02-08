@@ -77,6 +77,8 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
     const regions = getAdjacentRegions(destination!, G.board)
     const kingdoms = regions.filter(r => r.isKingdom)
 
+    // TODO: Confirm here.
+
     // If the existing kingdom contains the leader, a revolt occurs.
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {
         const opponentId = kingdoms[0].leaders[color]!
@@ -100,6 +102,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
             (G.board[coord.x][coord.y].occupant as Leader).inConflict = true
         })
         
+        // TODO: Confirm first
         ctx.events!.setActivePlayers!({
             value: {
                 [ctx.currentPlayer]: CONFLICT,
