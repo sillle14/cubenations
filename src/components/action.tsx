@@ -126,6 +126,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({
                 if (!selected.length) {
                     title = `${actionsLeft} action${actionsLeft > 1 ? 's' : ''} left`
                     // TODO: Add undo for basic moves
+                    // TODO: Add another stage here, and confirm move.
                     message = 'Place a tile or catastrophe, move a leader, click a tile to discard, or pass.'
                     buttons = [
                         {text: 'pass', onClick: () => {pass()}},

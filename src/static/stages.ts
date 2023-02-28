@@ -1,5 +1,6 @@
 export const CONFLICT = 'conflict'
 export const RESOLVE_CONFLICT = 'resolveConflict'
 export const CHOOSE_WAR = 'chooseWar'
+export const CONFIRM = 'confirm'
 export { MONUMENT } from '../models/pieces'
 export { TREASURE } from '../models/pieces'

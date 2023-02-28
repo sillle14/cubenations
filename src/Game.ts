@@ -5,7 +5,8 @@ import { ALL_COLORS, Color, RED } from './static/colors'
 import { Board } from './models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH, BORDERED, RIVERS, TREASURES } from './static/board'
 import { chooseWar, commitToConflict, resolveConflict } from './moves/conflict'
-import { MONUMENT, CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT, TREASURE } from './static/stages'
+import { confirm } from './moves/confirm'
+import { MONUMENT, CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT, TREASURE, CONFIRM } from './static/stages'
 import { Monument, Tile } from './models/pieces'
 import { TILE_COUNTS } from './static/tile'
 import CNState from './models/state'
@@ -104,6 +105,9 @@ export const CubeNations: Game<CNState> = {
             },
             [TREASURE]: {
                 moves: {takeTreasure}
+            },
+            [CONFIRM]: {
+                moves: {confirm}
             }
         }
     }
