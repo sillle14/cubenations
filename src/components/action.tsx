@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@mui/styles'
 import { PlayerID } from 'boardgame.io'
 import React, { FunctionComponent } from 'react'
 import { Conflict } from '../models/conflict'

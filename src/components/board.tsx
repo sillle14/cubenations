@@ -1,5 +1,5 @@
 import React, { useEffect, useLayoutEffect, useState, useRef } from 'react'
-import { makeStyles, ThemeProvider } from '@material-ui/styles'
+import { makeStyles, ThemeProvider } from '@mui/styles'
 import { BoardProps } from 'boardgame.io/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'

@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@mui/styles'
 
 import { sizingTheme } from '../static/display'
 

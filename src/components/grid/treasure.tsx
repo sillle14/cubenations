@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import { makeStyles, useTheme } from '@material-ui/styles'
+import { makeStyles, useTheme } from '@mui/styles'
 
 import { sizingTheme } from '../../static/display'
 import { Coord } from '../../models/board'

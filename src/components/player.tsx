@@ -1,4 +1,4 @@
-import { makeStyles } from '@material-ui/styles'
+import { makeStyles } from '@mui/styles'
 import React, { FunctionComponent, useContext } from 'react'
 
 import { sizingTheme } from '../static/display'

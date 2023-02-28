@@ -1,5 +1,5 @@
 import React, { FunctionComponent } from 'react'
-import { makeStyles, useTheme } from '@material-ui/styles'
+import { makeStyles, useTheme } from '@mui/styles'
 import { Move } from 'boardgame.io'
 
 import { Board, Coord } from '../../models/board'
