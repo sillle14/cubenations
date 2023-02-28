@@ -1,4 +1,3 @@
-import React from 'react'
 import { PlayerID } from 'boardgame.io'
 
 const LeaderImg = ({className, playerID}: {className: string, playerID: PlayerID}) => {

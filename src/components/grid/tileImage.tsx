@@ -1,4 +1,3 @@
-import React from 'react'
 import { CATASTROPHE } from '../../models/pieces'
 import { BLACK, BLUE, Color, GREEN, RED } from '../../static/colors'
 

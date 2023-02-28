@@ -1,4 +1,3 @@
-import React from 'react'
 import { BLACK, BLUE, Color, GREEN, RED } from '../../static/colors'
 
 const MonumentImg = ({colors}: {colors: [Color, Color]}) => {

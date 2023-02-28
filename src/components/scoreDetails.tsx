@@ -1,7 +1,7 @@
 import { makeStyles } from '@mui/styles'
 import { PlayerID } from 'boardgame.io'
 import Modal from 'react-modal'
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
 
 import Player from '../models/player'
 import { Color } from '../static/colors'

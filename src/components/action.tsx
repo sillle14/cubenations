@@ -1,6 +1,6 @@
 import { makeStyles } from '@mui/styles'
 import { PlayerID } from 'boardgame.io'
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
 import { Conflict } from '../models/conflict'
 import { Color } from '../static/colors'
 import { sizingTheme } from '../static/display'

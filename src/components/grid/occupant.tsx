@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
 import { Coord } from '../../models/board'
 import { CATASTROPHE, Leader, LEADER, MONUMENT, Occupant, Tile, TILE } from '../../models/pieces'
 import LeaderComp from './leader'

@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles'
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
 
 import { sizingTheme } from '../static/display'
 import { Conflict } from '../models/conflict'

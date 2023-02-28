@@ -1,5 +1,5 @@
 import { makeStyles } from '@mui/styles'
-import React, { FunctionComponent, useContext } from 'react'
+import { FunctionComponent, useContext } from 'react';
 
 import { sizingTheme } from '../../static/display'
 import { Monument } from '../../models/pieces'

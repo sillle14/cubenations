@@ -1,4 +1,4 @@
-import React, { useContext } from 'react'
+import { useContext } from 'react';
 import { makeStyles, useTheme } from '@mui/styles'
 
 import { sizingTheme } from '../../static/display'

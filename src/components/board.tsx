@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from 'react'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
 import { makeStyles, ThemeProvider } from '@mui/styles'
 import { BoardProps } from 'boardgame.io/react'
 import { DndProvider } from 'react-dnd'

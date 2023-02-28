@@ -1,4 +1,5 @@
-import React, { FunctionComponent } from 'react'
+import { FunctionComponent } from 'react';
+import * as React from 'react';
 
 import { Board, Coord } from '../../models/board'
 import { canPlaceLeader } from '../../moves/placeLeader'
