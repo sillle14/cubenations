@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { ReactNode } from 'react';
 import { useDrag } from 'react-dnd'
 import styled from '@emotion/styled';
 
@@ -15,12 +15,14 @@ const DraggableDiv = styled.div<{draggable: boolean, dragging: boolean}>(({dragg
 
 type DraggableProps = {
     item: Dragged,
-    draggable: boolean
+    draggable: boolean,
+    children: ReactNode
 }
 
-const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, children}) => {
+const Draggable= ({item, draggable, children}: DraggableProps) => {
 
     const [{isDragging}, drag] = useDrag({
+        type: item.type,
         item: item,
         canDrag: draggable,
         collect: (monitor) => ({isDragging: !!monitor.isDragging()})

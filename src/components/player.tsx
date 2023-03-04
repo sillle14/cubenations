@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext } from 'react';
+import { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import { CATASTROPHE, Catastrophe, DraggedLeader, LEADER } from '../models/pieces'
@@ -53,7 +53,7 @@ type PlayerProps = {
     selected: Array<number>,
     toggleSelectTile: (handIdx: number) => void
 }
-const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, selected, toggleSelectTile}) => {
+const PlayerComp = ({player, placeLeader, selected, toggleSelectTile}: PlayerProps) => {
 
     const {canDragTile, canSelectHand} = useContext(DraggableContext)
 
@@ -76,7 +76,7 @@ const PlayerComp: FunctionComponent<PlayerProps> = ({player, placeLeader, select
         if (player.leaders[color as Color]) {
             leaders.push(
                 <TileContainer key={color}>
-                    <Droppable
+                <Droppable
                     accept={LEADER}
                     canDrop={(item: DraggedLeader) => canPlaceLeader(item.source, null)}
                     onDrop={(item: DraggedLeader) => placeLeader(item.color, null)}

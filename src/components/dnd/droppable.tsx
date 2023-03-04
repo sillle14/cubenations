@@ -1,4 +1,4 @@
-import { FunctionComponent } from 'react';
+import { ReactNode } from 'react';
 import { useDrop } from 'react-dnd'
 import styled, { CSSObject } from '@emotion/styled';
 import { sizingTheme } from '../../static/display';
@@ -44,10 +44,11 @@ type DroppableProps = {
     onDrop: (item: any) => void,
     showTarget?: boolean,
     targetOffset?: (theme: sizingTheme) => string,
-    targetSize?: (theme: sizingTheme) => string
+    targetSize?: (theme: sizingTheme) => string,
+    children?: ReactNode
 }
 
-const Droppable: FunctionComponent<DroppableProps> = ({accept, canDrop, onDrop, showTarget, targetOffset, targetSize, children}) => {
+const Droppable = ({accept, canDrop, onDrop, showTarget, targetOffset, targetSize, children} : DroppableProps) => {
 
     const [{isOver, valid}, drop] = useDrop({
         accept, canDrop, 

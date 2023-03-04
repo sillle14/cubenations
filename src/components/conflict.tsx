@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 
 import { Conflict } from '../models/conflict'
@@ -34,7 +33,7 @@ type ConflictProps = {
     playerID: PlayerID | null,
     resolution: boolean
 }
-const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, tempSupport, playerID, resolution}) => {
+const ConflictComp = ({conflict, playerMap, tempSupport, playerID, resolution}: ConflictProps) => {
 
     // There are always exactly two players involved in a conflict.
     const player1 = Object.keys(conflict.players)[0]

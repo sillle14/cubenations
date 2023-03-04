@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import { Move } from 'boardgame.io'
 import styled from '@emotion/styled';
 
@@ -35,7 +34,7 @@ interface TileGridProps {
     possibleMonuments?: Array<Coord>,
     monuments: Array<Monument>
 }
-const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLeader, placeMonument, placeCatastrophe, possibleMonuments, monuments}) => {
+const TileGrid = ({board, placeTile, placeLeader, placeMonument, placeCatastrophe, possibleMonuments, monuments}: TileGridProps) => {
 
     // Treasures are displayed above the board using absolute positioning so they work with monuments.
     // Otherwise, they won't be in the correct z-index context.

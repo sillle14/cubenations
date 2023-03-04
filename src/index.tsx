@@ -1,13 +1,15 @@
 import { StrictMode } from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 import './index.css';
 import CubeNationsClient from './App';
 
-ReactDOM.render(
+const container = document.getElementById('root');
+const root = createRoot(container!);
+
+root.render(
   <StrictMode>
     {/* <div style={{height: '100vh'}}><CubeNationsClient/></div> */}
     <div style={{height: '100vh'}}><CubeNationsClient playerID="0"/></div>
     <div style={{height: '100vh'}}><CubeNationsClient playerID="1"/></div>
-  </StrictMode>,
-  document.getElementById('root')
+  </StrictMode>
 )

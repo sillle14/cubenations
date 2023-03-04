@@ -1,6 +1,5 @@
 import { PlayerID } from 'boardgame.io'
 import Modal from 'react-modal'
-import { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 
 import Player from '../models/player'
@@ -48,7 +47,7 @@ type ScoreDetailProps = {
     players: {[playerID in PlayerID]?: Player}
     playerMap: {[id in PlayerID]: string}
 }
-const ScoreModal: FunctionComponent<ScoreDetailProps> = ({open, toggle, players, playerMap}) => {
+const ScoreModal = ({open, toggle, players, playerMap}: ScoreDetailProps) => {
 
     let headers = [<th key="player">Player</th>]
     let rows = []

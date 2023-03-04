@@ -1,9 +1,10 @@
-import { FunctionComponent } from 'react';
+import { ReactNode } from 'react';
 import styled from '@emotion/styled';
 
 type ColumnProps = {
     fixed: boolean, // If true, align children to flex start with a fixed margin
-    width?: number   // Set width of the column (in tile size units)
+    width?: number,   // Set width of the column (in tile size units)
+    children: ReactNode
 }
 
 const ColumnDiv = styled.div<ColumnProps>(({theme, width, fixed}) => ({
@@ -19,7 +20,7 @@ const ColumnDiv = styled.div<ColumnProps>(({theme, width, fixed}) => ({
         width: width ? `calc(${theme.tileSize} * ${width})` : 'auto'
     }
 }))
-const Column: FunctionComponent<ColumnProps> = ({fixed, width, children}) => {
+const Column = ({fixed, width, children}: ColumnProps) => {
     return (
         <ColumnDiv fixed={fixed} width={width}>
             {children}

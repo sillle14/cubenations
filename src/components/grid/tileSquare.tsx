@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import styled, { CSSObject } from '@emotion/styled';
 
 import { Board, Coord } from '../../models/board'
@@ -43,7 +42,7 @@ interface TileSquareProps {
     specialBorder: boolean,
     unification: boolean
 }
-const TileSquare: FunctionComponent<TileSquareProps> = ({ 
+const TileSquare = ({ 
     location, 
     children, 
     placeTile, 
@@ -53,7 +52,7 @@ const TileSquare: FunctionComponent<TileSquareProps> = ({
     river,
     specialBorder,
     unification
-}) => {
+}: TileSquareProps) => {
 
     const canDrop = (item: Dragged) => {
         switch (item.type) {

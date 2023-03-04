@@ -1,7 +1,6 @@
 import { PlayerID } from 'boardgame.io'
 import styled, { CSSObject } from '@emotion/styled';
 
-import { FunctionComponent } from 'react';
 import { Conflict } from '../models/conflict'
 import { Color } from '../static/colors'
 import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
@@ -58,7 +57,7 @@ type ActionProps = {
     conflict: Conflict | null,
     spectator: boolean
 }
-const ActionBox: FunctionComponent<ActionProps> = ({
+const ActionBox = ({
     stage, 
     commitToConflict, 
     discardTiles, 
@@ -76,7 +75,7 @@ const ActionBox: FunctionComponent<ActionProps> = ({
     actionsLeft, 
     conflict, 
     spectator
-}) => {
+}: ActionProps) => {
 
     let title = ''
     let message = null

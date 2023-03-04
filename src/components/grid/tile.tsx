@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 
 import { Color } from '../../static/colors'
@@ -20,7 +19,7 @@ type TileProps = {
     opacity?: number,
     noShadow?: boolean
 }
-const TileComp: FunctionComponent<TileProps> = ({color, opacity, noShadow}) => 
+const TileComp = ({color, opacity, noShadow}: TileProps) => 
     <TileDiv shadow={!noShadow}>
         <TileImg color={color} opacity={opacity}/>
     </TileDiv>

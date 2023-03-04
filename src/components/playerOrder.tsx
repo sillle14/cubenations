@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 
 import { PlayerID } from 'boardgame.io'
@@ -45,7 +44,7 @@ type PlayerOrderProps = {
     playerOrder: Array<PlayerID>,
     currentPlayer: PlayerID
 }
-const PlayerOrderComp: FunctionComponent<PlayerOrderProps> = ({playerMap, playerOrder, currentPlayer}) => {
+const PlayerOrderComp = ({playerMap, playerOrder, currentPlayer}: PlayerOrderProps) => {
 
     const rows = playerOrder.map(id => (
         <PlayerRow key={id} current={currentPlayer === id}>

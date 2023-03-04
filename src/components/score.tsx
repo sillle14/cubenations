@@ -1,5 +1,3 @@
-import { FunctionComponent } from 'react';
-
 import { colors } from '../static/display'
 import { DraggedTreasure, TREASURE } from '../models/pieces'
 import { Color } from '../static/colors'
@@ -31,7 +29,7 @@ type ScoreProps = {
     score: {[color in Color | typeof TREASURE]: number},
     takeTreasure: (source: Coord) => void,
 }
-const ScoreComp: FunctionComponent<ScoreProps> = ({score, takeTreasure}) => {
+const ScoreComp= ({score, takeTreasure}: ScoreProps) => {
 
     let scoreRows = []
     for (const c in score) {

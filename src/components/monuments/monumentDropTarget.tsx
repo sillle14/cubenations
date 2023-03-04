@@ -1,4 +1,3 @@
-import { FunctionComponent } from 'react';
 import styled from '@emotion/styled';
 
 import { Coord } from '../../models/board'
@@ -17,7 +16,7 @@ interface MDTProps {
     position: Coord,
     placeMonument: (position: Coord, idx: number) => void
 }
-const MonumentDropTarget: FunctionComponent<MDTProps> = ({position, placeMonument}) => 
+const MonumentDropTarget = ({position, placeMonument}: MDTProps) => 
     <MDTDiv position={position}>
         <Droppable 
             accept={MONUMENT} 

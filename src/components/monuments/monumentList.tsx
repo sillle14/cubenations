@@ -1,4 +1,4 @@
-import { FunctionComponent, useContext } from 'react';
+import { useContext } from 'react';
 import styled from '@emotion/styled';
 
 import { Monument } from '../../models/pieces'
@@ -30,7 +30,7 @@ const Container = styled.div(({theme}) => ({padding: theme.tilePad}))
 type MonumentListProps = {
     monuments: Array<Monument>
 }
-const MonumentListComp: FunctionComponent<MonumentListProps> = ({monuments}) => {
+const MonumentListComp = ({monuments} : MonumentListProps) => {
 
     const {canDragMonument} = useContext(DraggableContext)
 
