@@ -1,9 +1,10 @@
-import React, { useEffect, useLayoutEffect, useState, useRef } from 'react'
-import { makeStyles, ThemeProvider } from '@material-ui/styles'
+import { useEffect, useLayoutEffect, useState, useRef } from 'react';
+import { ThemeProvider } from '@emotion/react';
 import { BoardProps } from 'boardgame.io/react'
 import { DndProvider } from 'react-dnd'
 import { HTML5Backend } from 'react-dnd-html5-backend'
 import { PlayerID } from 'boardgame.io'
+import styled from '@emotion/styled';
 
 import CNState from '../models/state'
 import ConflictComp from './conflict'
@@ -22,21 +23,17 @@ import { canTakeTreasure } from '../moves/takeTreasure'
 import ScoreDetailsModal from './scoreDetails'
 import { sizingTheme } from '../static/display'
 
-const useStyles = makeStyles({
-    root: {
-        display: 'flex',
-        height: '100%',
-        justifyContent: 'space-around',
-        background: '#607d8b',
-        color: '#37474f'
-    },
+const MainDiv = styled.div({
+    display: 'flex',
+    height: '100%',
+    justifyContent: 'space-around',
+    background: '#607d8b',
+    color: '#37474f'
 })
 
 export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardProps<CNState>) => {
 
     // TODO: Organization
-    const classes = useStyles()
-    
     let playerMap: {[id in PlayerID]: string} = {}
     matchData!.forEach((player, i) => {playerMap[player.id] = player.name ? player.name.slice(0, 10) : `Player ${i}`})
 
@@ -144,9 +141,9 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         <DndProvider backend={HTML5Backend}>
         <DraggableContext.Provider value={{canDragTile, canSelectHand, canDragLeader, canDragMonument, canDragTreasure}}>
         <ThemeProvider theme={theme}>
-            <div className={classes.root} ref={ref}>
+            <MainDiv ref={ref}>
                 <Column fixed={true} width={4.5}>
-                    {!!playerID && <ScoreComp score={G.players[playerID]!.score} takeTreasure={moves.takeTreasure}/>}
+                    {!!playerID && <ScoreComp score={G.players[playerID].score} takeTreasure={moves.takeTreasure}/>}
                     <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder} currentPlayer={ctx.currentPlayer}/>
                     {conflict}
                 </Column>
@@ -161,7 +158,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         monuments={G.monuments}
                     />
                     {!!playerID && <PlayerComp 
-                        player={G.players[playerID]!}
+                        player={G.players[playerID]}
                         placeLeader={moves.placeLeader}
                         selected={selected}
                         toggleSelectTile={toggleSelectTile}
@@ -181,7 +178,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         gameover={ctx.gameover}
                         playerMap={playerMap}
                         toggleModal={toggleModal}
-                        actionsLeft={!!playerID ? G.players[playerID]!.actions : 0}
+                        actionsLeft={!!playerID ? G.players[playerID].actions : 0}
                         myTurn={playerID === ctx.currentPlayer}
                         discardTiles={moves.discardTiles}
                         clearSelected={clearSelected}
@@ -190,7 +187,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                     />
                 </Column>
                 {!!ctx.gameover ? <ScoreDetailsModal open={modalOpen} toggle={toggleModal} players={G.players} playerMap={playerMap}/> : null}
-            </div>
+            </MainDiv>
         </ThemeProvider>
         </DraggableContext.Provider>
         </DndProvider>

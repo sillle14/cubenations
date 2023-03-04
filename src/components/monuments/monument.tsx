@@ -1,12 +1,10 @@
-import React from 'react'
-import { makeStyles } from '@material-ui/styles'
+import styled, { CSSObject } from '@emotion/styled'
 
 import { Color } from '../../static/colors'
-import { sizingTheme } from '../../static/display'
 import MonumentImg from './monumentImage'
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
+const MonumentDiv = styled.div<{noShadow?: boolean}>(({noShadow, theme}) => {
+    const style: CSSObject = {
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
@@ -15,18 +13,13 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
         borderRadius: `calc(0.4 * ${theme.tileSize})`,
         boxShadow: '2px 2px 5px #616161'
     }
-}))
+    if (noShadow) { style.boxShadow = 'unset' }
+    return style
+})
 
-
-const MonumentComp = ({colors, noShadow}: {colors: [Color, Color], noShadow?: boolean}) => {
-
-    let classes = useStyles()
-
-    return (
-        <div className={`${classes.root}`} style={noShadow ? {boxShadow: 'unset'} : {}}>
-            <MonumentImg colors={colors}/>
-        </div>
-    )
-}
+const MonumentComp = ({colors, noShadow}: {colors: [Color, Color], noShadow?: boolean}) => 
+    <MonumentDiv noShadow={noShadow}>
+        <MonumentImg colors={colors}/>
+    </MonumentDiv>
 
 export default MonumentComp

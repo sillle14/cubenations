@@ -18,4 +18,15 @@ export default class Player {
     constructor (id: PlayerID) {
         this.id = id
     }
+
+    static new (id: PlayerID) {
+        return {
+            leaders: {[BLACK]: null, [BLUE]: null, [GREEN]: null, [RED]: null},
+            score: {[BLACK]: 0, [BLUE]: 0, [GREEN]: 0, [RED]: 0, [TREASURE]: 0},
+            hand: [],
+            catastrophes: 2,
+            id: id,
+            actions: 2
+        }
+    }
 }

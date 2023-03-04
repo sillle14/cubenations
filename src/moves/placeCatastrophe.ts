@@ -1,4 +1,4 @@
-import { Ctx } from 'boardgame.io'
+import { Move } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { safeRemoveTile } from './helpers/utility'
@@ -20,13 +20,15 @@ export function canPlaceCatastrophe(destination: Coord, board: Board): boolean {
 }
 
 
-export default function placeCatastrophe(G: CNState, ctx: Ctx, destination: Coord) {    
+const placeCatastrophe: Move<CNState> = ({G, ctx, events}, destination: Coord) => {    
     if (!canPlaceCatastrophe(destination, G.board)) return INVALID_MOVE
 
     // TODO: Confirm here. Actually, this is a little weird, annoying to undo
 
     safeRemoveTile(destination, G.board, G.players)
-    G.board[destination.x][destination.y].occupant = new Catastrophe()
-    G.players[ctx.currentPlayer]!.catastrophes -= 1
-    endAction(G, ctx)
+    G.board[destination.x][destination.y].occupant = Catastrophe.new()
+    G.players[ctx.currentPlayer].catastrophes -= 1
+    endAction(G, ctx, events)
 }
+
+export default placeCatastrophe

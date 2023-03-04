@@ -1,11 +1,11 @@
-import { Ctx } from 'boardgame.io'
+import { Move } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { BLACK, BLUE, Color } from '../static/colors'
 import { Board, Coord } from '../models/board'
 import { getAdjacentRegions } from './helpers/regions'
 import { checkForMonument } from './helpers/monument'
-import { endAction } from "./helpers/endAction"
+import { endAction } from './helpers/endAction'
 import { checkAndStartWar } from './helpers/war'
 import CNState from '../models/state'
 
@@ -29,10 +29,9 @@ export function canPlaceTile(destination: Coord, color: Color, board: Board): bo
     return true
 }
 
-
-export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, destination: Coord) {
+const placeTile: Move<CNState> = ({G, ctx, events}, handIndex: number, destination: Coord) => {
     const targetSpace = G.board[destination.x][destination.y]
-    const tile = G.players[ctx.currentPlayer]!.hand[handIndex]!
+    const tile = G.players[ctx.currentPlayer].hand[handIndex]!
 
     if (!canPlaceTile(destination, tile.color, G.board)) return INVALID_MOVE
 
@@ -42,12 +41,12 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
 
     // Place the tile.
     targetSpace.occupant = tile
-    G.players[ctx.currentPlayer]!.hand[handIndex] = null
+    G.players[ctx.currentPlayer].hand[handIndex] = null
 
     // TODO: confirm before this, maybe check war first?
 
     if (kingdoms.length === 2) {
-        if (checkAndStartWar(G, ctx, kingdoms, destination)) {
+        if (checkAndStartWar(G, ctx, events, kingdoms, destination)) {
             // If a war was started, this move is over.
             return
         }
@@ -56,16 +55,18 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
         // Award a point for the placed tile.
         const matchingLeaderPlayerID = kingdoms[0].leaders[tile.color]
         if (matchingLeaderPlayerID) {
-            G.players[matchingLeaderPlayerID]!.score[tile.color] += 1
+            G.players[matchingLeaderPlayerID].score[tile.color] += 1
         } else {
             const blackLeaderPlayerID = kingdoms[0].leaders[BLACK]
             if (blackLeaderPlayerID) {
-                G.players[blackLeaderPlayerID]!.score[tile.color] += 1
+                G.players[blackLeaderPlayerID].score[tile.color] += 1
             }
         }
     }
 
-    if (!checkForMonument(G, ctx, destination)) {
-        endAction(G, ctx)
+    if (!checkForMonument(G, events, destination)) {
+        endAction(G, ctx, events)
     }
 }
+
+export default placeTile

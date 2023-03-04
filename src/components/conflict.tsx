@@ -1,41 +1,30 @@
-import { makeStyles } from '@material-ui/styles'
-import React, { FunctionComponent } from 'react'
+import styled from '@emotion/styled';
 
-import { sizingTheme } from '../static/display'
 import { Conflict } from '../models/conflict'
 import { PlayerID } from 'boardgame.io'
+import Header from './styled/header';
+import Box from './styled/box';
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.tilePad} 0`,
-        '& hr': {
-            width: '90%',
-            color: 'black',
-            border: 'solid 1px',
-            margin: '3% 0'
-        }
-    },
-    header: {
-        fontSize: 'larger',
-        fontWeight: 'bolder',
-    },
-    split: {
-        display: 'flex',
-        justifyContent: 'space-around',
-        width: '100%'
-    },
-    aggressor: {
-        alignSelf: 'start',
-        marginLeft: '10%',
-        fontSize: 'smaller'
-    },
-    winner: {
-        margin: '5% 0'
-    }
-}))
+const Break = styled.hr({
+    width: '90%',
+    color: 'black',
+    border: 'solid 1px',
+    margin: '3% 0'
+})
+
+const Split = styled.div({
+    display: 'flex',
+    justifyContent: 'space-around',
+    width: '100%'
+})
+
+const Footnote = styled.span({
+    alignSelf: 'start',
+    marginLeft: '10%',
+    fontSize: 'smaller'
+})
+
+const Winner = styled.span({ margin: '5% 0' })
 
 type ConflictProps = {
     conflict: Conflict,
@@ -44,9 +33,7 @@ type ConflictProps = {
     playerID: PlayerID | null,
     resolution: boolean
 }
-const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, tempSupport, playerID, resolution}) => {
-
-    const classes = useStyles()
+const ConflictComp = ({conflict, playerMap, tempSupport, playerID, resolution}: ConflictProps) => {
 
     // There are always exactly two players involved in a conflict.
     const player1 = Object.keys(conflict.players)[0]
@@ -69,23 +56,23 @@ const ConflictComp: FunctionComponent<ConflictProps> = ({conflict, playerMap, te
     }
 
     return (
-        <div className={classes.root}>
-            <span className={classes.header}>{color} {conflict.type}</span>
+        <Box>
+            <Header>{color} {conflict.type}</Header>
             <span>{`${playerMap[player1]}${conflict.aggressor === player1 ? '*' : ''} vs ${playerMap[player2]}${conflict.aggressor === player2 ? '*' : ''}`}</span>
-            <hr/>
+            <Break/>
             <span>Base</span>
-            <div className={classes.split}>
+            <Split>
                 <span>{conflict.players[player1].base}</span>
                 <span>{conflict.players[player2].base}</span>
-            </div>
+            </Split>
             <span>Support</span>
-            <div className={classes.split}>
+            <Split>
                 <span>{player1Support}</span>
                 <span>{player2Support}</span>
-            </div>
-            {resolution ? <span className={classes.winner}>{`${playerMap[conflict.winner!]} wins!`}</span> : <br/>}
-            <span className={classes.aggressor}>*Aggressor</span>
-        </div>
+            </Split>
+            {resolution ? <Winner>{`${playerMap[conflict.winner!]} wins!`}</Winner> : <br/>}
+            <Footnote>*Aggressor</Footnote>
+        </Box>
     )
 }
 

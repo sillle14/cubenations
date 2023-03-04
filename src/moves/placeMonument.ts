@@ -1,11 +1,11 @@
-import { Ctx } from 'boardgame.io'
+import { Move } from 'boardgame.io'
 import { Coord } from '../models/board'
 
 import CNState from '../models/state'
 import { endAction } from "./helpers/endAction"
 import { safeRemoveTile } from './helpers/utility'
 
-export default function placeMonument(G: CNState, ctx: Ctx, position: Coord, idx: number) {
+const placeMonument: Move<CNState> = ({G, ctx, events}, position: Coord, idx: number) => {
 
     const monument = G.monuments[idx]
     // Position is the top left of the monument.
@@ -24,6 +24,8 @@ export default function placeMonument(G: CNState, ctx: Ctx, position: Coord, idx
 
     delete G.availableMonumentColor
     delete G.possibleMonuments
-    ctx.events!.endStage!()
-    endAction(G, ctx)
+    events.endStage!()
+    endAction(G, ctx, events)
 }
+
+export default placeMonument

@@ -1,4 +1,4 @@
-import React, { FunctionComponent } from 'react'
+import styled, { CSSObject } from '@emotion/styled';
 
 import { Board, Coord } from '../../models/board'
 import { canPlaceLeader } from '../../moves/placeLeader'
@@ -7,16 +7,52 @@ import { CATASTROPHE, Dragged, DraggedLeader, DraggedTile, LEADER, TILE } from '
 import Droppable from '../dnd/droppable'
 import { canPlaceCatastrophe } from '../../moves/placeCatastrophe'
 
+interface TileTdProps {river: boolean, specialBorder: boolean, unification: boolean}
+const TileTd = styled.td<TileTdProps>(({river, specialBorder, unification, theme}) => {
+    const styles: CSSObject = {
+        border: `${theme.border} solid #37474f`,
+        padding: theme.tilePad,
+        height: theme.tileSize,
+        width: theme.tileSize,
+        position: 'relative'
+    }
+    if (river) { styles.background = '#81d4fa' }
+    if (specialBorder) { styles.boxShadow = `inset 0px 0px 0px calc(${theme.border} * 2) #37474f` }
+    if (unification) {
+        Object.assign(styles, {
+            '& img': {
+                opacity: 0.3
+            },
+            '& svg': {
+                opacity: 0.3
+            }
+        })
+    }
+    return styles
+})
+
 interface TileSquareProps {
     location: Coord, 
-    className: string, 
     children: React.ReactNode,
     placeTile: any,
     placeLeader: any,
     placeCatastrophe: any,
-    board: Board
+    board: Board,
+    river: boolean,
+    specialBorder: boolean,
+    unification: boolean
 }
-const TileSquare: FunctionComponent<TileSquareProps> = ({ location, className, children, placeTile, placeLeader, placeCatastrophe, board }) => {
+const TileSquare = ({ 
+    location, 
+    children, 
+    placeTile, 
+    placeLeader, 
+    placeCatastrophe, 
+    board,
+    river,
+    specialBorder,
+    unification
+}: TileSquareProps) => {
 
     const canDrop = (item: Dragged) => {
         switch (item.type) {
@@ -47,11 +83,11 @@ const TileSquare: FunctionComponent<TileSquareProps> = ({ location, className, c
                 break
         }
     }
-    return <td className={className}>
+    return <TileTd river={river} specialBorder={specialBorder} unification={unification}>
         <Droppable accept={[TILE, LEADER, CATASTROPHE]} canDrop={canDrop} onDrop={onDrop} showTarget>
             {children}
         </Droppable>
-    </td>
+    </TileTd>
 }
 
 export default TileSquare

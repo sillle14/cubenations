@@ -1,4 +1,4 @@
-import { Ctx, PlayerID } from 'boardgame.io'
+import { Ctx, Move, PlayerID } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 import { Revolt } from '../models/conflict'
 import { Leader, LEADER, Tile, TILE } from '../models/pieces'
@@ -11,17 +11,18 @@ import { getNeighbors } from './helpers/utility'
 import { endAction } from "./helpers/endAction"
 import { startWar, checkAndStartWar } from './helpers/war'
 import { Coord } from '../models/board'
+import { EventsAPI } from 'boardgame.io/dist/types/src/plugins/plugin-events'
 
 
-export function commitToConflict(G: CNState, ctx: Ctx, handIdxs: Array<number>) {
+export const commitToConflict: Move<CNState> = ({G, playerID, events}, handIdxs: Array<number>) => {
     if (!G.conflict) return INVALID_MOVE
 
-    if (!ctx.playerID) return INVALID_MOVE
+    if (!playerID) return INVALID_MOVE
 
-    if (!G.conflict.players[ctx.playerID]) return INVALID_MOVE
+    if (!G.conflict.players[playerID]) return INVALID_MOVE
 
-    G.conflict.players[ctx.playerID].support = handIdxs.length
-    handIdxs.forEach((i) => {G.players[ctx.playerID!]!.hand[i] = null})
+    G.conflict.players[playerID].support = handIdxs.length
+    handIdxs.forEach((i) => {G.players[playerID].hand[i] = null})
 
     const playerIDs = Object.keys(G.conflict.players)
     // Calculate the winner. Note that this will be recalculated when the second player commits tiles.
@@ -36,29 +37,29 @@ export function commitToConflict(G: CNState, ctx: Ctx, handIdxs: Array<number>) 
 
     G.conflict.winner = scores[0] > scores[1] ? playerIDs[0] : playerIDs[1]
 
-    ctx.events!.endStage!()
+    events.endStage!()
 }
 
-function resolveRevolt(G: CNState, ctx: Ctx, loser: PlayerID) {
+function resolveRevolt(G: CNState, ctx: Ctx, events: EventsAPI, loser: PlayerID) {
     // Return the losing leader home.
-    const loserPosition = G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor]!
+    const loserPosition = G.players[loser].leaders[(G.conflict as Revolt).leaderColor]!
     delete G.board[loserPosition.x][loserPosition.y].occupant
-    G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor] = null
+    G.players[loser].leaders[(G.conflict as Revolt).leaderColor] = null
 
     // Award the winner one point.
-    G.players[G.conflict!.winner!]!.score[RED] += 1
+    G.players[G.conflict!.winner!].score[RED] += 1
 
     // Unset the inConflict on the remaining leader
-    const winnerLeaderPostion = G.players[G.conflict!.winner!]!.leaders[(G.conflict as Revolt).leaderColor]!
-    const winnerLeader = G.board[winnerLeaderPostion.x][winnerLeaderPostion.y].occupant as Leader
+    const winnerLeaderPosition = G.players[G.conflict!.winner!].leaders[(G.conflict as Revolt).leaderColor]!
+    const winnerLeader = G.board[winnerLeaderPosition.x][winnerLeaderPosition.y].occupant as Leader
     winnerLeader.inConflict = false
 
     G.conflict = null
-    ctx.events!.endStage!()
-    endAction(G, ctx)
+    events.endStage!()
+    endAction(G, ctx, events)
 }
 
-function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
+function resolveWar(G: CNState, ctx: Ctx, events: EventsAPI, loser: PlayerID) {
     // Get the warring kingdoms.
     let regions = getAdjacentRegions(G.unificationTile!, G.board)
     let kingdoms = regions.filter(r => r.isKingdom)
@@ -99,24 +100,24 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
     })
 
     // Remove the losing leader and award points.
-    const loserLeaderPosition = G.players[loser]!.leaders[G.conflict!.color]!
+    const loserLeaderPosition = G.players[loser].leaders[G.conflict!.color]!
     delete G.board[loserLeaderPosition.x][loserLeaderPosition.y].occupant
-    G.players[loser]!.leaders[G.conflict!.color] = null
+    G.players[loser].leaders[G.conflict!.color] = null
     winnerPoints += 1
 
     // Award points.
-    G.players[G.conflict!.winner!]!.score[G.conflict!.color] += winnerPoints
+    G.players[G.conflict!.winner!].score[G.conflict!.color] += winnerPoints
 
     // Unset the inConflict on the remaining leader
-    const winnerLeaderPostion = G.players[G.conflict!.winner!]!.leaders[G.conflict!.color]!
-    const winnerLeader = G.board[winnerLeaderPostion.x][winnerLeaderPostion.y].occupant as Leader
+    const winnerLeaderPosition = G.players[G.conflict!.winner!].leaders[G.conflict!.color]!
+    const winnerLeader = G.board[winnerLeaderPosition.x][winnerLeaderPosition.y].occupant as Leader
     winnerLeader.inConflict = false
 
     // Recalculate the kingdoms to see if another war needs to happen.
     regions = getAdjacentRegions(G.unificationTile!, G.board)
     kingdoms = regions.filter(r => r.isKingdom)
 
-    if (checkAndStartWar(G, ctx, kingdoms, G.unificationTile!)) {
+    if (checkAndStartWar(G, ctx, events, kingdoms, G.unificationTile!)) {
         // This move is over if there's another war.
         return
     } else {
@@ -129,15 +130,15 @@ function resolveWar(G: CNState, ctx: Ctx, loser: PlayerID) {
         delete G.possibleWars
         delete G.warringKingdoms
         G.conflict = null
-        ctx.events!.endStage!()
+        events.endStage!()
 
-        if (!checkForMonument(G, ctx, placedTile)) {
-            endAction(G, ctx)
+        if (!checkForMonument(G, events, placedTile)) {
+            endAction(G, ctx, events)
         }
     }
 }
 
-export function resolveConflict(G: CNState, ctx: Ctx) {
+export const resolveConflict: Move<CNState> = ({G, ctx, events}) => {
     let loser: PlayerID
     for (const playerID in G.conflict!.players) {
         if (playerID !== G.conflict!.winner) {
@@ -147,14 +148,14 @@ export function resolveConflict(G: CNState, ctx: Ctx) {
     }
 
     if (G.conflict!.type === 'Revolt') {
-        resolveRevolt(G, ctx, loser!)
+        resolveRevolt(G, ctx, events, loser!)
     } else {
-        resolveWar(G, ctx, loser!)
+        resolveWar(G, ctx, events, loser!)
     }
 }
 
-export function chooseWar(G: CNState, ctx: Ctx, color: Color) {
+export const chooseWar: Move<CNState> = ({G, ctx, events}, color: Color) => {
     // End the choose war stage in case the current player will not be moved to a new stage for the war.
-    ctx.events!.endStage!()
-    startWar(G, ctx, color, G.warringKingdoms!)
+    events.endStage!()
+    startWar(G, ctx, events, color, G.warringKingdoms!)
 }

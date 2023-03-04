@@ -1,4 +1,4 @@
-import { Ctx } from 'boardgame.io'
+import { Move } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { Color, RED } from '../static/colors'
@@ -52,23 +52,23 @@ export function canPlaceLeader(source: Coord | null, destination: Coord | null, 
 }
 
 
-export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destination: Coord | null) {
-    const source = G.players[ctx.currentPlayer]!.leaders[color]
+const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination: Coord | null) => {
+    const source = G.players[ctx.currentPlayer].leaders[color]
     
     if (!canPlaceLeader(source, destination, G.board)) return INVALID_MOVE
 
     if (!destination) {
         // Send the leader back to hand.
-        G.players[ctx.currentPlayer]!.leaders[color] = null
+        G.players[ctx.currentPlayer].leaders[color] = null
         delete G.board[source!.x][source!.y].occupant
-        endAction(G, ctx)
+        endAction(G, ctx, events)
         return
     }
     
     const targetSpace = G.board[destination!.x][destination!.y]
     // Place the leader
-    targetSpace.occupant = new Leader(color, ctx.currentPlayer)
-    G.players[ctx.currentPlayer]!.leaders[color] = destination
+    targetSpace.occupant = Leader.new(color, ctx.currentPlayer)
+    G.players[ctx.currentPlayer].leaders[color] = destination
     if (source) {
         delete G.board[source.x][source.y].occupant
     }
@@ -82,13 +82,13 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
     // If the existing kingdom contains the leader, a revolt occurs.
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {
         const opponentId = kingdoms[0].leaders[color]!
-        const opponentPosition = G.players[opponentId]!.leaders[color]!
+        const opponentPosition = G.players[opponentId].leaders[color]!
         const opponentBase = getNeighbors(opponentPosition, G.board).filter(t => isColorTile(t, G.board, RED)).length
 
         const myBase = getNeighbors(destination, G.board).filter(t => isColorTile(t, G.board, RED)).length
 
         // Instantiate a revolt with the current player as the aggressor.
-        G.conflict = new Revolt({
+        G.conflict = Revolt.new({
             players: {
                 [ctx.currentPlayer]: {base: myBase}, 
                 [opponentId]: {base: opponentBase}
@@ -103,7 +103,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
         })
         
         // TODO: Confirm first
-        ctx.events!.setActivePlayers!({
+        events.setActivePlayers!({
             value: {
                 [ctx.currentPlayer]: CONFLICT,
             },
@@ -113,6 +113,8 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
             }
         })
     } else {
-        endAction(G, ctx)
+        endAction(G, ctx, events)
     }
 }
+
+export default placeLeader

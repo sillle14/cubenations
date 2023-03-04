@@ -55,7 +55,7 @@ export function isColorTile(coord: Coord, board: Board, color: Color): boolean {
  * @param board Current board state
  * @param players Player map to modify if necessary
  */
-export function safeRemoveTile(coord: Coord, board: Board, players: {[playerID in PlayerID]?: Player}) {
+export function safeRemoveTile(coord: Coord, board: Board, players: Record<PlayerID, Player>) {
     // If space is a red tile, we need to check if adjacent leaders should be sent home.
     if (isColorTile(coord, board, RED)) {
         getNeighbors(coord, board).forEach(neighbor => {
@@ -66,7 +66,7 @@ export function safeRemoveTile(coord: Coord, board: Board, players: {[playerID i
             // The leader should have at least two red neighbors, including the one we are removing here.
             if (leaderNeighbors.filter(ln => isColorTile(ln, board, RED)).length < 2) { 
                 // Send the leader back to hand.
-                players[leader.playerID]!.leaders[leader.color] = null
+                players[leader.playerID].leaders[leader.color] = null
                 delete board[neighbor.x][neighbor.y].occupant
             }
         })

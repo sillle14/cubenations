@@ -19,6 +19,10 @@ export class Tile implements Occupant {
     constructor (color: Color) {
         this.color = color
     }
+
+    static new(color: Color) {
+        return { type: TILE, color: color }
+    }
 }
 
 export interface DraggedTile extends Tile {
@@ -33,6 +37,14 @@ export class Monument implements Occupant {
     constructor (c1: Color, c2: Color) {
         this.colors = [c1, c2]
         this.position = null
+    }
+
+    static new (c1: Color, c2: Color) {
+        return {
+            type: MONUMENT,
+            colors: [c1, c2] as [Color, Color],
+            position: null
+        }
     }
 }
 export interface DraggedMonument extends Monument {
@@ -49,6 +61,15 @@ export class Leader implements Occupant {
         this.color = color
         this.playerID = player
     }
+
+    static new (color: Color, player: PlayerID) {
+        return {
+            type: LEADER,
+            color: color,
+            playerID: player,
+            inConflict: false
+        }
+    }
 }
 
 export interface DraggedLeader extends Leader {
@@ -57,6 +78,10 @@ export interface DraggedLeader extends Leader {
 
 export class Catastrophe implements Occupant {
     type = CATASTROPHE
+
+    static new () {
+        return { type: CATASTROPHE }
+    }
 }
 
 export interface DraggedTreasure {

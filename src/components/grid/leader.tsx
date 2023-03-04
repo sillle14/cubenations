@@ -1,6 +1,6 @@
-import React, { useContext } from 'react'
-import { makeStyles } from '@material-ui/styles'
+import { useContext } from 'react';
 import { PlayerID } from 'boardgame.io'
+import styled from '@emotion/styled';
 
 import { Color } from '../../static/colors'
 import { LEADER } from '../../models/pieces'
@@ -8,30 +8,31 @@ import { Coord } from '../../models/board'
 import LeaderImg from './leaderImage'
 import Draggable from '../dnd/draggable'
 import DraggableContext from '../dnd/draggableContext'
-import { backgroundColors, pulse } from '../../static/display'
+import { colors, pulse } from '../../static/display'
 
-const useStyles = makeStyles(Object.assign({
-    root: {
-        height: '100%',
-        width: '100%',
-        display: 'block'
-    },
-    emph: {
-        animation: '$pulse 2s infinite'
-    },
-    shadow: {
-        position: 'absolute' as 'absolute',
-        height: '100%',
-        width: '100%',
-        top: 0,
-        left: 0,
-        display: 'block',
-        filter: 'drop-shadow(2px 2px 3px black)',
-        fill: 'transparent',
-        stroke: 'transparent',
-        opacity: 0.6
-    },
-}, backgroundColors, pulse))
+const LeaderDiv = styled.div<{inConflict: boolean}>(({inConflict}) => ({
+    animation: inConflict ? `${pulse} 2s infinite` : ''
+}))
+
+const LeaderImgShadow = styled(LeaderImg)({
+    position: 'absolute',
+    height: '100%',
+    width: '100%',
+    top: 0,
+    left: 0,
+    display: 'block',
+    filter: 'drop-shadow(2px 2px 3px black)',
+    fill: 'transparent',
+    stroke: 'transparent',
+    opacity: 0.6
+})
+
+const StyledLeaderImage = styled(LeaderImg)<{color: Color}>(({color}) => ({
+    height: '100%',
+    width: '100%',
+    display: 'block',
+    fill: colors[color]
+}))
 
 interface LeaderCompProps {
     color: Color,
@@ -41,21 +42,19 @@ interface LeaderCompProps {
 }
 const LeaderComp = ({color, playerID, location, inConflict}: LeaderCompProps) => {
 
-    let classes = useStyles()
-
     const {canDragLeader} = useContext(DraggableContext)
 
     return (
-        <div className={!!inConflict ? classes.emph : ''} style={{position: 'relative'}}>
-        {/* Use a second leader img for the shadow so the shadow doesn't mess with the drag. */}
-        <LeaderImg playerID={playerID} className={classes.shadow}/>
-        <Draggable 
-            item={{type: LEADER, color: color, playerID: playerID, source: location}}
-            draggable={canDragLeader(playerID)}
-        >
-            <LeaderImg playerID={playerID} className={`${classes.root} ${classes[color]}`}/>
-        </Draggable>
-        </div>
+        <LeaderDiv inConflict={!!inConflict} style={{position: 'relative'}}>
+            {/* Use a second leader img for the shadow so the shadow doesn't mess with the drag. */}
+            <LeaderImgShadow playerID={playerID}/>
+            <Draggable 
+                item={{type: LEADER, color: color, playerID: playerID, source: location}}
+                draggable={canDragLeader(playerID)}
+            >
+                <StyledLeaderImage color={color} playerID={playerID}/>
+            </Draggable>
+        </LeaderDiv>
     )
 }
 

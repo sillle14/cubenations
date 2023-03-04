@@ -1,5 +1,5 @@
 import { PlayerID } from 'boardgame.io'
-import React from 'react'
+import { createContext } from 'react';
 import { Coord } from '../../models/board'
 import { Color } from '../../static/colors'
 
@@ -10,7 +10,7 @@ type ContextProps = {
     canDragMonument: (colors: Array<Color>) => boolean
     canDragTreasure: (position: Coord) => boolean
 }
-const DraggableContext = React.createContext<ContextProps>({
+const DraggableContext = createContext<ContextProps>({
     canDragTile: false, 
     canSelectHand: () => false,
     canDragLeader: () => false,

@@ -1,4 +1,5 @@
 import { Ctx, PlayerID } from 'boardgame.io'
+import { EventsAPI } from 'boardgame.io/dist/types/src/plugins/events/events'
 import { Coord } from '../../models/board'
 
 import { War } from '../../models/conflict'
@@ -14,10 +15,11 @@ import { CHOOSE_WAR, CONFLICT, RESOLVE_CONFLICT } from '../../static/stages'
  * 
  * @param G Game object
  * @param ctx Context object
+ * @param events Events API object
  * @param color Color of war to start
  * @param kingdoms Warring kingdoms
  */
-export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Region>) {
+export function startWar(G: CNState, ctx: Ctx, events: EventsAPI, color: Color, kingdoms: Array<Region>) {
     // Set the players at war, along with their base score.
     let players: {[id in PlayerID]: {base: number}} = {}
     kingdoms.forEach(k => {
@@ -47,18 +49,18 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
 
     // Set the conflict and the new active players. Note that the current player always resolves
     //  the conflict.
-    G.conflict = new War({
+    G.conflict = War.new({
         players: players,
         aggressor: aggressor,
         color: color
     })
 
-    const leaderCoords = Object.keys(players).map((player) => G.players[player]!.leaders[color]!)
+    const leaderCoords = Object.keys(players).map((player) => G.players[player].leaders[color]!)
     leaderCoords.forEach((coord) => {
         (G.board[coord.x][coord.y].occupant as Leader).inConflict = true
     })
 
-    ctx.events!.setActivePlayers!({
+    events.setActivePlayers!({
         value: {
             [aggressor]: CONFLICT,
         },
@@ -75,10 +77,11 @@ export function startWar(G: CNState, ctx: Ctx, color: Color, kingdoms: Array<Reg
  * 
  * @param G Game object
  * @param ctx Context object
+ * @param events Events API object
  * @param kingdoms Array of kingdoms at war.
  * @param unification Coordinates for the unification tile.
  */
-export function checkAndStartWar(G: CNState, ctx: Ctx, kingdoms: Array<Region>, unification: Coord): boolean {
+export function checkAndStartWar(G: CNState, ctx: Ctx, events: EventsAPI, kingdoms: Array<Region>, unification: Coord): boolean {
     // No war if only one kingdom.
     if (kingdoms.length < 2) {
         return false
@@ -96,11 +99,11 @@ export function checkAndStartWar(G: CNState, ctx: Ctx, kingdoms: Array<Region>, 
         G.board[unification.x][unification.y].unification = true
 
         if (warringColors.length === 1) {
-            startWar(G, ctx, warringColors[0], kingdoms)
+            startWar(G, ctx, events, warringColors[0], kingdoms)
         } else if (warringColors.length > 1) {
             G.possibleWars = warringColors
             G.warringKingdoms = kingdoms
-            ctx.events!.setStage!(CHOOSE_WAR)
+            events.setStage!(CHOOSE_WAR)
         }
         return true
     } else {

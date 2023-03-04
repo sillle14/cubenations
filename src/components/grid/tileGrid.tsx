@@ -1,10 +1,8 @@
-import React, { FunctionComponent } from 'react'
-import { makeStyles, useTheme } from '@material-ui/styles'
 import { Move } from 'boardgame.io'
+import styled from '@emotion/styled';
 
 import { Board, Coord } from '../../models/board'
 import { BOARD_HEIGHT, BOARD_WIDTH } from '../../static/board'
-import { sizingTheme } from '../../static/display'
 import OccupantComp from './occupant'
 import TileSquare from './tileSquare'
 import MonumentDropTarget from '../monuments/monumentDropTarget'
@@ -12,37 +10,21 @@ import MonumentComp from '../monuments/monument'
 import TreasureComp from './treasure'
 import { Monument } from '../../models/pieces'
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
-        position: 'relative',
+const GridDiv = styled.div({
+    position: 'relative',
         '& table': {
             width: 'max-content',
             background: '#ffecb3',
             borderCollapse: 'collapse',
-            '& td': {
-                border: `${theme.border} solid #37474f`,
-                padding: theme.tilePad,
-                height: theme.tileSize,
-                width: theme.tileSize,
-                position: 'relative'
-            },
-            '& .river': {
-                background: '#81d4fa'
-            },
-            '& .special-border': {
-                boxShadow: `inset 0px 0px 0px calc(${theme.border} * 2) #37474f`,
-            },
-            '& .unification': {
-                '& img': {
-                    opacity: 0.3
-                },
-                '& svg': {
-                    opacity: 0.3
-                }
-            }
         }
-    }
+})
+
+const MonumentDiv = styled.div<{position: Coord}>(({position, theme}) => ({
+    position: 'absolute',
+    top: `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${position.y} + ${theme.border} + ${theme.tilePad})`,
+    left:`calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${position.x} + ${theme.border} + ${theme.tilePad})`
 }))
+
 interface TileGridProps {
     board: Board, 
     placeTile: Move, 
@@ -52,10 +34,7 @@ interface TileGridProps {
     possibleMonuments?: Array<Coord>,
     monuments: Array<Monument>
 }
-const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLeader, placeMonument, placeCatastrophe, possibleMonuments, monuments}) => {
-
-    let classes = useStyles()
-    const theme: sizingTheme = useTheme()
+const TileGrid = ({board, placeTile, placeLeader, placeMonument, placeCatastrophe, possibleMonuments, monuments}: TileGridProps) => {
 
     // Treasures are displayed above the board using absolute positioning so they work with monuments.
     // Otherwise, they won't be in the correct z-index context.
@@ -65,18 +44,16 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
     for (let y = 0; y < BOARD_HEIGHT; y++) {
         let row: Array<JSX.Element> = []
         for (let x = 0; x < BOARD_WIDTH; x++) {
-            let tdClasses = []
-            if (board[x][y].river) tdClasses.push('river')
-            if (board[x][y].border) tdClasses.push('special-border')
             const location = {x: x, y: y}
             if (board[x][y].treasure) {
                 treasures.push(<TreasureComp key={`${x}${y}`} location={{x: x, y: y}}/>)
             }
-            if (board[x][y].unification) tdClasses.push('unification')
             row.push(
                 <TileSquare
                     key={x}
-                    className={tdClasses.join(' ')}
+                    river={board[x][y].river}
+                    specialBorder={board[x][y].border}
+                    unification={!!board[x][y].unification}
                     location={location}
                     placeTile={placeTile}
                     placeLeader={placeLeader}
@@ -96,22 +73,20 @@ const TileGrid: FunctionComponent<TileGridProps> = ({board, placeTile, placeLead
 
     const monumentComps = monuments.map((m, i) => {
         if (m.position) {
-            const top = `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${m.position.y} + ${theme.border} + ${theme.tilePad})`
-            const left = `calc((${theme.tileSize} + 2 * ${theme.tilePad} + ${theme.border}) * ${m.position.x} + ${theme.border} + ${theme.tilePad})`
-            return <div style={{position: 'absolute', top, left}} key={i}>
+            return <MonumentDiv position={m.position} key={i}>
                 <MonumentComp colors={m.colors}/>
-            </div>
+            </MonumentDiv>
         }
         return null
     })
 
     return (
-        <div className={classes.root}>
+        <GridDiv>
             <table><tbody>{rows}</tbody></table>
             {monumentDTs}
             {monumentComps}
             {treasures}
-        </div>
+        </GridDiv>
     )
 }
 

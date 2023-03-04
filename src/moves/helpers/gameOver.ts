@@ -33,13 +33,13 @@ export default function calculateWinners(G: CNState, ctx: Ctx): Array<PlayerID> 
     for (const pid in G.players) {
         // Deep copy so as not to mess with the original points.
         effectiveScores[pid] = {
-            [RED]: G.players[pid]!.score.red,
-            [BLUE]: G.players[pid]!.score.blue,
-            [GREEN]: G.players[pid]!.score.green,
-            [BLACK]: G.players[pid]!.score.black,
+            [RED]: G.players[pid].score.red,
+            [BLUE]: G.players[pid].score.blue,
+            [GREEN]: G.players[pid].score.green,
+            [BLACK]: G.players[pid].score.black,
         }
         // For each treasure, recalculate the score order and add the treasure to the lowest color.
-        for (let i = 0; i < G.players[pid!]!.score[TREASURE]; i++) {
+        for (let i = 0; i < G.players[pid].score[TREASURE]; i++) {
             effectiveScores[pid][sortColorMap(effectiveScores[pid])[0]] += 1
         }
     }

@@ -1,76 +1,65 @@
-import { makeStyles } from '@material-ui/styles'
-import React, { FunctionComponent } from 'react'
+import styled from '@emotion/styled';
 
-import { sizingTheme } from '../static/display'
 import { PlayerID } from 'boardgame.io'
 import LeaderImg from './grid/leaderImage'
+import Header from './styled/header'
+import Box from './styled/box'
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.tilePad} 0`,
-        '& > span': {
-            width: 'max-content',
-            fontSize: 'larger',
-            fontWeight: 'bolder',
-        },
-    },
-    leader: {
-        height: `calc(${theme.tileSize} / 2)`,
-        width: `calc(${theme.tileSize} / 2)`,
-        display: 'block',
-        fill: '#37474f'
-    },
-    table: {
-        textTransform: 'capitalize',
-        '& td:first-child': {
-            textAlign: 'center',
-            width: '50%',
-            fontWeight: 'bold'
-        },
-        '& td:last-child': {
-            width: '100%',
-            fontWeight: 'bolder',
-            display: 'flex',
-            justifyContent: 'center'
-        },
-    },
-    current: {
-        color: '#f5f5f5',
-        '& svg': {
-            fill: '#f5f5f5',
-            '& path': {
-                stroke: '#f5f5f5'
-            }
-        }
-    }
+const PlayerOrderLeaderImg = styled(LeaderImg)(({theme}) => ({
+    height: `calc(${theme.tileSize} / 2)`,
+    width: `calc(${theme.tileSize} / 2)`,
+    display: 'block',
+    fill: '#37474f'
 }))
+
+const PlayerOrderTable = styled.table(({
+    textTransform: 'capitalize',
+    '& td': {
+        textAlign: 'center',
+        width: '50%',
+        fontWeight: 'bold'
+    },
+    '& td:last-child': {
+        width: '100%',
+        display: 'flex',
+        justifyContent: 'center'
+    },
+}))
+
+const PlayerRow = styled.tr<{current: boolean}>(({current}) => {
+    if (!current) { return {} }
+    return {
+        color: '#f5f5f5',
+            '& svg': {
+                fill: '#f5f5f5',
+                '& path': {
+                    stroke: '#f5f5f5'
+                }
+            }
+    }
+})
 
 type PlayerOrderProps = {
     playerMap: {[id in PlayerID]: string},
     playerOrder: Array<PlayerID>,
     currentPlayer: PlayerID
 }
-const PlayerOrderComp: FunctionComponent<PlayerOrderProps> = ({playerMap, playerOrder, currentPlayer}) => {
-
-    const classes = useStyles()
+const PlayerOrderComp = ({playerMap, playerOrder, currentPlayer}: PlayerOrderProps) => {
 
     const rows = playerOrder.map(id => (
-        <tr key={id} className={currentPlayer === id ? classes.current : ''}>
+        <PlayerRow key={id} current={currentPlayer === id}>
             <td>{playerMap[id]}</td>
-            <td><LeaderImg playerID={id} className={classes.leader}/></td>
-        </tr>
+            <td><PlayerOrderLeaderImg playerID={id}/></td>
+        </PlayerRow>
     ))
 
     return (
-        <div className={classes.root}>
-            <span>Player Order</span>
-            <table className={classes.table}><tbody>
+        <Box>
+            <Header>Player Order</Header>
+            <PlayerOrderTable><tbody>
                 {rows}
-            </tbody></table>
-        </div>
+            </tbody></PlayerOrderTable>
+        </Box>
     )
 }
 

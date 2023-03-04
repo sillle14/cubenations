@@ -1,4 +1,4 @@
-import { Ctx, Game, PlayerID } from 'boardgame.io'
+import { Ctx, DefaultPluginAPIs, Game, PlayerID } from 'boardgame.io'
 import { TurnOrder } from 'boardgame.io/core'
 
 import { ALL_COLORS, Color, RED } from './static/colors'
@@ -18,9 +18,9 @@ import placeTile from './moves/placeTile'
 import discardTiles from './moves/discard'
 import Player from './models/player'
 import Space from './models/space'
-import { endAction } from "./moves/helpers/endAction"
+import { endAction, endActionMove } from './moves/helpers/endAction'
 
-function setup(ctx: Ctx): CNState {
+function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
     // Board
     let board: Board = []
     for (let x = 0; x < BOARD_WIDTH; x++) {
@@ -31,7 +31,7 @@ function setup(ctx: Ctx): CNState {
                 treasure: TREASURES[x][y],
                 border: BORDERED[x][y]
             }
-            if (TREASURES[x][y]) {space.occupant = new Tile(RED)}
+            if (TREASURES[x][y]) {space.occupant = Tile.new(RED)}
             column.push(space)
         }
         board.push(column)
@@ -41,28 +41,28 @@ function setup(ctx: Ctx): CNState {
     let tileBag: Array<Tile> = []
     for (let color in TILE_COUNTS) {
         for (let i = 0; i < TILE_COUNTS[color as Color]; i++){
-            tileBag.push(new Tile(color as Color))
+            tileBag.push(Tile.new(color as Color))
         }
     }
-    tileBag = ctx.random!.Shuffle(tileBag)
+    tileBag = random.Shuffle(tileBag)
 
     // Players
-    let players: {[playerID in PlayerID]?: Player} = {}
+    let players: Record<PlayerID, Player> = {}
     for (let i = 0; i < ctx.numPlayers; i ++) {
         const playerID = (i + '') as PlayerID
-        players[playerID] = new Player(playerID)
+        players[playerID] = Player.new(playerID)
     }
 
     // Deal each player 6 tiles.
     for (const playerID in players) {
-        players[playerID as PlayerID]!.hand = tileBag.splice(0, 6)
+        players[playerID as PlayerID].hand = tileBag.splice(0, 6)
     }
 
     // Monuments
     let monuments: Array<Monument> = []
     for (let i = 0; i < ALL_COLORS.length; i++) {
         for (let j = i + 1; j < ALL_COLORS.length; j++) {
-            monuments.push(new Monument(ALL_COLORS[i], ALL_COLORS[j]))
+            monuments.push(Monument.new(ALL_COLORS[i], ALL_COLORS[j]))
         }
     }
 
@@ -72,7 +72,7 @@ function setup(ctx: Ctx): CNState {
         tileBag: tileBag,
         monuments: monuments,
         conflict: null,
-        playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.
+        playerOrder: random.Shuffle(Object.keys(players)), // Randomize the player order.
         unificationTile: null,
         discardCount: 0, // Use to determine when discards have occurred
         treasureCount: 10
@@ -84,7 +84,7 @@ export const CubeNations: Game<CNState> = {
     setup: setup,
     minPlayers: 2,
     maxPlayers: 4,
-    moves: { placeTile, placeLeader, placeCatastrophe, discardTiles, pass: endAction },
+    moves: { placeTile, placeLeader, placeCatastrophe, discardTiles, pass: endActionMove },
     turn: {
         order: TurnOrder.CUSTOM_FROM('playerOrder'),
         stages: {
@@ -100,7 +100,7 @@ export const CubeNations: Game<CNState> = {
             [MONUMENT]: {
                 moves: {
                     placeMonument,
-                    pass: (G: CNState, ctx: Ctx) => {ctx.events!.endStage!(); endAction(G, ctx)}
+                    pass: ({G, ctx, events}) => {events.endStage!(); endAction(G, ctx, events)}
                 }
             },
             [TREASURE]: {

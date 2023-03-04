@@ -1,7 +1,6 @@
-import React from 'react'
 import { PlayerID } from 'boardgame.io'
 
-const LeaderImg = ({className, playerID}: {className: string, playerID: PlayerID}) => {
+const LeaderImg = ({className, playerID}: {className?: string, playerID: PlayerID}) => {
 
     let svgChild
     switch (playerID) {

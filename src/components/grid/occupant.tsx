@@ -1,4 +1,3 @@
-import React, { FunctionComponent } from 'react'
 import { Coord } from '../../models/board'
 import { CATASTROPHE, Leader, LEADER, MONUMENT, Occupant, Tile, TILE } from '../../models/pieces'
 import LeaderComp from './leader'
@@ -8,7 +7,7 @@ interface OccupantProps {
     occupant?: Occupant,
     location: Coord,
 }
-const OccupantComp: FunctionComponent<OccupantProps> = ({occupant, location}) => {
+const OccupantComp = ({occupant, location}: OccupantProps) => {
 
     if (!occupant) {
         return null

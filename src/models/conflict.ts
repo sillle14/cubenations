@@ -34,6 +34,15 @@ export class Revolt extends Conflict {
         super(others)
         this.leaderColor = leaderColor
     }
+
+    static new ({leaderColor, ...others}: RevoltProps): Revolt {
+        return {
+            type: 'Revolt',
+            color: RED,
+            leaderColor: leaderColor,
+            ...others
+        }
+    }
 }
 
 interface WarProps extends ConflictProps {
@@ -46,5 +55,13 @@ export class War extends Conflict {
     constructor ({color, ...others}: WarProps) {
         super(others)
         this.color = color
+    }
+
+    static new ({color, ...others}: WarProps): War {
+        return {
+            type: 'War',
+            color: color,
+            ...others
+        }
     }
 }
