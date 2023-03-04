@@ -5,7 +5,7 @@ import { Coord } from '../../models/board'
 import Draggable from '../dnd/draggable'
 import { TREASURE } from '../../models/pieces'
 import DraggableContext from '../dnd/draggableContext'
-import { newpulse } from '../../static/display'
+import { pulse } from '../../static/display'
 
 const TreasureDiv = styled.div<{location: Coord, emphasis: boolean}>(({location, emphasis, theme}) => ({
     height: `calc(${theme.tileSize} / 2)`,
@@ -15,7 +15,7 @@ const TreasureDiv = styled.div<{location: Coord, emphasis: boolean}>(({location,
     boxShadow: '2px 2px 5px #616161',
     top: `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.y + 0.5} + ${theme.border} * ${location.y + 1} - ${theme.tileSize} / 4)`,
     left: `calc((${theme.tileSize} + 2 * ${theme.tilePad}) * ${location.x + 0.5} + ${theme.border} * ${location.x + 1} - ${theme.tileSize} / 4)`,
-    animation: emphasis ? `${newpulse} 2s infinite` : ''
+    animation: emphasis ? `${pulse} 2s infinite` : ''
 }))
 
 const TreasureComp = ({location}: {location: Coord}) => {

@@ -8,10 +8,10 @@ import { Coord } from '../../models/board'
 import LeaderImg from './leaderImage'
 import Draggable from '../dnd/draggable'
 import DraggableContext from '../dnd/draggableContext'
-import { colors, newpulse } from '../../static/display'
+import { colors, pulse } from '../../static/display'
 
 const LeaderDiv = styled.div<{inConflict: boolean}>(({inConflict}) => ({
-    animation: inConflict ? `${newpulse} 2s infinite` : ''
+    animation: inConflict ? `${pulse} 2s infinite` : ''
 }))
 
 const LeaderImgShadow = styled(LeaderImg)({
