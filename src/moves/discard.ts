@@ -10,7 +10,7 @@ const discardTiles: Move<CNState> = ({G, ctx, events}, handIdxs: Array<number>) 
         if (!tile) {
             events.endGame!({winnerIDs: calculateWinners(G, ctx)})
         } else {
-            G.players[ctx.currentPlayer]!.hand[i] = tile
+            G.players[ctx.currentPlayer].hand[i] = tile
         }
     })
     // This variable changes every discard so the front end can clear temporary discards.

@@ -55,7 +55,7 @@ export function startWar(G: CNState, ctx: Ctx, events: EventsAPI, color: Color, 
         color: color
     })
 
-    const leaderCoords = Object.keys(players).map((player) => G.players[player]!.leaders[color]!)
+    const leaderCoords = Object.keys(players).map((player) => G.players[player].leaders[color]!)
     leaderCoords.forEach((coord) => {
         (G.board[coord.x][coord.y].occupant as Leader).inConflict = true
     })

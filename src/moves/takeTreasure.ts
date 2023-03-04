@@ -8,7 +8,7 @@ import calculateWinners from './helpers/gameOver'
 
 
 export function canTakeTreasure(G: CNState, source: Coord, playerID: PlayerID): boolean {
-    const availableTreasure = G.players[playerID]!.availableTreasure || []
+    const availableTreasure = G.players[playerID].availableTreasure || []
     
     if (!availableTreasure.some(c => c.x === source.x && c.y === source.y)) return false
 

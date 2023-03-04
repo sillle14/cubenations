@@ -44,7 +44,7 @@ const Footer = styled.div({
 type ScoreDetailProps = {
     open: boolean,
     toggle: () => void,
-    players: {[playerID in PlayerID]?: Player}
+    players: Record<PlayerID, Player>
     playerMap: {[id in PlayerID]: string}
 }
 const ScoreModal = ({open, toggle, players, playerMap}: ScoreDetailProps) => {
@@ -54,12 +54,12 @@ const ScoreModal = ({open, toggle, players, playerMap}: ScoreDetailProps) => {
     let headerDone = false
     for (const pid in players) {
         let cells = [<th key="player" scope="row">{playerMap[pid]}</th>]
-        for (const color in players[pid]!.score) {
+        for (const color in players[pid].score) {
             // Only add to header for the first player.
             if (!headerDone) {
                 headers.push(<th key={color}>{color}</th>)
             }
-            cells.push(<td key={color}>{players[pid]!.score[color as Color | typeof TREASURE]}</td>)
+            cells.push(<td key={color}>{players[pid].score[color as Color | typeof TREASURE]}</td>)
         }
         headerDone = true
         rows.push(<tr key={pid}>{cells}</tr>)

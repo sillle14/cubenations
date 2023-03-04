@@ -27,7 +27,7 @@ const placeCatastrophe: Move<CNState> = ({G, ctx, events}, destination: Coord) =
 
     safeRemoveTile(destination, G.board, G.players)
     G.board[destination.x][destination.y].occupant = new Catastrophe()
-    G.players[ctx.currentPlayer]!.catastrophes -= 1
+    G.players[ctx.currentPlayer].catastrophes -= 1
     endAction(G, ctx, events)
 }
 

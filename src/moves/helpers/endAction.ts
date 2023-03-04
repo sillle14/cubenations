@@ -18,18 +18,18 @@ import { breadthFirstSearch } from './regions'
  */
 
 export function endAction(G: CNState, ctx: Ctx, events: EventsAPI) {
-    let player = G.players[ctx.currentPlayer]!;
+    let player = G.players[ctx.currentPlayer];
     player.actions -= 1
     if (player.actions === 0) {
         player.actions = 2
         for (const playerID in G.players) {
             for (let i = 0; i < 6; i++) {
-                if (!G.players[playerID]!.hand[i]) {
+                if (!G.players[playerID].hand[i]) {
                     const tile = G.tileBag.pop()
                     if (!tile) {
                         events.endGame!({winnerIDs: calculateWinners(G, ctx)})
                     } else {
-                        G.players[playerID]!.hand[i] = tile
+                        G.players[playerID].hand[i] = tile
                     }
                 }
             }
@@ -57,9 +57,9 @@ export function endAction(G: CNState, ctx: Ctx, events: EventsAPI) {
         // Check for treasure. Treasure is only awarded to green leaders.
         const treasureStage: Record<PlayerID, StageArg> = {}
         for (const pid in G.players) {
-            const p = G.players[pid]!
+            const p = G.players[pid]
             if (p.leaders[GREEN]) {
-                const leaderRegion = breadthFirstSearch({start: p.leaders[GREEN]!, board: G.board})
+                const leaderRegion = breadthFirstSearch({start: p.leaders[GREEN], board: G.board})
                 let availableTreasure: Array<Coord> = []
                 leaderRegion.forEach((column, x) => {
                     column.forEach((space, y) => {

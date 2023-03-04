@@ -55,7 +55,7 @@ function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
 
     // Deal each player 6 tiles.
     for (const playerID in players) {
-        players[playerID as PlayerID]!.hand = tileBag.splice(0, 6)
+        players[playerID as PlayerID].hand = tileBag.splice(0, 6)
     }
 
     // Monuments

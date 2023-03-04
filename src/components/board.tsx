@@ -143,7 +143,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
         <ThemeProvider theme={theme}>
             <MainDiv ref={ref}>
                 <Column fixed={true} width={4.5}>
-                    {!!playerID && <ScoreComp score={G.players[playerID]!.score} takeTreasure={moves.takeTreasure}/>}
+                    {!!playerID && <ScoreComp score={G.players[playerID].score} takeTreasure={moves.takeTreasure}/>}
                     <PlayerOrderComp playerMap={playerMap} playerOrder={G.playerOrder} currentPlayer={ctx.currentPlayer}/>
                     {conflict}
                 </Column>
@@ -158,7 +158,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         monuments={G.monuments}
                     />
                     {!!playerID && <PlayerComp 
-                        player={G.players[playerID]!}
+                        player={G.players[playerID]}
                         placeLeader={moves.placeLeader}
                         selected={selected}
                         toggleSelectTile={toggleSelectTile}
@@ -178,7 +178,7 @@ export const CubeNationsTable = ({ G, moves, playerID, ctx, matchData }: BoardPr
                         gameover={ctx.gameover}
                         playerMap={playerMap}
                         toggleModal={toggleModal}
-                        actionsLeft={!!playerID ? G.players[playerID]!.actions : 0}
+                        actionsLeft={!!playerID ? G.players[playerID].actions : 0}
                         myTurn={playerID === ctx.currentPlayer}
                         discardTiles={moves.discardTiles}
                         clearSelected={clearSelected}

@@ -22,7 +22,7 @@ export const commitToConflict: Move<CNState> = ({G, playerID, events}, handIdxs:
     if (!G.conflict.players[playerID]) return INVALID_MOVE
 
     G.conflict.players[playerID].support = handIdxs.length
-    handIdxs.forEach((i) => {G.players[playerID]!.hand[i] = null})
+    handIdxs.forEach((i) => {G.players[playerID].hand[i] = null})
 
     const playerIDs = Object.keys(G.conflict.players)
     // Calculate the winner. Note that this will be recalculated when the second player commits tiles.
@@ -42,15 +42,15 @@ export const commitToConflict: Move<CNState> = ({G, playerID, events}, handIdxs:
 
 function resolveRevolt(G: CNState, ctx: Ctx, events: EventsAPI, loser: PlayerID) {
     // Return the losing leader home.
-    const loserPosition = G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor]!
+    const loserPosition = G.players[loser].leaders[(G.conflict as Revolt).leaderColor]!
     delete G.board[loserPosition.x][loserPosition.y].occupant
-    G.players[loser]!.leaders[(G.conflict as Revolt).leaderColor] = null
+    G.players[loser].leaders[(G.conflict as Revolt).leaderColor] = null
 
     // Award the winner one point.
-    G.players[G.conflict!.winner!]!.score[RED] += 1
+    G.players[G.conflict!.winner!].score[RED] += 1
 
     // Unset the inConflict on the remaining leader
-    const winnerLeaderPosition = G.players[G.conflict!.winner!]!.leaders[(G.conflict as Revolt).leaderColor]!
+    const winnerLeaderPosition = G.players[G.conflict!.winner!].leaders[(G.conflict as Revolt).leaderColor]!
     const winnerLeader = G.board[winnerLeaderPosition.x][winnerLeaderPosition.y].occupant as Leader
     winnerLeader.inConflict = false
 
@@ -100,16 +100,16 @@ function resolveWar(G: CNState, ctx: Ctx, events: EventsAPI, loser: PlayerID) {
     })
 
     // Remove the losing leader and award points.
-    const loserLeaderPosition = G.players[loser]!.leaders[G.conflict!.color]!
+    const loserLeaderPosition = G.players[loser].leaders[G.conflict!.color]!
     delete G.board[loserLeaderPosition.x][loserLeaderPosition.y].occupant
-    G.players[loser]!.leaders[G.conflict!.color] = null
+    G.players[loser].leaders[G.conflict!.color] = null
     winnerPoints += 1
 
     // Award points.
-    G.players[G.conflict!.winner!]!.score[G.conflict!.color] += winnerPoints
+    G.players[G.conflict!.winner!].score[G.conflict!.color] += winnerPoints
 
     // Unset the inConflict on the remaining leader
-    const winnerLeaderPosition = G.players[G.conflict!.winner!]!.leaders[G.conflict!.color]!
+    const winnerLeaderPosition = G.players[G.conflict!.winner!].leaders[G.conflict!.color]!
     const winnerLeader = G.board[winnerLeaderPosition.x][winnerLeaderPosition.y].occupant as Leader
     winnerLeader.inConflict = false
 

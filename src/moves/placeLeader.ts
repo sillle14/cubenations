@@ -53,13 +53,13 @@ export function canPlaceLeader(source: Coord | null, destination: Coord | null, 
 
 
 const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination: Coord | null) => {
-    const source = G.players[ctx.currentPlayer]!.leaders[color]
+    const source = G.players[ctx.currentPlayer].leaders[color]
     
     if (!canPlaceLeader(source, destination, G.board)) return INVALID_MOVE
 
     if (!destination) {
         // Send the leader back to hand.
-        G.players[ctx.currentPlayer]!.leaders[color] = null
+        G.players[ctx.currentPlayer].leaders[color] = null
         delete G.board[source!.x][source!.y].occupant
         endAction(G, ctx, events)
         return
@@ -68,7 +68,7 @@ const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination:
     const targetSpace = G.board[destination!.x][destination!.y]
     // Place the leader
     targetSpace.occupant = new Leader(color, ctx.currentPlayer)
-    G.players[ctx.currentPlayer]!.leaders[color] = destination
+    G.players[ctx.currentPlayer].leaders[color] = destination
     if (source) {
         delete G.board[source.x][source.y].occupant
     }
@@ -82,7 +82,7 @@ const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination:
     // If the existing kingdom contains the leader, a revolt occurs.
     if (kingdoms.length === 1 && kingdoms[0].leaders[color]) {
         const opponentId = kingdoms[0].leaders[color]!
-        const opponentPosition = G.players[opponentId]!.leaders[color]!
+        const opponentPosition = G.players[opponentId].leaders[color]!
         const opponentBase = getNeighbors(opponentPosition, G.board).filter(t => isColorTile(t, G.board, RED)).length
 
         const myBase = getNeighbors(destination, G.board).filter(t => isColorTile(t, G.board, RED)).length
