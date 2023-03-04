@@ -1,4 +1,4 @@
-import { Ctx } from 'boardgame.io'
+import { Move } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { BLACK, BLUE, Color } from '../static/colors'
@@ -29,8 +29,7 @@ export function canPlaceTile(destination: Coord, color: Color, board: Board): bo
     return true
 }
 
-
-export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, destination: Coord) {
+const placeTile: Move<CNState> = ({G, ctx, events}, handIndex: number, destination: Coord) => {
     const targetSpace = G.board[destination.x][destination.y]
     const tile = G.players[ctx.currentPlayer]!.hand[handIndex]!
 
@@ -47,7 +46,7 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
     // TODO: confirm before this, maybe check war first?
 
     if (kingdoms.length === 2) {
-        if (checkAndStartWar(G, ctx, kingdoms, destination)) {
+        if (checkAndStartWar(G, ctx, events, kingdoms, destination)) {
             // If a war was started, this move is over.
             return
         }
@@ -65,7 +64,9 @@ export default function placeTile(G: CNState, ctx: Ctx, handIndex: number, desti
         }
     }
 
-    if (!checkForMonument(G, ctx, destination)) {
-        endAction(G, ctx)
+    if (!checkForMonument(G, events, destination)) {
+        endAction(G, ctx, events)
     }
 }
+
+export default placeTile

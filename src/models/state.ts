@@ -9,7 +9,7 @@ import Region from './region'
 export default interface CNState {
     board: Board,
     tileBag: Array<Tile>,
-    players: {[playerID in PlayerID]?: Player},
+    players: Record<PlayerID, Player>,
     monuments: Array<Monument>
     conflict: Conflict | null,
     playerOrder: Array<PlayerID>,

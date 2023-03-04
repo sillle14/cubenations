@@ -1,4 +1,5 @@
-import { Ctx, PlayerID } from 'boardgame.io'
+import { Ctx, Move, PlayerID, StageArg } from 'boardgame.io'
+import { EventsAPI } from 'boardgame.io/dist/types/src/plugins/plugin-events';
 import { Coord } from '../../models/board';
 import { Monument, MONUMENT } from '../../models/pieces';
 import CNState from '../../models/state'
@@ -16,7 +17,7 @@ import { breadthFirstSearch } from './regions'
  * @param ctx Context object
  */
 
-export function endAction(G: CNState, ctx: Ctx) {
+export function endAction(G: CNState, ctx: Ctx, events: EventsAPI) {
     let player = G.players[ctx.currentPlayer]!;
     player.actions -= 1
     if (player.actions === 0) {
@@ -26,7 +27,7 @@ export function endAction(G: CNState, ctx: Ctx) {
                 if (!G.players[playerID]!.hand[i]) {
                     const tile = G.tileBag.pop()
                     if (!tile) {
-                        ctx.events!.endGame!({winnerIDs: calculateWinners(G, ctx)})
+                        events.endGame!({winnerIDs: calculateWinners(G, ctx)})
                     } else {
                         G.players[playerID]!.hand[i] = tile
                     }
@@ -54,7 +55,7 @@ export function endAction(G: CNState, ctx: Ctx) {
             player.score[color as Color] += monumentCount / 4
         })
         // Check for treasure. Treasure is only awarded to green leaders.
-        const treasureStage: {[pid in PlayerID]?: string} = {}
+        const treasureStage: Record<PlayerID, StageArg> = {}
         for (const pid in G.players) {
             const p = G.players[pid]!
             if (p.leaders[GREEN]) {
@@ -75,9 +76,13 @@ export function endAction(G: CNState, ctx: Ctx) {
         }
         // TODO: Before each, go to context
         if (Object.keys(treasureStage).length) {
-            ctx.events!.setActivePlayers!({value: treasureStage})
+            events.setActivePlayers!({value: treasureStage})
         } else {
-            ctx.events!.endTurn!()
+            events.endTurn!()
         }
     }
+}
+
+export const endActionMove: Move<CNState> = ({G, ctx, events}) => {
+    endAction(G, ctx, events)
 }

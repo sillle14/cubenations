@@ -1,4 +1,4 @@
-import { Ctx, PlayerID } from 'boardgame.io'
+import { Move, PlayerID } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import CNState from '../models/state'
@@ -20,27 +20,29 @@ export function canTakeTreasure(G: CNState, source: Coord, playerID: PlayerID): 
 }
 
 
-export default function takeTreasure(G: CNState, ctx: Ctx, source: Coord) {    
-    if (!canTakeTreasure(G, source, ctx.playerID!)) return INVALID_MOVE
+const takeTreasure: Move<CNState> = ({G, ctx, playerID, events}, source: Coord) => {    
+    if (!canTakeTreasure(G, source, playerID)) return INVALID_MOVE
 
     // Remove the treasure and award the point.
     G.board[source.x][source.y].treasure = false
-    G.players[ctx.playerID!]!.score[TREASURE] += 1
-    G.players[ctx.playerID!]!.availableTreasure = G.players[ctx.playerID!]!.availableTreasure!.filter(c => c.x !== source.x && c.y !== source.y)
+    G.players[playerID].score[TREASURE] += 1
+    G.players[playerID].availableTreasure = G.players[playerID].availableTreasure!.filter(c => c.x !== source.x && c.y !== source.y)
     G.treasureCount -= 1
 
     // If less than two are available, end the stage.
-    if (G.players[ctx.playerID!]!.availableTreasure!.length < 2) {
+    if (G.players[playerID].availableTreasure!.length < 2) {
         // If more than one player is taking treasure, just end the stage.
         // Otherwise, end the turn.
         if (Object.keys(ctx.activePlayers!).length > 1) {
-            ctx.events!.endStage!()
+            events.endStage!()
         } else {
             // The game ends if there are less than three treasures on the board.
             if (G.treasureCount < 3) {
-                ctx.events!.endGame!({winnerIDs: calculateWinners(G, ctx)})
+                events.endGame!({winnerIDs: calculateWinners(G, ctx)})
             }
-            ctx.events!.endTurn!()
+            events.endTurn!()
         }
     }
 }
+
+export default takeTreasure

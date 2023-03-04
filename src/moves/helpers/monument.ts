@@ -1,4 +1,4 @@
-import { Ctx } from 'boardgame.io'
+import { EventsAPI } from 'boardgame.io/dist/types/src/plugins/plugin-events'
 import { Coord } from '../../models/board'
 import { Tile } from '../../models/pieces'
 import CNState from '../../models/state'
@@ -12,11 +12,11 @@ import { isColorTile } from './utility'
  * @param coord Recently placed tile which may build a monument
  * @param board Game board
  */
-export function checkForMonument(G: CNState, ctx: Ctx, coord: Coord): boolean {
+export function checkForMonument(G: CNState, events: EventsAPI, coord: Coord): boolean {
     // We can assume the there is a tile in the coord .
     const color = (G.board[coord.x][coord.y].occupant as Tile).color
 
-    // All possible configurations, with the postion of the top left of the monument for tracking,
+    // All possible configurations, with the position of the top left of the monument for tracking,
     //  as well as the coords of the tiles in the monument (except the placed tile.)
     const monumentConfigurations = [
         // Placed tile top left
@@ -69,7 +69,7 @@ export function checkForMonument(G: CNState, ctx: Ctx, coord: Coord): boolean {
     if (possibleMonuments.length && G.monuments.some(m => m.colors.includes(color) && !m.position)) {
         G.availableMonumentColor = color
         G.possibleMonuments = possibleMonuments
-        ctx.events!.setStage!(MONUMENT)
+        events.setStage!(MONUMENT)
         return true
     } else {
         return false

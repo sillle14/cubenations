@@ -1,4 +1,4 @@
-import { Ctx } from 'boardgame.io'
+import { Move } from 'boardgame.io'
 import { INVALID_MOVE } from 'boardgame.io/core'
 
 import { Color, RED } from '../static/colors'
@@ -52,7 +52,7 @@ export function canPlaceLeader(source: Coord | null, destination: Coord | null, 
 }
 
 
-export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destination: Coord | null) {
+const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination: Coord | null) => {
     const source = G.players[ctx.currentPlayer]!.leaders[color]
     
     if (!canPlaceLeader(source, destination, G.board)) return INVALID_MOVE
@@ -61,7 +61,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
         // Send the leader back to hand.
         G.players[ctx.currentPlayer]!.leaders[color] = null
         delete G.board[source!.x][source!.y].occupant
-        endAction(G, ctx)
+        endAction(G, ctx, events)
         return
     }
     
@@ -103,7 +103,7 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
         })
         
         // TODO: Confirm first
-        ctx.events!.setActivePlayers!({
+        events.setActivePlayers!({
             value: {
                 [ctx.currentPlayer]: CONFLICT,
             },
@@ -113,6 +113,8 @@ export default function placeLeader(G: CNState, ctx: Ctx, color: Color, destinat
             }
         })
     } else {
-        endAction(G, ctx)
+        endAction(G, ctx, events)
     }
 }
+
+export default placeLeader

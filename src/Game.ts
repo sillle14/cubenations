@@ -1,4 +1,4 @@
-import { Ctx, Game, PlayerID } from 'boardgame.io'
+import { Ctx, DefaultPluginAPIs, Game, PlayerID } from 'boardgame.io'
 import { TurnOrder } from 'boardgame.io/core'
 
 import { ALL_COLORS, Color, RED } from './static/colors'
@@ -18,9 +18,9 @@ import placeTile from './moves/placeTile'
 import discardTiles from './moves/discard'
 import Player from './models/player'
 import Space from './models/space'
-import { endAction } from "./moves/helpers/endAction"
+import { endAction, endActionMove } from './moves/helpers/endAction'
 
-function setup(ctx: Ctx): CNState {
+function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
     // Board
     let board: Board = []
     for (let x = 0; x < BOARD_WIDTH; x++) {
@@ -44,10 +44,10 @@ function setup(ctx: Ctx): CNState {
             tileBag.push(new Tile(color as Color))
         }
     }
-    tileBag = ctx.random!.Shuffle(tileBag)
+    tileBag = random.Shuffle(tileBag)
 
     // Players
-    let players: {[playerID in PlayerID]?: Player} = {}
+    let players: Record<PlayerID, Player> = {}
     for (let i = 0; i < ctx.numPlayers; i ++) {
         const playerID = (i + '') as PlayerID
         players[playerID] = new Player(playerID)
@@ -72,7 +72,7 @@ function setup(ctx: Ctx): CNState {
         tileBag: tileBag,
         monuments: monuments,
         conflict: null,
-        playerOrder: ctx.random!.Shuffle(Object.keys(players)), // Randomize the player order.
+        playerOrder: random.Shuffle(Object.keys(players)), // Randomize the player order.
         unificationTile: null,
         discardCount: 0, // Use to determine when discards have occurred
         treasureCount: 10
@@ -84,7 +84,7 @@ export const CubeNations: Game<CNState> = {
     setup: setup,
     minPlayers: 2,
     maxPlayers: 4,
-    moves: { placeTile, placeLeader, placeCatastrophe, discardTiles, pass: endAction },
+    moves: { placeTile, placeLeader, placeCatastrophe, discardTiles, pass: endActionMove },
     turn: {
         order: TurnOrder.CUSTOM_FROM('playerOrder'),
         stages: {
@@ -100,7 +100,7 @@ export const CubeNations: Game<CNState> = {
             [MONUMENT]: {
                 moves: {
                     placeMonument,
-                    pass: (G: CNState, ctx: Ctx) => {ctx.events!.endStage!(); endAction(G, ctx)}
+                    pass: ({G, ctx, events}) => {events.endStage!(); endAction(G, ctx, events)}
                 }
             },
             [TREASURE]: {
