@@ -101,7 +101,7 @@ const PlayerComp = ({player, placeLeader, selected, toggleSelectTile}: PlayerPro
     for (let i = 0; i < player.catastrophes; i++) {
         catastrophes.push(
             <TileContainer key={i}><Shadow>
-                <Draggable draggable={canDragTile} item={new Catastrophe()}><TileComp color={CATASTROPHE} noShadow/></Draggable>
+                <Draggable draggable={canDragTile} item={Catastrophe.new()}><TileComp color={CATASTROPHE} noShadow/></Draggable>
             </Shadow></TileContainer>
         )
     }

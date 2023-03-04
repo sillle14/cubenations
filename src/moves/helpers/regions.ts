@@ -45,7 +45,7 @@ export function getAdjacentRegions(coord: Coord, board: Board): Array<Region> {
         if (!regions.some(r => r.spaces[neighbor.x][neighbor.y])) {
             // Add the region starting at this neighbor. Exclude the placed tile from search.
             regions.push(
-                new Region(breadthFirstSearch({start: neighbor, exclude: coord, board: board}), board)
+                Region.new(breadthFirstSearch({start: neighbor, exclude: coord, board: board}), board)
             )
         }
     })

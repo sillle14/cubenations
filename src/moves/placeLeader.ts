@@ -67,7 +67,7 @@ const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination:
     
     const targetSpace = G.board[destination!.x][destination!.y]
     // Place the leader
-    targetSpace.occupant = new Leader(color, ctx.currentPlayer)
+    targetSpace.occupant = Leader.new(color, ctx.currentPlayer)
     G.players[ctx.currentPlayer].leaders[color] = destination
     if (source) {
         delete G.board[source.x][source.y].occupant
@@ -88,7 +88,7 @@ const placeLeader: Move<CNState> = ({G, ctx, events}, color: Color, destination:
         const myBase = getNeighbors(destination, G.board).filter(t => isColorTile(t, G.board, RED)).length
 
         // Instantiate a revolt with the current player as the aggressor.
-        G.conflict = new Revolt({
+        G.conflict = Revolt.new({
             players: {
                 [ctx.currentPlayer]: {base: myBase}, 
                 [opponentId]: {base: opponentBase}

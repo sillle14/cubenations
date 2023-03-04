@@ -31,7 +31,7 @@ function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
                 treasure: TREASURES[x][y],
                 border: BORDERED[x][y]
             }
-            if (TREASURES[x][y]) {space.occupant = new Tile(RED)}
+            if (TREASURES[x][y]) {space.occupant = Tile.new(RED)}
             column.push(space)
         }
         board.push(column)
@@ -41,7 +41,7 @@ function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
     let tileBag: Array<Tile> = []
     for (let color in TILE_COUNTS) {
         for (let i = 0; i < TILE_COUNTS[color as Color]; i++){
-            tileBag.push(new Tile(color as Color))
+            tileBag.push(Tile.new(color as Color))
         }
     }
     tileBag = random.Shuffle(tileBag)
@@ -50,7 +50,7 @@ function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
     let players: Record<PlayerID, Player> = {}
     for (let i = 0; i < ctx.numPlayers; i ++) {
         const playerID = (i + '') as PlayerID
-        players[playerID] = new Player(playerID)
+        players[playerID] = Player.new(playerID)
     }
 
     // Deal each player 6 tiles.
@@ -62,7 +62,7 @@ function setup({ctx, random}: {ctx: Ctx} & DefaultPluginAPIs): CNState {
     let monuments: Array<Monument> = []
     for (let i = 0; i < ALL_COLORS.length; i++) {
         for (let j = i + 1; j < ALL_COLORS.length; j++) {
-            monuments.push(new Monument(ALL_COLORS[i], ALL_COLORS[j]))
+            monuments.push(Monument.new(ALL_COLORS[i], ALL_COLORS[j]))
         }
     }
 

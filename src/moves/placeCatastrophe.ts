@@ -26,7 +26,7 @@ const placeCatastrophe: Move<CNState> = ({G, ctx, events}, destination: Coord) =
     // TODO: Confirm here. Actually, this is a little weird, annoying to undo
 
     safeRemoveTile(destination, G.board, G.players)
-    G.board[destination.x][destination.y].occupant = new Catastrophe()
+    G.board[destination.x][destination.y].occupant = Catastrophe.new()
     G.players[ctx.currentPlayer].catastrophes -= 1
     endAction(G, ctx, events)
 }

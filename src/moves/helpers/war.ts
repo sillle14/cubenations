@@ -49,7 +49,7 @@ export function startWar(G: CNState, ctx: Ctx, events: EventsAPI, color: Color, 
 
     // Set the conflict and the new active players. Note that the current player always resolves
     //  the conflict.
-    G.conflict = new War({
+    G.conflict = War.new({
         players: players,
         aggressor: aggressor,
         color: color
