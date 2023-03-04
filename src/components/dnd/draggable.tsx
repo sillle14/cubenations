@@ -1,25 +1,17 @@
 import { FunctionComponent } from 'react';
-import { makeStyles } from '@mui/styles'
 import { useDrag } from 'react-dnd'
+import styled from '@emotion/styled';
 
 import { Dragged } from '../../models/pieces'
 
-const useStyles = makeStyles({
-    root: {
-        height: '100%',
-        width: '100%',
-        position: 'relative',
-        zIndex: 0       // This ensures that only the div is dragged, and not the background.
-    },
-    draggable: {
-        '& *': {cursor: 'grab'}
-    },
-    dragging: {
-        '& svg': {
-            opacity: 0.4,
-        }
-    }
-})
+const DraggableDiv = styled.div<{draggable: boolean, dragging: boolean}>(({draggable, dragging}) => ({ 
+    height: '100%',
+    width: '100%',
+    position: 'relative',
+    zIndex: 0, // This ensures that only the div is dragged, and not the background.
+    '& *': { cursor: draggable ? 'grab' : 'default' },
+    '& svg' : { opacity: dragging ? 0.4 : 1 }
+}))
 
 type DraggableProps = {
     item: Dragged,
@@ -33,14 +25,9 @@ const Draggable: FunctionComponent<DraggableProps> = ({item, draggable, children
         canDrag: draggable,
         collect: (monitor) => ({isDragging: !!monitor.isDragging()})
     })
-    const classes = useStyles()
-
-    let className = classes.root
-    if (draggable) {className += ` ${classes.draggable}`}
-    if (isDragging) {className += ` ${classes.dragging}`}
 
     return (
-        <div ref={drag} className={className}>{children}</div>
+        <DraggableDiv draggable={draggable} dragging={isDragging} ref={drag}>{children}</DraggableDiv>
     )
 }
 

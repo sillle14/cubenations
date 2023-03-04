@@ -1,36 +1,29 @@
 import { FunctionComponent } from 'react';
-import { makeStyles } from '@mui/styles'
-
-import { sizingTheme } from '../static/display'
+import styled from '@emotion/styled';
 
 type ColumnProps = {
     fixed: boolean, // If true, align children to flex start with a fixed margin
     width?: number   // Set width of the column (in tile size units)
 }
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        justifyContent: (props: ColumnProps) => props.fixed ? 'flex-start' : 'space-around',
-        '& > div': {
-            borderRadius: '10px',
-            border: '5px solid #f5f5f5',
-            boxShadow: '3px 3px 5px black',
-            background: '#b0bec5',
-            marginTop: (props: ColumnProps) => props.fixed ? `calc(${theme.tileSize} * 1.5)` : '0',
-            width: (props: ColumnProps) => props.width ? `calc(${theme.tileSize} * ${props.width})` : 'auto'
-        }
+const ColumnDiv = styled.div<ColumnProps>(({theme, width, fixed}) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: fixed ? 'flex-start' : 'space-around',
+    '& > div': {
+        borderRadius: '10px',
+        border: '5px solid #f5f5f5',
+        boxShadow: '3px 3px 5px black',
+        background: '#b0bec5',
+        marginTop: fixed ? `calc(${theme.tileSize} * 1.5)` : '0',
+        width: width ? `calc(${theme.tileSize} * ${width})` : 'auto'
     }
 }))
-const Column: FunctionComponent<ColumnProps> = (props) => {
-
-    const classes = useStyles(props)
-
+const Column: FunctionComponent<ColumnProps> = ({fixed, width, children}) => {
     return (
-        <div className={`${classes.root}`}>
-            {props.children}
-        </div>
+        <ColumnDiv fixed={fixed} width={width}>
+            {children}
+        </ColumnDiv>
     )
 }
 

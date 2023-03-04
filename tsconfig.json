@@ -1,7 +1,7 @@
 {
   "include": [
     "./src/*",
-    "server.ts"
+    "server.ts", "emotion.d.ts",
   ],
   "compilerOptions": {
     "strict": true,

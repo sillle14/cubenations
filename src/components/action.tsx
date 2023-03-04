@@ -1,51 +1,43 @@
-import { makeStyles } from '@mui/styles'
 import { PlayerID } from 'boardgame.io'
+import styled, { CSSObject } from '@emotion/styled';
+
 import { FunctionComponent } from 'react';
 import { Conflict } from '../models/conflict'
 import { Color } from '../static/colors'
-import { sizingTheme } from '../static/display'
 import { CHOOSE_WAR, CONFLICT, MONUMENT, RESOLVE_CONFLICT, TREASURE } from '../static/stages'
+import Header from './styled/header';
+import Box from './styled/box';
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        padding: `${theme.tilePad} 0`,
+const StyledBox = styled(Box)<{emphasis: boolean}>(({theme, emphasis}) => {
+    const style: CSSObject = {
         maxWidth: `calc(${theme.tileSize} * 4 + ${theme.tilePad} * 10 + ${theme.border} * 2)`,
-        '& span:first-child': {
-            width: 'max-content',
-            fontSize: 'larger',
-            fontWeight: 'bolder',
-        },
-        '& > p': {
-            margin: `${theme.tilePad} calc(${theme.tilePad} * 2)`,
-            textAlign: 'center'
-        },
-        '& > button': {
-            minWidth: '40%',
-            textTransform: 'capitalize',
-            background: '#f5f5f5',
-            borderRadius: '3px',
-            border: '2px solid #455a64',
-            color: '#455a64',
-            fontWeight: 'bolder',
-            cursor: 'pointer',
-            padding: '2%',
-            marginBottom: '2%',
-        },
-        '& > button:hover': {
-            background: '#455a64',
-            color: '#f5f5f5',
-        },
-        '& > button:focus': {
-            outline: 'none'
-        }
-    },
-    emphasis: {
-        background: '#ffecb3!important'
     }
+    if (emphasis) { style.background = '#ffecb3!important' }
+    return style
+})
+
+const Message = styled.p(({theme}) => ({
+    margin: `${theme.tilePad} calc(${theme.tilePad} * 2)`,
+    textAlign: 'center'
 }))
+
+const Button = styled.button({
+    minWidth: '40%',
+    textTransform: 'capitalize',
+    background: '#f5f5f5',
+    borderRadius: '3px',
+    border: '2px solid #455a64',
+    color: '#455a64',
+    fontWeight: 'bolder',
+    cursor: 'pointer',
+    padding: '2%',
+    marginBottom: '2%',
+    ':focus': { outline: 'none' },
+    ':hover': {
+        background: '#455a64',
+        color: '#f5f5f5',
+    }
+})
 
 type ActionProps = {
     stage: string,
@@ -85,8 +77,6 @@ const ActionBox: FunctionComponent<ActionProps> = ({
     conflict, 
     spectator
 }) => {
-
-    const classes = useStyles()
 
     let title = ''
     let message = null
@@ -159,11 +149,11 @@ const ActionBox: FunctionComponent<ActionProps> = ({
         buttons = [{text: 'Score Details', onClick: toggleModal}]
     }
 
-    return <div className={`${classes.root} ${emphasis ? classes.emphasis : ''}`}>
-        <span>{title}</span>
-        {!!message ? <p>{message}</p> : null}
-        {(buttons || []).map(({text, onClick}, i) => <button key={i} onClick={onClick}>{text}</button>)}
-    </div>
+    return <StyledBox emphasis={emphasis}>
+        <Header>{title}</Header>
+        {!!message ? <Message>{message}</Message> : null}
+        {(buttons || []).map(({text, onClick}, i) => <Button key={i} onClick={onClick}>{text}</Button>)}
+    </StyledBox>
 }
 
 export default ActionBox

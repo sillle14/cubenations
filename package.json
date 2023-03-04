@@ -3,7 +3,8 @@
   "version": "1.0.2",
   "private": false,
   "dependencies": {
-    "@mui/styles": "^5.11.11",
+    "@emotion/react": "^11.10.6",
+    "@emotion/styled": "^11.10.6",
     "boardgame.io": "^0.42.2",
     "esm": "^3.2.25",
     "react": "^17.0.2",

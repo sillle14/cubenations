@@ -1,15 +1,21 @@
 import { FunctionComponent } from 'react';
-import { makeStyles } from '@mui/styles'
 import { useDrop } from 'react-dnd'
-import { sizingTheme } from '../../static/display'
+import styled, { CSSObject } from '@emotion/styled';
+import { sizingTheme } from '../../static/display';
 
-const useStyles = makeStyles((theme: sizingTheme) => ({
-    root: {
-        height: '100%',
-        width: '100%',
-        position: 'relative'
-    },
-    dropTarget: {
+
+const DropDiv = styled.div({
+    height: '100%',
+    width: '100%',
+    position: 'relative'
+})
+
+interface DropTargetProps {
+    offset?: (theme: sizingTheme) => string,
+    size?: (theme: sizingTheme) => string,
+}
+const DropTarget = styled.div<DropTargetProps>(({offset, size, theme}) => {
+    const style: CSSObject = {
         position: 'absolute',
         top: 0,
         left: 0,
@@ -21,15 +27,24 @@ const useStyles = makeStyles((theme: sizingTheme) => ({
         borderRadius: `calc(0.15 * ${theme.tileSize})`,
         boxShadow: '2px 2px 5px #616161',
     }
-}))
+    if (offset) {
+        style.left = offset(theme)
+        style.top = offset(theme)
+    }
+    if (size) {
+        style.height = size(theme)
+        style.width = size(theme)
+    }
+    return style
+})
 
 type DroppableProps = {
     accept: string | Array<string>,
     canDrop: (item: any) => boolean,
     onDrop: (item: any) => void,
     showTarget?: boolean,
-    targetOffset?: string,
-    targetSize?: string
+    targetOffset?: (theme: sizingTheme) => string,
+    targetSize?: (theme: sizingTheme) => string
 }
 
 const Droppable: FunctionComponent<DroppableProps> = ({accept, canDrop, onDrop, showTarget, targetOffset, targetSize, children}) => {
@@ -43,23 +58,12 @@ const Droppable: FunctionComponent<DroppableProps> = ({accept, canDrop, onDrop, 
             valid: !!monitor.isOver() && !!monitor.canDrop()
         }))
     })
-    const classes = useStyles()
-
-    let targetStyle: {left?: string, top?: string, height?: string, width?: string} = {}
-    if (targetOffset) {
-        targetStyle['left'] = targetOffset
-        targetStyle['top'] = targetOffset
-    }
-    if (targetSize) {
-        targetStyle['height'] = targetSize
-        targetStyle['width'] = targetSize
-    }
 
     return (
-        <div ref={drop} className={classes.root}>
-            {isOver && showTarget && valid && <div className={classes.dropTarget} style={targetStyle}/>}
+        <DropDiv ref={drop}>
+            {isOver && showTarget && valid && <DropTarget offset={targetOffset} size={targetSize}/>}
             {children}
-        </div>
+        </DropDiv>
     )
 }
 
